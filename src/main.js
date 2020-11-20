@@ -5,6 +5,7 @@ import {createShowMoreButtonTemplate} from "./view/show-more-button.js";
 import {createFilmsCountTemplate} from "./view/films-count.js";
 import {createFilmsTemplate} from "./view/films.js";
 import {createFilmCardTemplate} from "./view/film-card.js";
+import {generateFilmCard} from "./mock/film-card.js";
 
 const CARDS_COUNT = 5;
 
@@ -31,3 +32,4 @@ render(filmsSection, createShowMoreButtonTemplate(), `beforeend`);
 
 render(siteFooterElement, createFilmsCountTemplate(), `beforeend`);
 
+console.log(generateFilmCard());
