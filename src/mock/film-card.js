@@ -17,7 +17,7 @@ const MAX_DURATION = 134;
 const MIN_COMMENTS = 0;
 const MAX_COMMENTS = 100;
 
-const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
+const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 const DESCRIPTION_SHORT_LENGTH = 139;
 
 const POSTERS_PATH = `././images/posters/`;
@@ -94,12 +94,12 @@ const COUNTRIES = [
 ];
 
 const titles = {
-  'Побег из Шоушенка': 'The Shawshank Redemption',
-  'Крестный отец': 'The Godfather',
-  'Тёмный рыцарь': 'The Dark Knight',
-  '12 Разгеванных мужчин': '12 Angry Men',
-  'Список Шиндлера': 'Schindler\'s List'
-}
+  [`Побег из Шоушенка`]: `The Shawshank Redemption`,
+  [`Крестный отец`]: `The Godfather`,
+  [`Тёмный рыцарь`]: `The Dark Knight`,
+  [`12 Разгеванных мужчин`]: `12 Angry Men`,
+  [`Список Шиндлера`]: `Schindler's List`
+};
 
 const getRandomInt = (a = 1, b = 0) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -112,7 +112,7 @@ const getRandomRating = (max, min) => {
   return raiting === max ? raiting : `${raiting}.${getRandomInt(max - 1, min)}`;
 };
 
-const getRandomValuesFromArray = (size, source) => Array(size).fill().map((el) => source[getRandomInt(source.length - 1)]).join(`, `);
+const getRandomValuesFromArray = (size, source) => Array(size).fill().map(() => source[getRandomInt(source.length - 1)]).join(`, `);
 
 const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomInt(POSTERS.length - 1)];
 
@@ -123,7 +123,7 @@ const getRandomTitle = () => {
   const title = arr[getRandomInt(arr.length - 1)];
   originalTitle = titles[title];
   return title;
-}
+};
 
 const getRandonGenre = () => GENRES[getRandomInt(GENRES.length - 1)];
 
@@ -173,4 +173,4 @@ export const generateFilmCard = () => {
   };
 };
 
-export const generateFilmCards = () => Array(CARD_AMOUNT_TO_GENERATE).fill().map((el) => generateFilmCard());
+export const generateFilmCards = () => Array(CARD_AMOUNT_TO_GENERATE).fill().map(() => generateFilmCard());
