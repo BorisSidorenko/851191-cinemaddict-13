@@ -25,7 +25,7 @@ const filmsSection = siteMainElement.querySelector(`.films-list`);
 const filmListContainer = filmsSection.querySelector(`.films-list__container`);
 
 for (let i = 0; i < CARDS_COUNT; i++) {
-  render(filmListContainer, createFilmCardTemplate(), `beforeend`);
+  render(filmListContainer, createFilmCardTemplate(generateFilmCard()), `beforeend`);
 }
 
 render(filmsSection, createShowMoreButtonTemplate(), `beforeend`);

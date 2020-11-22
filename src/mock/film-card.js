@@ -1,5 +1,7 @@
 const CARD_AMOUNT_TO_GENERATE = 20;
 
+const MINUTES_IN_HOUR = 60;
+
 const MIN_YEAR = 1950;
 const MAX_YEAR = 2008;
 
@@ -102,7 +104,12 @@ const titles = {
 const getRandomInt = (a = 1, b = 0) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
-  return Math.floor(lower + Math.random() * (upper - lower + 1))
+  return Math.floor(lower + Math.random() * (upper - lower + 1));
+};
+
+const getRandomRating = (max, min) => {
+  const raiting = getRandomInt(max, min);
+  return raiting === max ? raiting : `${raiting}.${getRandomInt(max - 1, min)}`;
 };
 
 const getRandomValuesFromArray = (size, source) => Array(size).fill().map((el) => source[getRandomInt(source.length - 1)]).join(`, `);
@@ -122,6 +129,20 @@ const getRandonGenre = () => GENRES[getRandomInt(GENRES.length - 1)];
 
 const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
 
+const getRandomDuration = (max, min) => {
+  const duration = getRandomInt(max, min);
+
+  if (duration > MINUTES_IN_HOUR) {
+    if (duration % MINUTES_IN_HOUR > 0) {
+      return `${Math.floor(duration / MINUTES_IN_HOUR)}h ${duration % MINUTES_IN_HOUR}m`;
+    } else {
+      return `${Math.floor(duration / MINUTES_IN_HOUR)}h`;
+    }
+  } else {
+    return `${duration}m`;
+  }
+};
+
 const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length - 1)];
 
 const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
@@ -136,9 +157,9 @@ export const generateFilmCard = () => {
   return {
     poster: getRandomPoster(),
     title: getRandomTitle(),
-    raiting: getRandomInt(MIN_RATING, MAX_RATING),
+    rating: getRandomRating(MAX_RATING, MIN_RATING),
     year: getRandomInt(MIN_YEAR, MAX_YEAR),
-    duration: getRandomInt(MIN_DURATION, MAX_DURATION),
+    duration: getRandomDuration(MAX_DURATION, MIN_DURATION),
     genre: getRandonGenre(),
     descriptionShort: getShortDescription(),
     description: DESCRIPTION,
