@@ -1,3 +1,5 @@
+import {nanoid} from "C:/Users/boris/Desktop/HtmlAcademy/851191-cinemaddict-13/src/vendor/nanoid";
+
 const CARD_AMOUNT_TO_GENERATE = 20;
 
 const MINUTES_IN_HOUR = 60;
@@ -155,6 +157,7 @@ const getRandomAgeRating = () => `${getRandomInt(MIN_AGE_RATING, MAX_AGE_RATING)
 
 export const generateFilmCard = () => {
   return {
+    id: nanoid(8),
     poster: getRandomPoster(),
     title: getRandomTitle(),
     rating: getRandomRating(MAX_RATING, MIN_RATING),
