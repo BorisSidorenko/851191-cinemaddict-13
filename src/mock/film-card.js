@@ -1,3 +1,5 @@
+const CARD_AMOUNT_TO_GENERATE = 20;
+
 const MIN_YEAR = 1950;
 const MAX_YEAR = 2008;
 
@@ -103,6 +105,8 @@ const getRandomInt = (a = 1, b = 0) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1))
 };
 
+const getRandomValuesFromArray = (size, source) => Array(size).fill().map((el) => source[getRandomInt(source.length - 1)]).join(`, `);
+
 const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomInt(POSTERS.length - 1)];
 
 let originalTitle = ``;
@@ -120,9 +124,9 @@ const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_
 
 const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length - 1)];
 
-const getRandomWriters = () => Array(SCREENWRITERS_PER_FILM).fill().map((el) => SCREENWRITERS[getRandomInt(SCREENWRITERS.length - 1)]).join(`, `);
+const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
 
-const getRandomActors = () => Array(ACTORS_PER_FILM).fill().map((el) => ACTORS[getRandomInt(ACTORS.length - 1)]).join(`, `);
+const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS);
 
 const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length - 1)];
 
@@ -147,3 +151,5 @@ export const generateFilmCard = () => {
     ageRating: getRandomAgeRating()
   };
 };
+
+export const generateFilmCards = () => Array(CARD_AMOUNT_TO_GENERATE).fill().map((el) => generateFilmCard());
