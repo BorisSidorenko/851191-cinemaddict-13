@@ -1,3 +1,21 @@
+const MIN_YEAR = 1950;
+const MAX_YEAR = 2008;
+
+const MIN_RATING = 1;
+const MAX_RATING = 10;
+
+const MIN_AGE_RATING = 6;
+const MAX_AGE_RATING = 18;
+
+const MIN_DURATION = 70;
+const MAX_DURATION = 134;
+
+const MIN_COMMENTS = 0;
+const MAX_COMMENTS = 100;
+
+const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
+const DESCRIPTION_SHORT_LENGTH = 139;
+
 const POSTERS_PATH = `././images/posters/`;
 const POSTERS = [
   `made-for-each-other.png`,
@@ -18,20 +36,58 @@ const GENRES = [
   `Western`
 ];
 
-const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
-const DESCRIPTION_SHORT_LENGTH = 139;
+const DIRECTORS = [
+  `Frank Darabont`,
+  `Francis Ford Coppola`,
+  `Christopher Nolan`,
+  `Sidney Lumet`,
+  `Steven Spielberg`
+];
 
-const MIN_YEAR = 1950;
-const MAX_YEAR = 2008;
+const SCREENWRITERS_PER_FILM = 2;
 
-const MIN_RATING = 1;
-const MAX_RATING = 10;
+const SCREENWRITERS = [
+  `Stephen King`,
+  `Frank Darabont`,
+  `Mario Puzo`,
+  `Francis Ford Coppola`,
+  `Jonathan Nolan`,
+  `Christopher Nolan`,
+  `Reginald Rose`,
+  `Thomas Keneally`,
+  `Steven Zaillian`
+];
 
-const MIN_DURATION = 70;
-const MAX_DURATION = 134;
+const ACTORS_PER_FILM = 3;
 
-const MIN_COMMENTS = 0;
-const MAX_COMMENTS = 100;
+const ACTORS = [
+  `Tim Robbins`,
+  `Morgan Freeman`,
+  `Bob Gunton`,
+  `Marlon Brando`,
+  `Al Pacino`,
+  `James Caan`,
+  `Christian Bale`,
+  `Heath Ledger`,
+  `Aaron Eckhart`,
+  `Henry Fonda`,
+  `Lee J. Cobb`,
+  `Martin Balsam`,
+  `Liam Neeson`,
+  `Ralph Fiennes`,
+  `Ben Kingsley`
+];
+
+const COUNTRIES = [
+  `USA`,
+  `Russia`,
+  `Italy`,
+  `Spain`,
+  `Germany`,
+  `United Kingdom`,
+  `China`,
+  `Japan`
+];
 
 const titles = {
   'Побег из Шоушенка': 'The Shawshank Redemption',
@@ -49,15 +105,28 @@ const getRandomInt = (a = 1, b = 0) => {
 
 const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomInt(POSTERS.length - 1)];
 
+let originalTitle = ``;
+
 const getRandomTitle = () => {
   const arr = Object.keys(titles);
-  return arr[getRandomInt(arr.length - 1)];
+  const title = arr[getRandomInt(arr.length - 1)];
+  originalTitle = titles[title];
+  return title;
 }
 
 const getRandonGenre = () => GENRES[getRandomInt(GENRES.length - 1)];
 
 const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
 
+const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length - 1)];
+
+const getRandomWriters = () => Array(SCREENWRITERS_PER_FILM).fill().map((el) => SCREENWRITERS[getRandomInt(SCREENWRITERS.length - 1)]).join(`, `);
+
+const getRandomActors = () => Array(ACTORS_PER_FILM).fill().map((el) => ACTORS[getRandomInt(ACTORS.length - 1)]).join(`, `);
+
+const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length - 1)];
+
+const getRandomAgeRating = () => `${getRandomInt(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
 export const generateFilmCard = () => {
   return {
@@ -70,11 +139,11 @@ export const generateFilmCard = () => {
     descriptionShort: getShortDescription(),
     description: DESCRIPTION,
     commentsCount: getRandomInt(MIN_COMMENTS, MAX_COMMENTS),
-    titleOriginal: ``,
-    director: ``,
-    screenwriters: ``,
-    actors: ``,
-    country: ``,
-    ageRating: ``
+    titleOriginal: originalTitle,
+    director: getRandomDirector(),
+    screenwriters: getRandomWriters(),
+    actors: getRandomActors(),
+    country: getRandomCountry(),
+    ageRating: getRandomAgeRating()
   };
 };
