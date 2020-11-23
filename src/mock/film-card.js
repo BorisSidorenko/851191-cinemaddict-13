@@ -1,4 +1,5 @@
-//import {nanoid} from "C:/Users/boris/Desktop/HtmlAcademy/851191-cinemaddict-13/src/vendor/nanoid";
+import {nanoid} from "../vendor/nanoid";
+import {getRandomInt} from "../utils";
 import dayjs from "dayjs";
 
 const CARD_AMOUNT_TO_GENERATE = 20;
@@ -107,12 +108,6 @@ const titles = {
   [`Список Шиндлера`]: `Schindler's List`
 };
 
-const getRandomInt = (a = 1, b = 0) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
 const getRandomRating = (max, min) => {
   const raiting = getRandomInt(max, min);
   return raiting === max ? raiting : `${raiting}.${getRandomInt(max - 1, min)}`;
@@ -161,12 +156,12 @@ const getRandomAgeRating = () => `${getRandomInt(MIN_AGE_RATING, MAX_AGE_RATING)
 
 const getRandomReleaseDate = (startYear, endYear) => {
   const date = new Date(new Date(startYear, 0, 1).getTime() + Math.random() * (new Date(endYear, 0, 1).getTime() - new Date(startYear, 0, 1).getTime()));
-  return dayjs(date).format('DD MMMM YYYY');
+  return dayjs(date).format(`DD MMMM YYYY`);
 };
 
 export const generateFilmCard = () => {
   return {
-    id: `123`, //nanoid(8),
+    id: nanoid(8),
     poster: getRandomPoster(),
     title: getRandomTitle(),
     rating: getRandomRating(MAX_RATING, MIN_RATING),
