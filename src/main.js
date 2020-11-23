@@ -10,6 +10,7 @@ import {generateClosePopupButtonTemaplte} from "./view/close-popup-button";
 import {generateFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
 import {generateFilmPopupPoster} from "./view/film-popup-poster";
 import {generateFilmPopupInfoTemplate} from "./view/film-popup-info";
+import {generateFilmPopupControls} from "./view/film-popup-controls";
 import {isEscEvent} from "./utils";
 import {generateFilmCards} from "./mock/film-card";
 
@@ -75,6 +76,7 @@ const renderPopup = (card) => {
 
   render(popupInfoWrap, generateFilmPopupPoster(card), `beforeend`);
   render(popupInfoWrap, generateFilmPopupInfoTemplate(card), `beforeend`);
+  render(popupTopContainer, generateFilmPopupControls(), `beforeend`);
 
   siteBodyElement.classList.toggle(`hide-overflow`);
   closePopupButton.addEventListener(`click`, closePopup);
