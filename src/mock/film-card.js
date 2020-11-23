@@ -33,6 +33,9 @@ const POSTERS = [
   `the-man-with-the-golden-arm.jpg`
 ];
 
+const MIN_GENERS_AMOUNT = 1;
+const MAX_GENRES_AMOUNT = 3;
+
 const GENRES = [
   `Fantasy`,
   `Thriller`,
@@ -114,7 +117,7 @@ const getRandomRating = (max, min) => {
   return raiting === max ? raiting : `${raiting}.${getRandomInt(max - 1, min)}`;
 };
 
-const getRandomValuesFromArray = (size, source) => Array(size).fill().map(() => source[getRandomInt(source.length - 1)]).join(`, `);
+const getRandomValuesFromArray = (size, source) => Array(size).fill().map(() => source[getRandomInt(source.length - 1)]);
 
 const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomInt(POSTERS.length - 1)];
 
@@ -127,7 +130,7 @@ const getRandomTitle = () => {
   return title;
 };
 
-const getRandonGenre = () => GENRES[getRandomInt(GENRES.length - 1)];
+const getRandonGenres = () => getRandomValuesFromArray(getRandomInt(MAX_GENRES_AMOUNT, MIN_GENERS_AMOUNT), GENRES);
 
 const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
 
@@ -147,9 +150,9 @@ const getRandomDuration = (max, min) => {
 
 const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length - 1)];
 
-const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
+const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS).join(`, `);
 
-const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS);
+const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS).join(`, `);
 
 const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length - 1)];
 
@@ -163,7 +166,7 @@ export const generateFilmCard = () => {
     rating: getRandomRating(MAX_RATING, MIN_RATING),
     year: getRandomInt(MIN_YEAR, MAX_YEAR),
     duration: getRandomDuration(MAX_DURATION, MIN_DURATION),
-    genre: getRandonGenre(),
+    genres: getRandonGenres(),
     descriptionShort: getShortDescription(),
     description: DESCRIPTION,
     commentsCount: getRandomInt(MIN_COMMENTS, MAX_COMMENTS),
@@ -171,6 +174,7 @@ export const generateFilmCard = () => {
     director: getRandomDirector(),
     screenwriters: getRandomWriters(),
     actors: getRandomActors(),
+    releaseDate: ``,
     country: getRandomCountry(),
     ageRating: getRandomAgeRating()
   };

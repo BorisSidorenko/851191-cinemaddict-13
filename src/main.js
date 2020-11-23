@@ -9,6 +9,7 @@ import {generateFilmPopupTemplate} from "./view/film-popup";
 import {generateClosePopupButtonTemaplte} from "./view/close-popup-button";
 import {generateFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
 import {generateFilmPopupPoster} from "./view/film-popup-poster";
+import {generateFilmPopupInfoTemplate} from "./view/film-popup-info";
 import {isEscEvent} from "./utils";
 import {generateFilmCard} from "./mock/film-card";
 
@@ -62,13 +63,17 @@ const renderPopup = () => {
 
   const poupForm = siteBodyElement.querySelector(`.film-details__inner`);
   const popupTopContainer = poupForm.querySelector(`.film-details__top-container`);
-  const popupBottomContainer = poupForm.querySelector(`.film-details__bottom-container`);
 
   render(popupTopContainer, generateClosePopupButtonTemaplte(), `beforeend`);
   render(popupTopContainer, generateFilmPopupInfoWrap(), `beforeend`);
-  render(popupTopContainer, generateFilmPopupPoster(), `beforeend`);
 
   const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
+  const popupInfoWrap = popupTopContainer.querySelector(`.film-details__info-wrap`);
+
+  render(popupInfoWrap, generateFilmPopupPoster(generateFilmCard()), `beforeend`);
+  render(popupInfoWrap, generateFilmPopupInfoTemplate(generateFilmCard()), `beforeend`);
+
+
   closePopupButton.addEventListener(`click`, closePopup);
 };
 
