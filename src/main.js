@@ -52,6 +52,7 @@ const closePopup = () => {
 
   filmPopup.remove();
 
+  siteBodyElement.classList.toggle(`hide-overflow`);
   closePopupButton.removeEventListener(`click`, closePopup);
   document.removeEventListener(`keydown`, onPopupEscPress);
 };
@@ -61,7 +62,7 @@ const onPopupEscPress = (evt) => {
 };
 
 const renderPopup = (card) => {
-  render(siteBodyElement, generateFilmPopupTemplate(), `beforeend`);
+  render(siteFooterElement, generateFilmPopupTemplate(), `afterend`);
 
   const poupForm = siteBodyElement.querySelector(`.film-details__inner`);
   const popupTopContainer = poupForm.querySelector(`.film-details__top-container`);
@@ -75,7 +76,7 @@ const renderPopup = (card) => {
   render(popupInfoWrap, generateFilmPopupPoster(card), `beforeend`);
   render(popupInfoWrap, generateFilmPopupInfoTemplate(card), `beforeend`);
 
-
+  siteBodyElement.classList.toggle(`hide-overflow`);
   closePopupButton.addEventListener(`click`, closePopup);
 };
 
