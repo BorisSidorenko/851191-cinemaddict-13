@@ -36,7 +36,7 @@ const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
 render(siteHeaderElement, createProfileTemplate(), `beforeend`);
-render(siteMainElement, createSiteMenuTemplate(), `afterbegin`);
+render(siteMainElement, createSiteMenuTemplate(cards), `afterbegin`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
 render(siteMainElement, createFilmsTemplate(), `beforeend`);
 

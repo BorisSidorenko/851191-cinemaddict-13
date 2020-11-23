@@ -2,12 +2,12 @@ const generateGenresTemplate = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
 };
 
-export const generateFilmPopupInfoTemplate = ({title, originalTitle, rating, director, screenwriters, actors, releaseDate, duration, country, genres, description}) => {
+export const generateFilmPopupInfoTemplate = ({title, titleOriginal, rating, director, screenwriters, actors, releaseDate, duration, country, genres, description}) => {
   return `<div class="film-details__info">
     <div class="film-details__info-head">
       <div class="film-details__title-wrap">
         <h3 class="film-details__title">${title}</h3>
-        <p class="film-details__title-original">Original: ${originalTitle}</p>
+        <p class="film-details__title-original">Original: ${titleOriginal}</p>
       </div>
 
       <div class="film-details__rating">

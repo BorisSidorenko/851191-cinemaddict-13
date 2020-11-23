@@ -176,7 +176,10 @@ export const generateFilmCard = () => {
     actors: getRandomActors(),
     releaseDate: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
     country: getRandomCountry(),
-    ageRating: getRandomAgeRating()
+    ageRating: getRandomAgeRating(),
+    isWatchlist: Boolean(getRandomIntInRange(0, 1)),
+    isHistory: Boolean(getRandomIntInRange(0, 1)),
+    isFavorite: Boolean(getRandomIntInRange(0, 1))
   };
 };
 
