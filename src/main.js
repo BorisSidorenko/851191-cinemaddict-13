@@ -11,8 +11,12 @@ import {generateFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
 import {generateFilmPopupPoster} from "./view/film-popup-poster";
 import {generateFilmPopupInfoTemplate} from "./view/film-popup-info";
 import {generateFilmPopupControls} from "./view/film-popup-controls";
+import {generateFilmPopupCommentsWrap} from "./view/film-popup-comments-wrap";
+import {generateFilmPopupCommentsList} from "./view/film-popup-comments-list";
+import {generateFilmPopupNewComment} from "./view/film-popup-new-comment";
 import {isEscEvent} from "./utils";
 import {generateFilmCards} from "./mock/film-card";
+import {generateComments} from "./mock/comment";
 
 const CARDS_TO_SHOW_COUNT = 5;
 
@@ -65,8 +69,9 @@ const onPopupEscPress = (evt) => {
 const renderPopup = (card) => {
   render(siteFooterElement, generateFilmPopupTemplate(), `afterend`);
 
-  const poupForm = siteBodyElement.querySelector(`.film-details__inner`);
-  const popupTopContainer = poupForm.querySelector(`.film-details__top-container`);
+  const popupForm = siteBodyElement.querySelector(`.film-details__inner`);
+  const popupTopContainer = popupForm.querySelector(`.film-details__top-container`);
+  const popupBottomContainer = popupForm.querySelector(`.film-details__bottom-container`);
 
   render(popupTopContainer, generateClosePopupButtonTemaplte(), `beforeend`);
   render(popupTopContainer, generateFilmPopupInfoWrap(), `beforeend`);
@@ -77,6 +82,12 @@ const renderPopup = (card) => {
   render(popupInfoWrap, generateFilmPopupPoster(card), `beforeend`);
   render(popupInfoWrap, generateFilmPopupInfoTemplate(card), `beforeend`);
   render(popupTopContainer, generateFilmPopupControls(), `beforeend`);
+
+  render(popupBottomContainer, generateFilmPopupCommentsWrap(card), `beforeend`);
+
+  const commentsWrap = popupBottomContainer.querySelector(`.film-details__comments-wrap`);
+  render(commentsWrap, generateFilmPopupCommentsList(generateComments()), `beforeend`);
+  render(commentsWrap, generateFilmPopupNewComment(), `beforeend`);
 
   siteBodyElement.classList.toggle(`hide-overflow`);
   closePopupButton.addEventListener(`click`, closePopup);

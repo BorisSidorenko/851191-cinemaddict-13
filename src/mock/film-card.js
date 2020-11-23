@@ -1,5 +1,5 @@
 import {nanoid} from "../vendor/nanoid";
-import {getRandomInt} from "../utils";
+import {getRandomIntInRange, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
 import dayjs from "dayjs";
 
 const CARD_AMOUNT_TO_GENERATE = 20;
@@ -109,29 +109,29 @@ const titles = {
 };
 
 const getRandomRating = (max, min) => {
-  const raiting = getRandomInt(max, min);
-  return raiting === max ? raiting : `${raiting}.${getRandomInt(max - 1, min)}`;
+  const raiting = getRandomIntInRange(max, min);
+  return raiting === max ? raiting : `${raiting}.${getRandomIntInRange(max - 1, min)}`;
 };
 
-const getRandomValuesFromArray = (size, source) => Array(size).fill().map(() => source[getRandomInt(source.length - 1)]);
+const getRandomValuesFromArray = (size, source) => Array(size).fill().map(() => source[getRandomIntInRange(source.length - 1)]);
 
-const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomInt(POSTERS.length - 1)];
+const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomIntInRange(POSTERS.length - 1)];
 
 let originalTitle = ``;
 
 const getRandomTitle = () => {
   const arr = Object.keys(titles);
-  const title = arr[getRandomInt(arr.length - 1)];
+  const title = arr[getRandomIntInRange(arr.length - 1)];
   originalTitle = titles[title];
   return title;
 };
 
-const getRandonGenres = () => getRandomValuesFromArray(getRandomInt(MAX_GENRES_AMOUNT, MIN_GENERS_AMOUNT), GENRES);
+const getRandonGenres = () => getRandomValuesFromArray(getRandomIntInRange(MAX_GENRES_AMOUNT, MIN_GENERS_AMOUNT), GENRES);
 
 const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
 
 const getRandomDuration = (max, min) => {
-  const duration = getRandomInt(max, min);
+  const duration = getRandomIntInRange(max, min);
 
   if (duration > MINUTES_IN_HOUR) {
     if (duration % MINUTES_IN_HOUR > 0) {
@@ -144,19 +144,18 @@ const getRandomDuration = (max, min) => {
   }
 };
 
-const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length - 1)];
+const getRandomDirector = () => DIRECTORS[getRandomIntInRange(DIRECTORS.length - 1)];
 
 const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS).join(`, `);
 
 const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS).join(`, `);
 
-const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length - 1)];
+const getRandomCountry = () => COUNTRIES[getRandomIntInRange(COUNTRIES.length - 1)];
 
-const getRandomAgeRating = () => `${getRandomInt(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
+const getRandomAgeRating = () => `${getRandomIntInRange(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
 const getRandomReleaseDate = (startYear, endYear) => {
-  const date = new Date(new Date(startYear, 0, 1).getTime() + Math.random() * (new Date(endYear, 0, 1).getTime() - new Date(startYear, 0, 1).getTime()));
-  return dayjs(date).format(`DD MMMM YYYY`);
+  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(`DD MMMM YYYY`);
 };
 
 export const generateFilmCard = () => {
@@ -165,12 +164,12 @@ export const generateFilmCard = () => {
     poster: getRandomPoster(),
     title: getRandomTitle(),
     rating: getRandomRating(MAX_RATING, MIN_RATING),
-    year: getRandomInt(MIN_YEAR, MAX_YEAR),
+    year: getRandomIntInRange(MIN_YEAR, MAX_YEAR),
     duration: getRandomDuration(MAX_DURATION, MIN_DURATION),
     genres: getRandonGenres(),
     descriptionShort: getShortDescription(),
     description: DESCRIPTION,
-    commentsCount: getRandomInt(MIN_COMMENTS, MAX_COMMENTS),
+    commentsCount: getRandomIntInRange(MIN_COMMENTS, MAX_COMMENTS),
     titleOriginal: originalTitle,
     director: getRandomDirector(),
     screenwriters: getRandomWriters(),
@@ -181,4 +180,4 @@ export const generateFilmCard = () => {
   };
 };
 
-export const generateFilmCards = () => Array(CARD_AMOUNT_TO_GENERATE).fill().map(() => generateFilmCard());
+export const generateFilmCards = () => getArrayOfObjects(CARD_AMOUNT_TO_GENERATE, generateFilmCard);

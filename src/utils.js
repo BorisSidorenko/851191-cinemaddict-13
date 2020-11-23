@@ -8,8 +8,16 @@ export const isEscEvent = (evt, action) => {
   }
 };
 
-export const getRandomInt = (a = 1, b = 0) => {
+export const getRandomIntInRange = (a = 1, b = 0) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
+
+export const getRandomDateInYearRange = (startYear, endYear) => {
+  const date = new Date(new Date(startYear, 0, 1).getTime() + Math.random() * (new Date(endYear, 0, 1).getTime() - new Date(startYear, 0, 1).getTime()));
+  return date;
+};
+
+
+export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
