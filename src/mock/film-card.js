@@ -1,4 +1,5 @@
 import {nanoid} from "C:/Users/boris/Desktop/HtmlAcademy/851191-cinemaddict-13/src/vendor/nanoid";
+import dayjs from "dayjs";
 
 const CARD_AMOUNT_TO_GENERATE = 20;
 
@@ -158,6 +159,11 @@ const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length - 1)];
 
 const getRandomAgeRating = () => `${getRandomInt(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
+const getRandomReleaseDate = (startYear, endYear) => {
+  const date = new Date(new Date(startYear, 0, 1).getTime() + Math.random() * (new Date(endYear, 0, 1).getTime() - new Date(startYear, 0, 1).getTime()));
+  return dayjs(date).format('DD MMMM YYYY');
+};
+
 export const generateFilmCard = () => {
   return {
     id: nanoid(8),
@@ -174,7 +180,7 @@ export const generateFilmCard = () => {
     director: getRandomDirector(),
     screenwriters: getRandomWriters(),
     actors: getRandomActors(),
-    releaseDate: ``,
+    releaseDate: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
     country: getRandomCountry(),
     ageRating: getRandomAgeRating()
   };
