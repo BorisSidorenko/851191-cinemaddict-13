@@ -11,15 +11,17 @@ import {generateFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
 import {generateFilmPopupPoster} from "./view/film-popup-poster";
 import {generateFilmPopupInfoTemplate} from "./view/film-popup-info";
 import {isEscEvent} from "./utils";
-import {generateFilmCard} from "./mock/film-card";
+import {generateFilmCards} from "./mock/film-card";
 
-const CARDS_COUNT = 5;
+const CARDS_TO_SHOW_COUNT = 5;
 
 const ELEMENTS_TO_SHOW_POPUP = [
   `film-card__poster`,
   `film-card__title`,
   `film-card__comments`
 ];
+
+const cards = generateFilmCards();
 
 const render = (container, template, position) => container.insertAdjacentHTML(position, template);
 
@@ -36,8 +38,8 @@ render(siteMainElement, createFilmsTemplate(), `beforeend`);
 const filmsSection = siteMainElement.querySelector(`.films-list`);
 const filmListContainer = filmsSection.querySelector(`.films-list__container`);
 
-for (let i = 0; i < CARDS_COUNT; i++) {
-  render(filmListContainer, createFilmCardTemplate(generateFilmCard()), `beforeend`);
+for (let i = 0; i < CARDS_TO_SHOW_COUNT; i++) {
+  render(filmListContainer, createFilmCardTemplate(cards[i]), `beforeend`);
 }
 
 render(filmsSection, createShowMoreButtonTemplate(), `beforeend`);
@@ -58,7 +60,7 @@ const onPopupEscPress = (evt) => {
   isEscEvent(evt, closePopup);
 };
 
-const renderPopup = () => {
+const renderPopup = (card) => {
   render(siteBodyElement, generateFilmPopupTemplate(), `beforeend`);
 
   const poupForm = siteBodyElement.querySelector(`.film-details__inner`);
@@ -70,20 +72,25 @@ const renderPopup = () => {
   const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
   const popupInfoWrap = popupTopContainer.querySelector(`.film-details__info-wrap`);
 
-  render(popupInfoWrap, generateFilmPopupPoster(generateFilmCard()), `beforeend`);
-  render(popupInfoWrap, generateFilmPopupInfoTemplate(generateFilmCard()), `beforeend`);
+  render(popupInfoWrap, generateFilmPopupPoster(card), `beforeend`);
+  render(popupInfoWrap, generateFilmPopupInfoTemplate(card), `beforeend`);
 
 
   closePopupButton.addEventListener(`click`, closePopup);
 };
 
 const onFilmCardClick = (evt) => {
-  if (ELEMENTS_TO_SHOW_POPUP.some((val) => val === evt.target.className)) {
+  const isElementToShowPopup = ELEMENTS_TO_SHOW_POPUP.some((val) => val === evt.target.className);
+
+  if (isElementToShowPopup) {
     evt.preventDefault();
 
-    renderPopup();
+    const clickedCard = cards.find((el) => el.id === evt.target.parentNode.dataset.id);
 
-    document.addEventListener(`keydown`, onPopupEscPress);
+    if (clickedCard) {
+      renderPopup(clickedCard);
+      document.addEventListener(`keydown`, onPopupEscPress);
+    }
   }
 };
 
