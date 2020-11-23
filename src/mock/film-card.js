@@ -1,4 +1,4 @@
-import {nanoid} from "C:/Users/boris/Desktop/HtmlAcademy/851191-cinemaddict-13/src/vendor/nanoid";
+//import {nanoid} from "C:/Users/boris/Desktop/HtmlAcademy/851191-cinemaddict-13/src/vendor/nanoid";
 import dayjs from "dayjs";
 
 const CARD_AMOUNT_TO_GENERATE = 20;
@@ -166,7 +166,7 @@ const getRandomReleaseDate = (startYear, endYear) => {
 
 export const generateFilmCard = () => {
   return {
-    id: nanoid(8),
+    id: `123`, //nanoid(8),
     poster: getRandomPoster(),
     title: getRandomTitle(),
     rating: getRandomRating(MAX_RATING, MIN_RATING),
