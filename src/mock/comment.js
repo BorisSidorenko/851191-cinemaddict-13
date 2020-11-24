@@ -43,8 +43,9 @@ const getRandomCommentDate = (startYear, endYear) => {
   return dayjs(getRandomDateInYearRange(startYear, endYear)).format(`YYYY/MM/YY hh:mm`);
 };
 
-export const generateComment = () => {
+export const generateComment = (id) => () => {
   return {
+    filmId: id,
     text: getRandomComment(),
     emoji: getRandomEmoji(),
     author: getRandomAuthor(),
@@ -52,4 +53,4 @@ export const generateComment = () => {
   };
 };
 
-export const generateComments = () => getArrayOfObjects(getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT), generateComment);
+export const generateComments = ({id}) => getArrayOfObjects(getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT), generateComment(id));

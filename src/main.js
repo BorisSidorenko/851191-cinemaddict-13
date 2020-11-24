@@ -29,7 +29,22 @@ const ELEMENTS_TO_SHOW_POPUP = [
   `film-card__comments`
 ];
 
-const cards = generateFilmCards();
+const allFilmcards = generateFilmCards();
+const allComments = allFilmcards.map((card) => generateComments(card));
+
+const getFilmCardComments = (card) => {
+  let filmCardComments = [];
+
+  allComments.forEach((comments) => {
+    const match = comments.filter((comment) => card.id === comment.filmId);
+
+    if (match.length > 0) {
+      filmCardComments = match;
+    }
+  });
+
+  return filmCardComments;
+};
 
 const render = (container, template, position) => container.insertAdjacentHTML(position, template);
 
@@ -39,7 +54,7 @@ const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
 render(siteHeaderElement, createProfileTemplate(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)), `beforeend`);
-render(siteMainElement, createSiteMenuTemplate(cards), `afterbegin`);
+render(siteMainElement, createSiteMenuTemplate(allFilmcards), `afterbegin`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
 render(siteMainElement, createFilmsTemplate(), `beforeend`);
 
@@ -47,7 +62,7 @@ const filmsSection = siteMainElement.querySelector(`.films-list`);
 const filmListContainer = filmsSection.querySelector(`.films-list__container`);
 
 for (let i = 0; i < CARDS_TO_SHOW_COUNT; i++) {
-  render(filmListContainer, createFilmCardTemplate(cards[i]), `beforeend`);
+  render(filmListContainer, createFilmCardTemplate(allFilmcards[i], getFilmCardComments(allFilmcards[i]).length), `beforeend`);
 }
 
 render(filmsSection, createShowMoreButtonTemplate(), `beforeend`);
@@ -70,6 +85,8 @@ const onPopupEscPress = (evt) => {
 };
 
 const renderPopup = (card) => {
+  const cardComments = getFilmCardComments(card);
+
   render(siteFooterElement, createFilmPopupTemplate(), `afterend`);
 
   const popupForm = siteBodyElement.querySelector(`.film-details__inner`);
@@ -86,10 +103,10 @@ const renderPopup = (card) => {
   render(popupInfoWrap, createFilmPopupInfoTemplate(card), `beforeend`);
   render(popupTopContainer, createFilmPopupControls(), `beforeend`);
 
-  render(popupBottomContainer, createFilmPopupCommentsWrap(card), `beforeend`);
+  render(popupBottomContainer, createFilmPopupCommentsWrap(cardComments.length), `beforeend`);
 
   const commentsWrap = popupBottomContainer.querySelector(`.film-details__comments-wrap`);
-  render(commentsWrap, createFilmPopupCommentsList(generateComments()), `beforeend`);
+  render(commentsWrap, createFilmPopupCommentsList(cardComments), `beforeend`);
   render(commentsWrap, createFilmPopupNewComment(), `beforeend`);
 
   siteBodyElement.classList.toggle(`hide-overflow`);
@@ -102,7 +119,7 @@ const onFilmCardClick = (evt) => {
   if (isElementToShowPopup) {
     evt.preventDefault();
 
-    const clickedCard = cards.find((el) => el.id === evt.target.parentNode.dataset.id);
+    const clickedCard = allFilmcards.find((el) => el.id === evt.target.parentNode.dataset.id);
 
     if (clickedCard) {
       renderPopup(clickedCard);
