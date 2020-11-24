@@ -9,7 +9,7 @@ const COMMENTS = [
   `Movie just for one time`
 ];
 
-const EMOJI_PATH = `../../images/emoji/`;
+const EMOJI_PATH = `././images/emoji/`;
 
 const EMOJI = [
   `angry.png`,
