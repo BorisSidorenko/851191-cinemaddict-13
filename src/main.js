@@ -61,11 +61,36 @@ render(siteMainElement, createFilmsTemplate(), `beforeend`);
 const filmsSection = siteMainElement.querySelector(`.films-list`);
 const filmListContainer = filmsSection.querySelector(`.films-list__container`);
 
-for (let i = 0; i < CARDS_TO_SHOW_COUNT; i++) {
-  render(filmListContainer, createFilmCardTemplate(allFilmcards[i], getFilmCardComments(allFilmcards[i]).length), `beforeend`);
-}
-
 render(filmsSection, createShowMoreButtonTemplate(), `beforeend`);
+const showMoreButton = filmsSection.querySelector(`.films-list__show-more`);
+
+const renderFilmCards = (cardsToShow) => {
+  filmListContainer.innerHTML = ``;
+
+  cardsToShow.forEach((cardToShow) => {
+    render(filmListContainer, createFilmCardTemplate(cardToShow, getFilmCardComments(cardToShow).length), `beforeend`);
+  });
+
+  if (allFilmcards.length === cardsToShow.length) {
+    showMoreButton.remove();
+  }
+};
+
+renderFilmCards(allFilmcards.slice(0, CARDS_TO_SHOW_COUNT));
+
+
+const getCadrsToShow = () => {
+  let showMoreButtonClickCounter = 1;
+
+  return () => {
+    showMoreButtonClickCounter++;
+    renderFilmCards(allFilmcards.slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter));
+  };
+};
+
+const onShowMoreButtonClick = getCadrsToShow();
+
+showMoreButton.addEventListener(`click`, onShowMoreButtonClick);
 
 render(siteFooterElement, createFilmsCountTemplate(), `beforeend`);
 

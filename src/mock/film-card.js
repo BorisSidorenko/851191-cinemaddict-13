@@ -2,7 +2,7 @@ import {nanoid} from "../vendor/nanoid";
 import {getRandomIntInRange, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
 import dayjs from "dayjs";
 
-const CARD_AMOUNT_TO_GENERATE = 20;
+const CARD_AMOUNT_TO_GENERATE = 13;
 
 const MINUTES_IN_HOUR = 60;
 
