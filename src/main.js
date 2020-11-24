@@ -14,11 +14,14 @@ import {createFilmPopupControls} from "./view/film-popup-controls";
 import {createFilmPopupCommentsWrap} from "./view/film-popup-comments-wrap";
 import {createFilmPopupCommentsList} from "./view/film-popup-comments-list";
 import {createFilmPopupNewComment} from "./view/film-popup-new-comment";
-import {isEscEvent} from "./utils";
+import {isEscEvent, getRandomIntInRange} from "./utils";
 import {generateFilmCards} from "./mock/film-card";
 import {generateComments} from "./mock/comment";
 
 const CARDS_TO_SHOW_COUNT = 5;
+
+const MIN_PROFILE_RANK = 0;
+const MAX_PROFILE_RANK = 40;
 
 const ELEMENTS_TO_SHOW_POPUP = [
   `film-card__poster`,
@@ -35,7 +38,7 @@ const siteHeaderElement = siteBodyElement.querySelector(`.header`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
-render(siteHeaderElement, createProfileTemplate(), `beforeend`);
+render(siteHeaderElement, createProfileTemplate(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)), `beforeend`);
 render(siteMainElement, createSiteMenuTemplate(cards), `afterbegin`);
 render(siteMainElement, createSortTemplate(), `beforeend`);
 render(siteMainElement, createFilmsTemplate(), `beforeend`);
