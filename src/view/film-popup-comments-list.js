@@ -1,4 +1,4 @@
-const generateComments = (comments) => {
+const createCommentElements = (comments) => {
   return comments.map(({text, emoji, author, date}) => `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
       <img src="${emoji}" width="55" height="55" alt="emoji-smile">
@@ -14,8 +14,8 @@ const generateComments = (comments) => {
   </li>`).join(``);
 };
 
-export const generateFilmPopupCommentsList = (comments) => {
+export const createFilmPopupCommentsList = (comments) => {
   return `<ul class="film-details__comments-list">
-    ${generateComments(comments)}
+    ${createCommentElements(comments)}
   </ul>`;
 };

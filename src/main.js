@@ -5,15 +5,15 @@ import {createShowMoreButtonTemplate} from "./view/show-more-button";
 import {createFilmsCountTemplate} from "./view/films-count";
 import {createFilmsTemplate} from "./view/films";
 import {createFilmCardTemplate} from "./view/film-card";
-import {generateFilmPopupTemplate} from "./view/film-popup";
-import {generateClosePopupButtonTemaplte} from "./view/close-popup-button";
-import {generateFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
-import {generateFilmPopupPoster} from "./view/film-popup-poster";
-import {generateFilmPopupInfoTemplate} from "./view/film-popup-info";
-import {generateFilmPopupControls} from "./view/film-popup-controls";
-import {generateFilmPopupCommentsWrap} from "./view/film-popup-comments-wrap";
-import {generateFilmPopupCommentsList} from "./view/film-popup-comments-list";
-import {generateFilmPopupNewComment} from "./view/film-popup-new-comment";
+import {createFilmPopupTemplate} from "./view/film-popup";
+import {createClosePopupButtonTemaplte} from "./view/close-popup-button";
+import {createFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
+import {createFilmPopupPoster} from "./view/film-popup-poster";
+import {createFilmPopupInfoTemplate} from "./view/film-popup-info";
+import {createFilmPopupControls} from "./view/film-popup-controls";
+import {createFilmPopupCommentsWrap} from "./view/film-popup-comments-wrap";
+import {createFilmPopupCommentsList} from "./view/film-popup-comments-list";
+import {createFilmPopupNewComment} from "./view/film-popup-new-comment";
 import {isEscEvent} from "./utils";
 import {generateFilmCards} from "./mock/film-card";
 import {generateComments} from "./mock/comment";
@@ -67,27 +67,27 @@ const onPopupEscPress = (evt) => {
 };
 
 const renderPopup = (card) => {
-  render(siteFooterElement, generateFilmPopupTemplate(), `afterend`);
+  render(siteFooterElement, createFilmPopupTemplate(), `afterend`);
 
   const popupForm = siteBodyElement.querySelector(`.film-details__inner`);
   const popupTopContainer = popupForm.querySelector(`.film-details__top-container`);
   const popupBottomContainer = popupForm.querySelector(`.film-details__bottom-container`);
 
-  render(popupTopContainer, generateClosePopupButtonTemaplte(), `beforeend`);
-  render(popupTopContainer, generateFilmPopupInfoWrap(), `beforeend`);
+  render(popupTopContainer, createClosePopupButtonTemaplte(), `beforeend`);
+  render(popupTopContainer, createFilmPopupInfoWrap(), `beforeend`);
 
   const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
   const popupInfoWrap = popupTopContainer.querySelector(`.film-details__info-wrap`);
 
-  render(popupInfoWrap, generateFilmPopupPoster(card), `beforeend`);
-  render(popupInfoWrap, generateFilmPopupInfoTemplate(card), `beforeend`);
-  render(popupTopContainer, generateFilmPopupControls(), `beforeend`);
+  render(popupInfoWrap, createFilmPopupPoster(card), `beforeend`);
+  render(popupInfoWrap, createFilmPopupInfoTemplate(card), `beforeend`);
+  render(popupTopContainer, createFilmPopupControls(), `beforeend`);
 
-  render(popupBottomContainer, generateFilmPopupCommentsWrap(card), `beforeend`);
+  render(popupBottomContainer, createFilmPopupCommentsWrap(card), `beforeend`);
 
   const commentsWrap = popupBottomContainer.querySelector(`.film-details__comments-wrap`);
-  render(commentsWrap, generateFilmPopupCommentsList(generateComments()), `beforeend`);
-  render(commentsWrap, generateFilmPopupNewComment(), `beforeend`);
+  render(commentsWrap, createFilmPopupCommentsList(generateComments()), `beforeend`);
+  render(commentsWrap, createFilmPopupNewComment(), `beforeend`);
 
   siteBodyElement.classList.toggle(`hide-overflow`);
   closePopupButton.addEventListener(`click`, closePopup);
