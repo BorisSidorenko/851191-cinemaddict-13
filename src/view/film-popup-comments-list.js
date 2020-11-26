@@ -1,5 +1,5 @@
-const createCommentElements = (comments) => {
-  return comments.map(({text, emoji, author, date}) => `<li class="film-details__comment">
+const getCommentElement = ({text, emoji, author, date}) => {
+  return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
       <img src="${emoji}" width="55" height="55" alt="emoji-smile">
     </span>
@@ -11,7 +11,11 @@ const createCommentElements = (comments) => {
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
-  </li>`).join(``);
+  </li>`;
+};
+
+const createCommentElements = (comments) => {
+  return comments.map(getCommentElement).join(``);
 };
 
 export const createFilmPopupCommentsList = (comments) => {

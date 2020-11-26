@@ -38,17 +38,17 @@ const MIN_COMMENT_COUNT = 0;
 const getRandomComment = () => {
   const commentIndex = getRandomIntInRange(COMMENTS.length - 1);
   return COMMENTS[commentIndex];
-}
+};
 
 const getRandomEmoji = () => {
   const getEmojiIndex = getRandomIntInRange(EMOJI.length - 1);
   return `${EMOJI_PATH}${EMOJI[getEmojiIndex]}`;
-}
+};
 
 const getRandomAuthor = () => {
   const authorIndex = getRandomIntInRange(AUTHORS.length - 1);
   return AUTHORS[authorIndex];
-}
+};
 
 const getRandomCommentDate = (startYear, endYear) => {
   return dayjs(getRandomDateInYearRange(startYear, endYear)).format(COMMENT_DATE_FORMAT);
@@ -67,4 +67,4 @@ export const generateComment = (id) => () => {
 export const generateComments = (id) => {
   const commentsCount = getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT);
   return getArrayOfObjects(commentsCount, generateComment(id));
-}
+};

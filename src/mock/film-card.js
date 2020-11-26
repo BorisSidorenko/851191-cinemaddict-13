@@ -118,7 +118,7 @@ const getRandomRating = (max, min) => {
 const getRandomValuesFromArray = (size, source) => {
   return Array(size).fill().map(() => {
     const index = getRandomIntInRange(source.length - 1);
-    source[index];
+    return source[index];
   });
 };
 

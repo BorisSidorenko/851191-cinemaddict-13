@@ -1,17 +1,19 @@
 const Ranks = {
   NOVICE: `Novice`,
+  NOVICE_FILMS_MAX: 10,
   FAN: `Fan`,
+  FAN_FILMS_MAX: 20,
   MOVIEBUFF: `Movie Buff`
 };
 
 const getRank = (fimlsCount) => {
   let rank = ``;
 
-  if (fimlsCount > 0 && fimlsCount <= 10) {
+  if (fimlsCount > 0 && fimlsCount <= Ranks.NOVICE_FILMS_MAX) {
     rank = Ranks.NOVICE;
-  } else if (fimlsCount > 10 && fimlsCount <= 20) {
+  } else if (fimlsCount > Ranks.NOVICE_FILMS_MAX && fimlsCount <= Ranks.FAN_FILMS_MAX) {
     rank = Ranks.FAN;
-  } else if (fimlsCount > 20) {
+  } else if (fimlsCount > Ranks.FAN_FILMS_MAX) {
     rank = Ranks.MOVIEBUFF;
   }
 

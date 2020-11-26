@@ -117,7 +117,7 @@ const appendPopupWithCloseButton = (popupTopContainer) => {
   const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
 
   closePopupButton.addEventListener(`click`, closePopup);
-}
+};
 
 const appendPopupWithInfo = (popupTopContainer, card) => {
   render(popupTopContainer, createFilmPopupInfoWrap(), `beforeend`);
