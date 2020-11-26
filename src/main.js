@@ -163,13 +163,18 @@ const renderPopup = (card) => {
   siteBodyElement.classList.toggle(`hide-overflow`);
 };
 
-const onFilmCardClick = (evt) => {
-  const isElementToShowPopup = ELEMENTS_TO_SHOW_POPUP.some((val) => val === evt.target.className);
+const isPopupElementClicked = (className) => ELEMENTS_TO_SHOW_POPUP.some((val) => val === className);
 
-  if (isElementToShowPopup) {
+const getCard = (id) => allFilmcards.find((el) => el.id === id);
+
+const onFilmCardClick = (evt) => {
+  const showPopup = isPopupElementClicked(evt.target.className);
+
+  if (showPopup) {
     evt.preventDefault();
 
-    const clickedCard = allFilmcards.find((el) => el.id === evt.target.parentNode.dataset.id);
+    const cardId = evt.target.parentNode.dataset.id;
+    const clickedCard = getCard(cardId);
 
     if (clickedCard) {
       renderPopup(clickedCard);

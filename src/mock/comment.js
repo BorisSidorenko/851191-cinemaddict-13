@@ -27,7 +27,7 @@ const AUTHORS = [
   `Liam Phill`
 ];
 
-const RELEASE_DATE_FORMAT = `YYYY/MM/YY hh:mm`;
+const COMMENT_DATE_FORMAT = `YYYY/MM/YY hh:mm`;
 
 const MAX_YEAR_COMMENT = 2020;
 const MIN_YEAR_COMMENT = 2018;
@@ -51,7 +51,7 @@ const getRandomAuthor = () => {
 }
 
 const getRandomCommentDate = (startYear, endYear) => {
-  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(RELEASE_DATE_FORMAT);
+  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(COMMENT_DATE_FORMAT);
 };
 
 export const generateComment = (id) => () => {

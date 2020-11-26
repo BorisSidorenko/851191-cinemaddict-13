@@ -108,12 +108,19 @@ const titles = {
   [`Список Шиндлера`]: `Schindler's List`
 };
 
+const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
+
 const getRandomRating = (max, min) => {
   const raiting = getRandomIntInRange(max, min);
   return raiting === max ? raiting : `${raiting}.${getRandomIntInRange(max - 1, min)}`;
 };
 
-const getRandomValuesFromArray = (size, source) => Array(size).fill().map(() => source[getRandomIntInRange(source.length - 1)]);
+const getRandomValuesFromArray = (size, source) => {
+  return Array(size).fill().map(() => {
+    const index = getRandomIntInRange(source.length - 1);
+    source[index];
+  });
+};
 
 const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomIntInRange(POSTERS.length - 1)];
 
@@ -155,7 +162,7 @@ const getRandomCountry = () => COUNTRIES[getRandomIntInRange(COUNTRIES.length - 
 const getRandomAgeRating = () => `${getRandomIntInRange(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
 const getRandomReleaseDate = (startYear, endYear) => {
-  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(`DD MMMM YYYY`);
+  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(RELEASE_DATE_FORMAT);
 };
 
 export const generateFilmCard = () => {
