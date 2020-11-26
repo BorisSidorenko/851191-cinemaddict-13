@@ -27,20 +27,31 @@ const AUTHORS = [
   `Liam Phill`
 ];
 
+const RELEASE_DATE_FORMAT = `YYYY/MM/YY hh:mm`;
+
 const MAX_YEAR_COMMENT = 2020;
 const MIN_YEAR_COMMENT = 2018;
 
 const MAX_COMMENT_COUNT = 5;
 const MIN_COMMENT_COUNT = 0;
 
-const getRandomComment = () => COMMENTS[getRandomIntInRange(COMMENTS.length - 1)];
+const getRandomComment = () => {
+  const commentIndex = getRandomIntInRange(COMMENTS.length - 1);
+  return COMMENTS[commentIndex];
+}
 
-const getRandomEmoji = () => EMOJI_PATH + EMOJI[getRandomIntInRange(EMOJI.length - 1)];
+const getRandomEmoji = () => {
+  const getEmojiIndex = getRandomIntInRange(EMOJI.length - 1);
+  return `${EMOJI_PATH}${EMOJI[getEmojiIndex]}`;
+}
 
-const getRandomAuthor = () => AUTHORS[getRandomIntInRange(AUTHORS.length - 1)];
+const getRandomAuthor = () => {
+  const authorIndex = getRandomIntInRange(AUTHORS.length - 1);
+  return AUTHORS[authorIndex];
+}
 
 const getRandomCommentDate = (startYear, endYear) => {
-  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(`YYYY/MM/YY hh:mm`);
+  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(RELEASE_DATE_FORMAT);
 };
 
 export const generateComment = (id) => () => {
@@ -53,4 +64,7 @@ export const generateComment = (id) => () => {
   };
 };
 
-export const generateComments = (id) => getArrayOfObjects(getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT), generateComment(id));
+export const generateComments = (id) => {
+  const commentsCount = getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT);
+  return getArrayOfObjects(commentsCount, generateComment(id));
+}
