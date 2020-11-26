@@ -60,30 +60,35 @@ render(filmsSection, createShowMoreButtonTemplate(), `beforeend`);
 const showMoreButton = filmsSection.querySelector(`.films-list__show-more`);
 
 const renderFilmCards = (cardsToShow) => {
+  cardsToShow.forEach((cardToShow) => {
+    const commentsCount = getFilmCardComments(cardToShow).length;
+    const filmCardTemplate = createFilmCardTemplate(cardToShow, commentsCount);
+    render(filmListContainer, filmCardTemplate, `beforeend`);
+  });
+};
+
+const appendFilmCards = (cardsToShow) => {
   filmListContainer.innerHTML = ``;
 
-  cardsToShow.forEach((cardToShow) => {
-    render(filmListContainer, createFilmCardTemplate(cardToShow, getFilmCardComments(cardToShow).length), `beforeend`);
-  });
+  renderFilmCards(cardsToShow);
 
   if (allFilmcards.length === cardsToShow.length) {
     showMoreButton.remove();
   }
 };
 
-renderFilmCards(allFilmcards.slice(0, CARDS_TO_SHOW_COUNT));
+const initialCardsToShow = allFilmcards.slice(0, CARDS_TO_SHOW_COUNT);
+appendFilmCards(initialCardsToShow);
 
+let showMoreButtonClickCounter = 1;
 
-const getCadrsToShow = () => {
-  let showMoreButtonClickCounter = 1;
+const onShowMoreButtonClick = () => {
+  showMoreButtonClickCounter++;
 
-  return () => {
-    showMoreButtonClickCounter++;
-    renderFilmCards(allFilmcards.slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter));
-  };
+  const cardsToShow = allFilmcards.slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter);
+
+  appendFilmCards(cardsToShow);
 };
-
-const onShowMoreButtonClick = getCadrsToShow();
 
 showMoreButton.addEventListener(`click`, onShowMoreButtonClick);
 
