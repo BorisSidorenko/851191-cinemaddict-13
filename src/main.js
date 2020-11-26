@@ -30,21 +30,16 @@ const ELEMENTS_TO_SHOW_POPUP = [
 ];
 
 const allFilmcards = generateFilmCards();
-const allComments = allFilmcards.map((card) => generateComments(card));
 
-const getFilmCardComments = (card) => {
-  let filmCardComments = [];
+const getAllComments = () => allFilmcards.reduce((acc, card) => {
+  const {id} = card;
+  acc[id] = generateComments(id);
+  return acc;
+}, {});
 
-  allComments.forEach((comments) => {
-    const match = comments.filter((comment) => card.id === comment.filmId);
+const allComments = getAllComments();
 
-    if (match.length > 0) {
-      filmCardComments = match;
-    }
-  });
-
-  return filmCardComments;
-};
+const getFilmCardComments = ({id}) => allComments[id];
 
 const render = (container, template, position) => container.insertAdjacentHTML(position, template);
 

@@ -53,4 +53,4 @@ export const generateComment = (id) => () => {
   };
 };
 
-export const generateComments = ({id}) => getArrayOfObjects(getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT), generateComment(id));
+export const generateComments = (id) => getArrayOfObjects(getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT), generateComment(id));
