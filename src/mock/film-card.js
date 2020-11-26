@@ -100,7 +100,7 @@ const COUNTRIES = [
   `Japan`
 ];
 
-const titles = {
+const title = {
   [`Побег из Шоушенка`]: `The Shawshank Redemption`,
   [`Крестный отец`]: `The Godfather`,
   [`Тёмный рыцарь`]: `The Dark Knight`,
@@ -127,13 +127,16 @@ const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomIntInRange(POSTERS
 let originalTitle = ``;
 
 const getRandomTitle = () => {
-  const arr = Object.keys(titles);
-  const title = arr[getRandomIntInRange(arr.length - 1)];
-  originalTitle = titles[title];
-  return title;
+  const arr = Object.keys(title);
+  const translatedTitle = arr[getRandomIntInRange(arr.length - 1)];
+  originalTitle = title[translatedTitle];
+  return translatedTitle;
 };
 
-const getRandonGenres = () => getRandomValuesFromArray(getRandomIntInRange(MAX_GENRES_AMOUNT, MIN_GENERS_AMOUNT), GENRES);
+const getRandonGenres = () => {
+  const genresCount = getRandomIntInRange(MAX_GENRES_AMOUNT, MIN_GENERS_AMOUNT);
+  return getRandomValuesFromArray(genresCount, GENRES);
+};
 
 const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
 
@@ -153,7 +156,10 @@ const getRandomDuration = (max, min) => {
 
 const getRandomDirector = () => DIRECTORS[getRandomIntInRange(DIRECTORS.length - 1)];
 
-const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS).join(`, `);
+const getRandomWriters = () => {
+  const screenwriters = getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
+  return screenwriters.join(`, `);
+};
 
 const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS).join(`, `);
 
@@ -165,29 +171,29 @@ const getRandomReleaseDate = (startYear, endYear) => {
   return dayjs(getRandomDateInYearRange(startYear, endYear)).format(RELEASE_DATE_FORMAT);
 };
 
-export const generateFilmCard = () => {
-  return {
-    id: nanoid(8),
-    poster: getRandomPoster(),
-    title: getRandomTitle(),
-    rating: getRandomRating(MAX_RATING, MIN_RATING),
-    year: getRandomIntInRange(MIN_YEAR, MAX_YEAR),
-    duration: getRandomDuration(MAX_DURATION, MIN_DURATION),
-    genres: getRandonGenres(),
-    descriptionShort: getShortDescription(),
-    description: DESCRIPTION,
-    commentsCount: getRandomIntInRange(MIN_COMMENTS, MAX_COMMENTS),
-    titleOriginal: originalTitle,
-    director: getRandomDirector(),
-    screenwriters: getRandomWriters(),
-    actors: getRandomActors(),
-    releaseDate: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
-    country: getRandomCountry(),
-    ageRating: getRandomAgeRating(),
-    isWatchlist: Boolean(getRandomIntInRange(0, 1)),
-    isHistory: Boolean(getRandomIntInRange(0, 1)),
-    isFavorite: Boolean(getRandomIntInRange(0, 1))
-  };
-};
+const getRandomBool = () => getRandomIntInRange(0, 1) > 0;
+
+export const generateFilmCard = () => ({
+  id: nanoid(8),
+  poster: getRandomPoster(),
+  title: getRandomTitle(),
+  rating: getRandomRating(MAX_RATING, MIN_RATING),
+  year: getRandomIntInRange(MIN_YEAR, MAX_YEAR),
+  duration: getRandomDuration(MAX_DURATION, MIN_DURATION),
+  genres: getRandonGenres(),
+  descriptionShort: getShortDescription(),
+  description: DESCRIPTION,
+  commentsCount: getRandomIntInRange(MIN_COMMENTS, MAX_COMMENTS),
+  titleOriginal: originalTitle,
+  director: getRandomDirector(),
+  screenwriters: getRandomWriters(),
+  actors: getRandomActors(),
+  releaseDate: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
+  country: getRandomCountry(),
+  ageRating: getRandomAgeRating(),
+  isWatchlist: getRandomBool(),
+  isHistory: getRandomBool(),
+  isFavorite: getRandomBool()
+});
 
 export const generateFilmCards = () => getArrayOfObjects(CARD_AMOUNT_TO_GENERATE, generateFilmCard);
