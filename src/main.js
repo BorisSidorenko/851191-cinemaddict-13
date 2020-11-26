@@ -109,33 +109,58 @@ const onPopupEscPress = (evt) => {
   isEscEvent(evt, closePopup);
 };
 
-const renderPopup = (card) => {
-  const cardComments = getFilmCardComments(card);
+const appendFooterWithPopup = () => render(siteFooterElement, createFilmPopupTemplate(), `afterend`);
 
-  render(siteFooterElement, createFilmPopupTemplate(), `afterend`);
-
-  const popupForm = siteBodyElement.querySelector(`.film-details__inner`);
-  const popupTopContainer = popupForm.querySelector(`.film-details__top-container`);
-  const popupBottomContainer = popupForm.querySelector(`.film-details__bottom-container`);
-
+const appendPopupWithCloseButton = (popupTopContainer) => {
   render(popupTopContainer, createClosePopupButtonTemaplte(), `beforeend`);
-  render(popupTopContainer, createFilmPopupInfoWrap(), `beforeend`);
 
   const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
+
+  closePopupButton.addEventListener(`click`, closePopup);
+}
+
+const appendPopupWithInfo = (popupTopContainer, card) => {
+  render(popupTopContainer, createFilmPopupInfoWrap(), `beforeend`);
+
   const popupInfoWrap = popupTopContainer.querySelector(`.film-details__info-wrap`);
 
   render(popupInfoWrap, createFilmPopupPoster(card), `beforeend`);
   render(popupInfoWrap, createFilmPopupInfoTemplate(card), `beforeend`);
-  render(popupTopContainer, createFilmPopupControls(), `beforeend`);
+};
 
+const appendPopupWithControls = (popupTopContainer) => render(popupTopContainer, createFilmPopupControls(), `beforeend`);
+
+const renderPopupTopContainer = (popupForm, card) => {
+  const popupTopContainer = popupForm.querySelector(`.film-details__top-container`);
+
+  appendPopupWithCloseButton(popupTopContainer);
+  appendPopupWithInfo(popupTopContainer, card);
+  appendPopupWithControls(popupTopContainer);
+};
+
+const appendPopupWithComments = (popupBottomContainer, cardComments) => {
   render(popupBottomContainer, createFilmPopupCommentsWrap(cardComments.length), `beforeend`);
-
   const commentsWrap = popupBottomContainer.querySelector(`.film-details__comments-wrap`);
+
   render(commentsWrap, createFilmPopupCommentsList(cardComments), `beforeend`);
   render(commentsWrap, createFilmPopupNewComment(), `beforeend`);
+};
+
+const renderPopupBottomContainer = (popupForm, card) => {
+  const cardComments = getFilmCardComments(card);
+  const popupBottomContainer = popupForm.querySelector(`.film-details__bottom-container`);
+
+  appendPopupWithComments(popupBottomContainer, cardComments);
+};
+
+const renderPopup = (card) => {
+  appendFooterWithPopup();
+  const popupForm = siteBodyElement.querySelector(`.film-details__inner`);
+
+  renderPopupTopContainer(popupForm, card);
+  renderPopupBottomContainer(popupForm, card);
 
   siteBodyElement.classList.toggle(`hide-overflow`);
-  closePopupButton.addEventListener(`click`, closePopup);
 };
 
 const onFilmCardClick = (evt) => {
