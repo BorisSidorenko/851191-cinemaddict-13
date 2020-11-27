@@ -1,5 +1,5 @@
 import {nanoid} from "../vendor/nanoid";
-import {getRandomIntInRange, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
+import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
 import dayjs from "dayjs";
 
 const CARD_AMOUNT_TO_GENERATE = 13;
@@ -117,18 +117,18 @@ const getRandomRating = (max, min) => {
 
 const getRandomValuesFromArray = (size, source) => {
   return Array(size).fill().map(() => {
-    const index = getRandomIntInRange(source.length - 1);
+    const index = getRandomInt(source.length);
     return source[index];
   });
 };
 
-const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomIntInRange(POSTERS.length - 1)];
+const getRandomPoster = () => POSTERS_PATH + POSTERS[getRandomInt(POSTERS.length)];
 
 let originalTitle = ``;
 
 const getRandomTitle = () => {
   const arr = Object.keys(title);
-  const translatedTitle = arr[getRandomIntInRange(arr.length - 1)];
+  const translatedTitle = arr[getRandomInt(arr.length)];
   originalTitle = title[translatedTitle];
   return translatedTitle;
 };
@@ -154,7 +154,7 @@ const getRandomDuration = (max, min) => {
   }
 };
 
-const getRandomDirector = () => DIRECTORS[getRandomIntInRange(DIRECTORS.length - 1)];
+const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length)];
 
 const getRandomWriters = () => {
   const screenwriters = getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
@@ -163,7 +163,7 @@ const getRandomWriters = () => {
 
 const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS).join(`, `);
 
-const getRandomCountry = () => COUNTRIES[getRandomIntInRange(COUNTRIES.length - 1)];
+const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length)];
 
 const getRandomAgeRating = () => `${getRandomIntInRange(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 

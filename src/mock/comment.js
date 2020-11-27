@@ -1,4 +1,4 @@
-import {getRandomIntInRange, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
+import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
 import dayjs from "dayjs";
 
 const COMMENTS = [
@@ -36,17 +36,17 @@ const MAX_COMMENT_COUNT = 5;
 const MIN_COMMENT_COUNT = 0;
 
 const getRandomComment = () => {
-  const commentIndex = getRandomIntInRange(COMMENTS.length - 1);
+  const commentIndex = getRandomInt(COMMENTS.length);
   return COMMENTS[commentIndex];
 };
 
 const getRandomEmoji = () => {
-  const getEmojiIndex = getRandomIntInRange(EMOJI.length - 1);
+  const getEmojiIndex = getRandomInt(EMOJI.length);
   return `${EMOJI_PATH}${EMOJI[getEmojiIndex]}`;
 };
 
 const getRandomAuthor = () => {
-  const authorIndex = getRandomIntInRange(AUTHORS.length - 1);
+  const authorIndex = getRandomInt(AUTHORS.length);
   return AUTHORS[authorIndex];
 };
 

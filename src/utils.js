@@ -14,6 +14,8 @@ export const getRandomIntInRange = (a = 1, b = 0) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
+export const getRandomInt = (maxNumber) => getRandomIntInRange(maxNumber - 1);
+
 export const getRandomDateInYearRange = (startYear, endYear) => {
   const date = new Date(new Date(startYear, 0, 1).getTime() + Math.random() * (new Date(endYear, 0, 1).getTime() - new Date(startYear, 0, 1).getTime()));
   return date;
