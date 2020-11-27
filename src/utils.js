@@ -1,6 +1,13 @@
+import dayjs from "dayjs";
+
 const KeyCode = {
   ESC_CODE: `Escape`
 };
+
+const MAX_MONTH = 12;
+const MIN_MONTH = 1;
+const MAX_DATE = 31;
+const MIN_DATE = 1;
 
 export const isEscEvent = (evt, action) => {
   if (evt.key === KeyCode.ESC_CODE) {
@@ -16,9 +23,12 @@ export const getRandomIntInRange = (a = 1, b = 0) => {
 
 export const getRandomInt = (maxNumber) => getRandomIntInRange(maxNumber - 1);
 
-export const getRandomDateInYearRange = (startYear, endYear) => {
-  const date = new Date(new Date(startYear, 0, 1).getTime() + Math.random() * (new Date(endYear, 0, 1).getTime() - new Date(startYear, 0, 1).getTime()));
-  return date;
+export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
+  const year = getRandomIntInRange(startYear, endYear);
+  const month = getRandomIntInRange(MAX_MONTH, MIN_MONTH);
+  const date = getRandomIntInRange(MAX_DATE, MIN_DATE);
+
+  return dayjs(`${year}-${month}-${date}`).format(dateFormat);
 };
 
 

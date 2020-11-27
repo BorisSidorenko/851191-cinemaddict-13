@@ -1,5 +1,4 @@
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
-import dayjs from "dayjs";
 
 const COMMENTS = [
   `Almost two hours? Seriously?`,
@@ -27,7 +26,7 @@ const AUTHORS = [
   `Liam Phill`
 ];
 
-const COMMENT_DATE_FORMAT = `YYYY/MM/YY hh:mm`;
+const COMMENT_DATE_FORMAT = `YYYY/MM/DD hh:mm`;
 
 const MAX_YEAR_COMMENT = 2020;
 const MIN_YEAR_COMMENT = 2018;
@@ -50,9 +49,7 @@ const getRandomAuthor = () => {
   return AUTHORS[authorIndex];
 };
 
-const getRandomCommentDate = (startYear, endYear) => {
-  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(COMMENT_DATE_FORMAT);
-};
+const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, COMMENT_DATE_FORMAT);
 
 export const generateComment = (id) => () => {
   return {

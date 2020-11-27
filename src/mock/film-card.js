@@ -1,6 +1,5 @@
 import {nanoid} from "../vendor/nanoid";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
-import dayjs from "dayjs";
 
 const CARD_AMOUNT_TO_GENERATE = 13;
 
@@ -167,9 +166,7 @@ const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length)];
 
 const getRandomAgeRating = () => `${getRandomIntInRange(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
-const getRandomReleaseDate = (startYear, endYear) => {
-  return dayjs(getRandomDateInYearRange(startYear, endYear)).format(RELEASE_DATE_FORMAT);
-};
+const getRandomReleaseDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, RELEASE_DATE_FORMAT);
 
 const getRandomBool = () => getRandomIntInRange(0, 1) > 0;
 
