@@ -7,12 +7,12 @@ import FilmsWrapperView from "./view/films";
 import FilmsListView from "./view/films-list";
 import FilmListContainer from "./view/films-list-container";
 import FilmCardView from "./view/film-card";
-import {createFilmPopupTemplate} from "./view/film-popup";
-import {createClosePopupButtonTemaplte} from "./view/close-popup-button";
-import {createFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
-import {createFilmPopupPoster} from "./view/film-popup-poster";
-import {createFilmPopupInfoTemplate} from "./view/film-popup-info";
-import {createFilmPopupControls} from "./view/film-popup-controls";
+import FilmPopupView from "./view/film-popup";
+import ClosePopupButtonView from "./view/close-popup-button";
+import FilmPopupInfoWrapView from "./view/film-popup-info-wrap";
+import FilmPopupPosterView from "./view/film-popup-poster";
+import FilmPopupInfoView from "./view/film-popup-info";
+import FilmPopupControlsView from "./view/film-popup-controls";
 import {createFilmPopupCommentsWrap} from "./view/film-popup-comments-wrap";
 import {createFilmPopupCommentsList} from "./view/film-popup-comments-list";
 import {createFilmPopupNewComment} from "./view/film-popup-new-comment";
@@ -113,10 +113,10 @@ const onPopupEscPress = (evt) => {
   isEscEvent(evt, closePopup);
 };
 
-const appendFooterWithPopup = () => renderTemplate(siteFooterElement, createFilmPopupTemplate(), `afterend`);
+const appendFooterWithPopup = () => renderElement(siteBodyElement, new FilmPopupView().getElement());
 
 const appendPopupWithCloseButton = (popupTopContainer) => {
-  renderTemplate(popupTopContainer, createClosePopupButtonTemaplte());
+  renderElement(popupTopContainer, new ClosePopupButtonView().getElement());
 
   const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
 
@@ -124,15 +124,14 @@ const appendPopupWithCloseButton = (popupTopContainer) => {
 };
 
 const appendPopupWithInfo = (popupTopContainer, card) => {
-  renderTemplate(popupTopContainer, createFilmPopupInfoWrap());
+  const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
+  renderElement(popupTopContainer, filmPopupInfoWrapComponent.getElement());
 
-  const popupInfoWrap = popupTopContainer.querySelector(`.film-details__info-wrap`);
-
-  renderTemplate(popupInfoWrap, createFilmPopupPoster(card));
-  renderTemplate(popupInfoWrap, createFilmPopupInfoTemplate(card));
+  renderElement(filmPopupInfoWrapComponent.getElement(), new FilmPopupPosterView(card).getElement());
+  renderElement(filmPopupInfoWrapComponent.getElement(), new FilmPopupInfoView(card).getElement());
 };
 
-const appendPopupWithControls = (popupTopContainer) => renderTemplate(popupTopContainer, createFilmPopupControls());
+const appendPopupWithControls = (popupTopContainer) => renderElement(popupTopContainer, new FilmPopupControlsView().getElement());
 
 const renderPopupTopContainer = (popupForm, card) => {
   const popupTopContainer = popupForm.querySelector(`.film-details__top-container`);
