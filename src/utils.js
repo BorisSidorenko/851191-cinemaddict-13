@@ -4,7 +4,7 @@ const KeyCode = {
   ESC_CODE: `Escape`
 };
 
-export const RnderPosition = {
+export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   AFTEREND: `afterend`,
   BEFOREEND: `beforeend`
@@ -37,6 +37,14 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
   return dayjs(`${year}-${month}-${date}`).format(dateFormat);
 };
 
-export const renderTemplate = (container, template, position = RnderPosition.BEFOREEND) => container.insertAdjacentHTML(position, template);
+export const renderTemplate = (container, template, position = RenderPosition.BEFOREEND) => container.insertAdjacentHTML(position, template);
+
+export const renderElement = (container, element, place) => place === RenderPosition.BEFOREEND ? container.append(element) : container.prepend(element);
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
