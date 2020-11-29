@@ -36,8 +36,6 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
   return dayjs(`${year}-${month}-${date}`).format(dateFormat);
 };
 
-export const renderTemplate = (container, template, position = RenderPosition.BEFOREEND) => container.insertAdjacentHTML(position, template);
-
 export const renderElement = (container, element, place = RenderPosition.BEFOREEND) => place === RenderPosition.BEFOREEND ? container.append(element) : container.prepend(element);
 
 export const createElement = (template) => {

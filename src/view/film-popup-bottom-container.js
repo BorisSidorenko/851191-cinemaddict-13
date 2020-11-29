@@ -1,17 +1,17 @@
 import {createElement} from "../utils";
 
-const createFilmPopupTemplate = () => {
-  return `<section class="film-details">
-    </section>`;
+const createFilmPopupBottomContainerFormTemplate = () => {
+  return `<div class="film-details__bottom-container">
+    </div>`;
 };
 
-export default class FilmPopup {
+export default class FilmPopupForm {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmPopupTemplate();
+    return createFilmPopupBottomContainerFormTemplate();
   }
 
   getElement() {

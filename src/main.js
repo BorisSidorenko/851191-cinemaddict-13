@@ -12,11 +12,14 @@ import ClosePopupButtonView from "./view/close-popup-button";
 import FilmPopupInfoWrapView from "./view/film-popup-info-wrap";
 import FilmPopupPosterView from "./view/film-popup-poster";
 import FilmPopupInfoView from "./view/film-popup-info";
+import FilmPopupFormView from "./view/film-popup-form";
+import FilmPopupTopContainerView from "./view/film-popup-top-container";
+import FilmPopupBottomContainerView from "./view/film-popup-bottom-container";
 import FilmPopupControlsView from "./view/film-popup-controls";
-import {createFilmPopupCommentsWrap} from "./view/film-popup-comments-wrap";
-import {createFilmPopupCommentsList} from "./view/film-popup-comments-list";
-import {createFilmPopupNewComment} from "./view/film-popup-new-comment";
-import {isEscEvent, getRandomIntInRange, renderTemplate, renderElement, RenderPosition} from "./utils";
+import FilmPopupCommentsWrapView from "./view/film-popup-comments-wrap";
+import FilmPopupCommentsListView from "./view/film-popup-comments-list";
+import FilmPopupNewCommentView from "./view/film-popup-new-comment";
+import {isEscEvent, getRandomIntInRange, renderElement, RenderPosition} from "./utils";
 import {generateFilmCards} from "./mock/film-card";
 import {generateComments} from "./mock/comment";
 
@@ -98,14 +101,15 @@ showMoreButtonComponent.getElement().addEventListener(`click`, onShowMoreButtonC
 
 renderElement(siteFooterElement, new FilmsCountView(allFilmcards.length).getElement());
 
-const closePopup = () => {
-  const filmPopup = siteBodyElement.querySelector(`.film-details`);
-  const closePopupButton = filmPopup.querySelector(`.film-details__close-btn`);
+const filmPopupComponent = new FilmPopupView();
+const closePopupButtonComponent = new ClosePopupButtonView();
 
-  filmPopup.remove();
+const closePopup = () => {
+  filmPopupComponent.getElement().remove();
+  filmPopupComponent.removeElement();
 
   siteBodyElement.classList.toggle(`hide-overflow`);
-  closePopupButton.removeEventListener(`click`, closePopup);
+  closePopupButtonComponent.getElement().removeEventListener(`click`, closePopup);
   document.removeEventListener(`keydown`, onPopupEscPress);
 };
 
@@ -113,55 +117,59 @@ const onPopupEscPress = (evt) => {
   isEscEvent(evt, closePopup);
 };
 
-const appendFooterWithPopup = () => renderElement(siteBodyElement, new FilmPopupView().getElement());
+const appendFooterWithPopup = (popupForm, popupTopContainer, popupBottomContainer) => {
+  const filmPopup = filmPopupComponent.getElement();
+  renderElement(siteBodyElement, filmPopup);
+  renderElement(filmPopup, popupForm);
+  renderElement(popupForm, popupTopContainer);
+  renderElement(popupForm, popupBottomContainer);
+};
 
 const appendPopupWithCloseButton = (popupTopContainer) => {
-  renderElement(popupTopContainer, new ClosePopupButtonView().getElement());
 
-  const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
+  renderElement(popupTopContainer, closePopupButtonComponent.getElement());
 
-  closePopupButton.addEventListener(`click`, closePopup);
+  closePopupButtonComponent.getElement().addEventListener(`click`, closePopup);
 };
 
 const appendPopupWithInfo = (popupTopContainer, card) => {
-  const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
-  renderElement(popupTopContainer, filmPopupInfoWrapComponent.getElement());
+  const filmPopupInfoWrap = new FilmPopupInfoWrapView().getElement();
+  renderElement(popupTopContainer, filmPopupInfoWrap);
 
-  renderElement(filmPopupInfoWrapComponent.getElement(), new FilmPopupPosterView(card).getElement());
-  renderElement(filmPopupInfoWrapComponent.getElement(), new FilmPopupInfoView(card).getElement());
+  renderElement(filmPopupInfoWrap, new FilmPopupPosterView(card).getElement());
+  renderElement(filmPopupInfoWrap, new FilmPopupInfoView(card).getElement());
 };
 
 const appendPopupWithControls = (popupTopContainer) => renderElement(popupTopContainer, new FilmPopupControlsView().getElement());
 
-const renderPopupTopContainer = (popupForm, card) => {
-  const popupTopContainer = popupForm.querySelector(`.film-details__top-container`);
-
+const renderPopupTopContainer = (popupTopContainer, card) => {
   appendPopupWithCloseButton(popupTopContainer);
   appendPopupWithInfo(popupTopContainer, card);
   appendPopupWithControls(popupTopContainer);
 };
 
 const appendPopupWithComments = (popupBottomContainer, cardComments) => {
-  renderTemplate(popupBottomContainer, createFilmPopupCommentsWrap(cardComments.length));
-  const commentsWrap = popupBottomContainer.querySelector(`.film-details__comments-wrap`);
+  const filmPopupCommentsWrapComponent = new FilmPopupCommentsWrapView(cardComments.length);
+  renderElement(popupBottomContainer, filmPopupCommentsWrapComponent.getElement());
 
-  renderTemplate(commentsWrap, createFilmPopupCommentsList(cardComments));
-  renderTemplate(commentsWrap, createFilmPopupNewComment());
+  renderElement(filmPopupCommentsWrapComponent.getElement(), new FilmPopupCommentsListView(cardComments).getElement());
+  renderElement(filmPopupCommentsWrapComponent.getElement(), new FilmPopupNewCommentView().getElement());
 };
 
-const renderPopupBottomContainer = (popupForm, card) => {
+const renderPopupBottomContainer = (popupBottomContainer, card) => {
   const cardComments = getFilmCardComments(card);
-  const popupBottomContainer = popupForm.querySelector(`.film-details__bottom-container`);
-
   appendPopupWithComments(popupBottomContainer, cardComments);
 };
 
 const renderPopup = (card) => {
-  appendFooterWithPopup();
-  const popupForm = siteBodyElement.querySelector(`.film-details__inner`);
+  const popupForm = new FilmPopupFormView().getElement();
+  const popupTopContainer = new FilmPopupTopContainerView().getElement();
+  const popupBottomContainer = new FilmPopupBottomContainerView().getElement();
 
-  renderPopupTopContainer(popupForm, card);
-  renderPopupBottomContainer(popupForm, card);
+  appendFooterWithPopup(popupForm, popupTopContainer, popupBottomContainer);
+
+  renderPopupTopContainer(popupTopContainer, card);
+  renderPopupBottomContainer(popupBottomContainer, card);
 
   siteBodyElement.classList.toggle(`hide-overflow`);
 };
