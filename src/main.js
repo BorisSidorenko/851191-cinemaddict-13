@@ -3,8 +3,10 @@ import ProfileView from "./view/profile";
 import SortView from "./view/sort";
 import ShowMoreButtonView from "./view/show-more-button";
 import FilmsCountView from "./view/films-count";
-import {createFilmsTemplate} from "./view/films";
-import {createFilmCardTemplate} from "./view/film-card";
+import FilmsWrapperView from "./view/films";
+import FilmsListView from "./view/films-list";
+import FilmListContainer from "./view/films-list-container";
+import FilmCardView from "./view/film-card";
 import {createFilmPopupTemplate} from "./view/film-popup";
 import {createClosePopupButtonTemaplte} from "./view/close-popup-button";
 import {createFilmPopupInfoWrap} from "./view/film-popup-info-wrap";
@@ -48,24 +50,28 @@ const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 renderElement(siteHeaderElement, new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)).getElement());
 renderElement(siteMainElement, new SiteMenuView(allFilmcards).getElement(), RenderPosition.AFTERBEGIN);
 renderElement(siteMainElement, new SortView().getElement());
-renderTemplate(siteMainElement, createFilmsTemplate());
 
-const filmsSection = siteMainElement.querySelector(`.films-list`);
-const filmListContainer = filmsSection.querySelector(`.films-list__container`);
+const filmsWrapperComponent = new FilmsWrapperView();
+const filmsListComponent = new FilmsListView();
+const filmsListContainerComponent = new FilmListContainer();
+
+renderElement(siteMainElement, filmsWrapperComponent.getElement());
+renderElement(filmsWrapperComponent.getElement(), filmsListComponent.getElement());
+renderElement(filmsListComponent.getElement(), filmsListContainerComponent.getElement());
 
 const showMoreButtonComponent = new ShowMoreButtonView();
-renderElement(filmsSection, showMoreButtonComponent.getElement());
+renderElement(filmsListComponent.getElement(), showMoreButtonComponent.getElement());
 
 const renderFilmCards = (cardsToShow) => {
   cardsToShow.forEach((cardToShow) => {
     const commentsCount = getFilmCardComments(cardToShow).length;
-    const filmCardTemplate = createFilmCardTemplate(cardToShow, commentsCount);
-    renderTemplate(filmListContainer, filmCardTemplate);
+    const filmCard = new FilmCardView(cardToShow, commentsCount).getElement();
+    renderElement(filmsListContainerComponent.getElement(), filmCard);
   });
 };
 
 const appendFilmCards = (cardsToShow) => {
-  filmListContainer.innerHTML = ``;
+  filmsListContainerComponent.getElement().innerHTML = ``;
 
   renderFilmCards(cardsToShow);
 
@@ -181,5 +187,5 @@ const onFilmCardClick = (evt) => {
   }
 };
 
-filmListContainer.addEventListener(`click`, onFilmCardClick);
+filmsListContainerComponent.getElement().addEventListener(`click`, onFilmCardClick);
 
