@@ -1,5 +1,5 @@
 import SiteMenuView from "./view/site-menu";
-import {createProfileTemplate} from "./view/profile";
+import ProfileView from "./view/profile";
 import {createSortTemplate} from "./view/sort";
 import {createShowMoreButtonTemplate} from "./view/show-more-button";
 import {createFilmsCountTemplate} from "./view/films-count";
@@ -45,7 +45,7 @@ const siteHeaderElement = siteBodyElement.querySelector(`.header`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
-renderTemplate(siteHeaderElement, createProfileTemplate(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)));
+renderElement(siteHeaderElement, new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)).getElement());
 renderElement(siteMainElement, new SiteMenuView(allFilmcards).getElement(), RenderPosition.AFTERBEGIN);
 renderTemplate(siteMainElement, createSortTemplate());
 renderTemplate(siteMainElement, createFilmsTemplate());

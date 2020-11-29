@@ -39,7 +39,7 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
 
 export const renderTemplate = (container, template, position = RenderPosition.BEFOREEND) => container.insertAdjacentHTML(position, template);
 
-export const renderElement = (container, element, place) => place === RenderPosition.BEFOREEND ? container.append(element) : container.prepend(element);
+export const renderElement = (container, element, place = RenderPosition.BEFOREEND) => place === RenderPosition.BEFOREEND ? container.append(element) : container.prepend(element);
 
 export const createElement = (template) => {
   const newElement = document.createElement(`div`);
