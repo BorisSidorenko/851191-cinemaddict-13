@@ -31,8 +31,7 @@ const ELEMENTS_TO_SHOW_POPUP = [
 
 const allFilmcards = generateFilmCards();
 
-const getAllComments = () => allFilmcards.reduce((acc, card) => {
-  const {id} = card;
+const getAllComments = () => allFilmcards.reduce((acc, {id}) => {
   acc[id] = generateComments(id);
   return acc;
 }, {});
@@ -41,29 +40,29 @@ const allComments = getAllComments();
 
 const getFilmCardComments = ({id}) => allComments[id];
 
-const render = (container, template, position) => container.insertAdjacentHTML(position, template);
+const render = (container, template, position = `beforeend`) => container.insertAdjacentHTML(position, template);
 
 const siteBodyElement = document.querySelector(`body`);
 const siteHeaderElement = siteBodyElement.querySelector(`.header`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
-render(siteHeaderElement, createProfileTemplate(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)), `beforeend`);
+render(siteHeaderElement, createProfileTemplate(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)));
 render(siteMainElement, createSiteMenuTemplate(allFilmcards), `afterbegin`);
-render(siteMainElement, createSortTemplate(), `beforeend`);
-render(siteMainElement, createFilmsTemplate(), `beforeend`);
+render(siteMainElement, createSortTemplate());
+render(siteMainElement, createFilmsTemplate());
 
 const filmsSection = siteMainElement.querySelector(`.films-list`);
 const filmListContainer = filmsSection.querySelector(`.films-list__container`);
 
-render(filmsSection, createShowMoreButtonTemplate(), `beforeend`);
+render(filmsSection, createShowMoreButtonTemplate());
 const showMoreButton = filmsSection.querySelector(`.films-list__show-more`);
 
 const renderFilmCards = (cardsToShow) => {
   cardsToShow.forEach((cardToShow) => {
     const commentsCount = getFilmCardComments(cardToShow).length;
     const filmCardTemplate = createFilmCardTemplate(cardToShow, commentsCount);
-    render(filmListContainer, filmCardTemplate, `beforeend`);
+    render(filmListContainer, filmCardTemplate);
   });
 };
 
@@ -92,7 +91,7 @@ const onShowMoreButtonClick = () => {
 
 showMoreButton.addEventListener(`click`, onShowMoreButtonClick);
 
-render(siteFooterElement, createFilmsCountTemplate(), `beforeend`);
+render(siteFooterElement, createFilmsCountTemplate());
 
 const closePopup = () => {
   const filmPopup = siteBodyElement.querySelector(`.film-details`);
@@ -112,7 +111,7 @@ const onPopupEscPress = (evt) => {
 const appendFooterWithPopup = () => render(siteFooterElement, createFilmPopupTemplate(), `afterend`);
 
 const appendPopupWithCloseButton = (popupTopContainer) => {
-  render(popupTopContainer, createClosePopupButtonTemaplte(), `beforeend`);
+  render(popupTopContainer, createClosePopupButtonTemaplte());
 
   const closePopupButton = popupTopContainer.querySelector(`.film-details__close-btn`);
 
@@ -120,15 +119,15 @@ const appendPopupWithCloseButton = (popupTopContainer) => {
 };
 
 const appendPopupWithInfo = (popupTopContainer, card) => {
-  render(popupTopContainer, createFilmPopupInfoWrap(), `beforeend`);
+  render(popupTopContainer, createFilmPopupInfoWrap());
 
   const popupInfoWrap = popupTopContainer.querySelector(`.film-details__info-wrap`);
 
-  render(popupInfoWrap, createFilmPopupPoster(card), `beforeend`);
-  render(popupInfoWrap, createFilmPopupInfoTemplate(card), `beforeend`);
+  render(popupInfoWrap, createFilmPopupPoster(card));
+  render(popupInfoWrap, createFilmPopupInfoTemplate(card));
 };
 
-const appendPopupWithControls = (popupTopContainer) => render(popupTopContainer, createFilmPopupControls(), `beforeend`);
+const appendPopupWithControls = (popupTopContainer) => render(popupTopContainer, createFilmPopupControls());
 
 const renderPopupTopContainer = (popupForm, card) => {
   const popupTopContainer = popupForm.querySelector(`.film-details__top-container`);
@@ -139,11 +138,11 @@ const renderPopupTopContainer = (popupForm, card) => {
 };
 
 const appendPopupWithComments = (popupBottomContainer, cardComments) => {
-  render(popupBottomContainer, createFilmPopupCommentsWrap(cardComments.length), `beforeend`);
+  render(popupBottomContainer, createFilmPopupCommentsWrap(cardComments.length));
   const commentsWrap = popupBottomContainer.querySelector(`.film-details__comments-wrap`);
 
-  render(commentsWrap, createFilmPopupCommentsList(cardComments), `beforeend`);
-  render(commentsWrap, createFilmPopupNewComment(), `beforeend`);
+  render(commentsWrap, createFilmPopupCommentsList(cardComments));
+  render(commentsWrap, createFilmPopupNewComment());
 };
 
 const renderPopupBottomContainer = (popupForm, card) => {
