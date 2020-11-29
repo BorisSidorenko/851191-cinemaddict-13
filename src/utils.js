@@ -4,6 +4,12 @@ const KeyCode = {
   ESC_CODE: `Escape`
 };
 
+export const RnderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  AFTEREND: `afterend`,
+  BEFOREEND: `beforeend`
+};
+
 const MAX_MONTH = 12;
 const MIN_MONTH = 1;
 const MAX_DATE = 31;
@@ -31,5 +37,6 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
   return dayjs(`${year}-${month}-${date}`).format(dateFormat);
 };
 
+export const renderTemplate = (container, template, position = RnderPosition.BEFOREEND) => container.insertAdjacentHTML(position, template);
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
