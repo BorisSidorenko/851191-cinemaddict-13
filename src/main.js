@@ -1,8 +1,8 @@
 import SiteMenuView from "./view/site-menu";
 import ProfileView from "./view/profile";
-import {createSortTemplate} from "./view/sort";
-import {createShowMoreButtonTemplate} from "./view/show-more-button";
-import {createFilmsCountTemplate} from "./view/films-count";
+import SortView from "./view/sort";
+import ShowMoreButtonView from "./view/show-more-button";
+import FilmsCountView from "./view/films-count";
 import {createFilmsTemplate} from "./view/films";
 import {createFilmCardTemplate} from "./view/film-card";
 import {createFilmPopupTemplate} from "./view/film-popup";
@@ -47,14 +47,14 @@ const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
 renderElement(siteHeaderElement, new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)).getElement());
 renderElement(siteMainElement, new SiteMenuView(allFilmcards).getElement(), RenderPosition.AFTERBEGIN);
-renderTemplate(siteMainElement, createSortTemplate());
+renderElement(siteMainElement, new SortView().getElement());
 renderTemplate(siteMainElement, createFilmsTemplate());
 
 const filmsSection = siteMainElement.querySelector(`.films-list`);
 const filmListContainer = filmsSection.querySelector(`.films-list__container`);
 
-renderTemplate(filmsSection, createShowMoreButtonTemplate());
-const showMoreButton = filmsSection.querySelector(`.films-list__show-more`);
+const showMoreButtonComponent = new ShowMoreButtonView();
+renderElement(filmsSection, showMoreButtonComponent.getElement());
 
 const renderFilmCards = (cardsToShow) => {
   cardsToShow.forEach((cardToShow) => {
@@ -70,7 +70,8 @@ const appendFilmCards = (cardsToShow) => {
   renderFilmCards(cardsToShow);
 
   if (allFilmcards.length === cardsToShow.length) {
-    showMoreButton.remove();
+    showMoreButtonComponent.getElement().remove();
+    showMoreButtonComponent.removeElement();
   }
 };
 
@@ -87,9 +88,9 @@ const onShowMoreButtonClick = () => {
   appendFilmCards(cardsToShow);
 };
 
-showMoreButton.addEventListener(`click`, onShowMoreButtonClick);
+showMoreButtonComponent.getElement().addEventListener(`click`, onShowMoreButtonClick);
 
-renderTemplate(siteFooterElement, createFilmsCountTemplate());
+renderElement(siteFooterElement, new FilmsCountView(allFilmcards.length).getElement());
 
 const closePopup = () => {
   const filmPopup = siteBodyElement.querySelector(`.film-details`);
