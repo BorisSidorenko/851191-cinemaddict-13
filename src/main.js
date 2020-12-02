@@ -1,15 +1,15 @@
 import SiteMenuView from "./view/site-menu";
 import ProfileView from "./view/profile";
-import SortView from "./view/sort";
+import SortView from "./view/sort/sort";
 import ShowMoreButtonView from "./view/show-more-button";
 import FilmsCountView from "./view/films-count";
 import FilmsWrapperView from "./view/films";
 import FilmsListView from "./view/films-list";
 import EmptyFilmsListView from "./view/films-list-empty";
 import FilmListContainer from "./view/films-list-container";
-import FilmCardView from "./view/film-card";
+import FilmCardView from "./view/film-card/film-card";
 import FilmPopupView from "./view/film-popup";
-import ClosePopupButtonView from "./view/close-popup-button";
+import ClosePopupButtonView from "./view/close-popup-button/close-popup-button";
 import FilmPopupInfoWrapView from "./view/film-popup-info-wrap";
 import FilmPopupPosterView from "./view/film-popup-poster";
 import FilmPopupInfoView from "./view/film-popup-info";
@@ -57,7 +57,7 @@ const siteMenuComponent = new SiteMenuView(allFilmcards);
 
 renderElement(siteHeaderElement, profileComponent.getElement());
 renderElement(siteMainElement, siteMenuComponent.getElement(), RenderPosition.AFTERBEGIN);
-renderElement(siteMainElement, sortComponent.getElement());
+renderElement(siteMainElement, sortComponent.element);
 
 const filmsWrapperComponent = new FilmsWrapperView();
 const filmsListComponent = new FilmsListView();
@@ -82,7 +82,7 @@ renderElement(filmsListComponent.getElement(), showMoreButtonComponent.getElemen
 const renderFilmCards = (cardsToShow) => {
   cardsToShow.forEach((cardToShow) => {
     const commentsCount = getFilmCardComments(cardToShow).length;
-    const filmCard = new FilmCardView(cardToShow, commentsCount).getElement();
+    const filmCard = new FilmCardView(cardToShow, commentsCount).element;
     renderElement(filmsListContainerComponent.getElement(), filmCard);
   });
 };

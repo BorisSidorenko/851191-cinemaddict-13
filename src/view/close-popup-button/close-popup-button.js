@@ -1,10 +1,6 @@
-import {createElement} from "../utils";
+import {createElement} from "../../utils";
+import {createClosePopupButtonTemaplte} from "../close-popup-button/close-popup-button-template";
 
-const createClosePopupButtonTemaplte = () => {
-  return `<div class="film-details__close">
-    <button class="film-details__close-btn" type="button">close</button>
-  </div>`;
-};
 
 export default class ClosePopupButton {
   constructor() {
