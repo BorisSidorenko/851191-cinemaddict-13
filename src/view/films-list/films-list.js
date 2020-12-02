@@ -1,10 +1,5 @@
-import {createElement} from "../utils";
-
-const createFilmsListTemplate = () => {
-  return `<section class="films-list">
-    <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-  </section>`;
-};
+import {createElement} from "../../utils";
+import {createFilmsListTemplate} from "../films-list/films-list-template";
 
 export default class FilmsList {
   constructor() {
@@ -15,7 +10,7 @@ export default class FilmsList {
     return createFilmsListTemplate();
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

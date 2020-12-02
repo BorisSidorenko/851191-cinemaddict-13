@@ -1,8 +1,5 @@
-import {createElement} from "../utils";
-
-const createShowMoreButtonTemplate = () => {
-  return `<button class="films-list__show-more">Show more</button>`;
-};
+import {createElement} from "../../utils";
+import {createShowMoreButtonTemplate} from "../show-more-button/show-more-button-template";
 
 export default class ShowMoreButton {
   constructor() {
@@ -13,7 +10,7 @@ export default class ShowMoreButton {
     return createShowMoreButtonTemplate();
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

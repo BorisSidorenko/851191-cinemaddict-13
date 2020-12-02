@@ -1,9 +1,5 @@
-import {createElement} from "../utils";
-
-const createFilmsWrapperTemplate = () => {
-  return `<section class="films">
-    </section>`;
-};
+import {createElement} from "../../utils";
+import {createFilmsWrapperTemplate} from "../films/films-template";
 
 export default class FilmsWrapper {
   constructor() {
@@ -14,7 +10,7 @@ export default class FilmsWrapper {
     return createFilmsWrapperTemplate();
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

@@ -1,11 +1,11 @@
-import SiteMenuView from "./view/site-menu";
-import ProfileView from "./view/profile";
+import SiteMenuView from "./view/site-menu/site-menu";
+import ProfileView from "./view/profile/profile";
 import SortView from "./view/sort/sort";
-import ShowMoreButtonView from "./view/show-more-button";
+import ShowMoreButtonView from "./view/show-more-button/show-more-button";
 import FilmsCountView from "./view/films-count";
-import FilmsWrapperView from "./view/films";
-import FilmsListView from "./view/films-list";
-import EmptyFilmsListView from "./view/films-list-empty";
+import FilmsWrapperView from "./view/films/films";
+import FilmsListView from "./view/films-list/films-list";
+import EmptyFilmsListView from "./view/films-list-empty/films-list-empty";
 import FilmListContainer from "./view/films-list-container";
 import FilmCardView from "./view/film-card/film-card";
 import FilmPopupView from "./view/film-popup";
@@ -55,8 +55,8 @@ const sortComponent = new SortView();
 const profileComponent = new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK));
 const siteMenuComponent = new SiteMenuView(allFilmcards);
 
-renderElement(siteHeaderElement, profileComponent.getElement());
-renderElement(siteMainElement, siteMenuComponent.getElement(), RenderPosition.AFTERBEGIN);
+renderElement(siteHeaderElement, profileComponent.element);
+renderElement(siteMainElement, siteMenuComponent.element, RenderPosition.AFTERBEGIN);
 renderElement(siteMainElement, sortComponent.element);
 
 const filmsWrapperComponent = new FilmsWrapperView();
@@ -64,20 +64,20 @@ const filmsListComponent = new FilmsListView();
 const emptyFilmsList = new EmptyFilmsListView();
 const filmsListContainerComponent = new FilmListContainer();
 
-renderElement(siteMainElement, filmsWrapperComponent.getElement());
+renderElement(siteMainElement, filmsWrapperComponent.element);
 
 if (allFilmcards.length > 0) {
-  renderElement(filmsWrapperComponent.getElement(), filmsListComponent.getElement());
+  renderElement(filmsWrapperComponent.element, filmsListComponent.element);
 } else {
   sortComponent.getElement().remove();
   sortComponent.removeElement();
-  renderElement(filmsWrapperComponent.getElement(), emptyFilmsList.getElement());
+  renderElement(filmsWrapperComponent.getElement(), emptyFilmsList.element);
 }
 
-renderElement(filmsListComponent.getElement(), filmsListContainerComponent.getElement());
+renderElement(filmsListComponent.element, filmsListContainerComponent.getElement());
 
 const showMoreButtonComponent = new ShowMoreButtonView();
-renderElement(filmsListComponent.getElement(), showMoreButtonComponent.getElement());
+renderElement(filmsListComponent.element, showMoreButtonComponent.element);
 
 const renderFilmCards = (cardsToShow) => {
   cardsToShow.forEach((cardToShow) => {
@@ -111,7 +111,7 @@ const onShowMoreButtonClick = () => {
   appendFilmCards(cardsToShow);
 };
 
-showMoreButtonComponent.getElement().addEventListener(`click`, onShowMoreButtonClick);
+showMoreButtonComponent.element.addEventListener(`click`, onShowMoreButtonClick);
 
 const filmsCountComponent = new FilmsCountView(allFilmcards.length);
 renderElement(siteFooterElement, filmsCountComponent.getElement());
