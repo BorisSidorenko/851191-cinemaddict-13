@@ -1,9 +1,5 @@
-import {createElement} from "../utils";
-
-const createFilmsListContainerTemplate = () => {
-  return `<div class="films-list__container">
-    </div>`;
-};
+import {createElement} from "../../utils";
+import {createFilmsListContainerTemplate} from "../films-list-container/films-list-container-template";
 
 export default class FilmsListContainer {
   constructor() {
@@ -14,7 +10,7 @@ export default class FilmsListContainer {
     return createFilmsListContainerTemplate();
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

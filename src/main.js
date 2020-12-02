@@ -2,24 +2,24 @@ import SiteMenuView from "./view/site-menu/site-menu";
 import ProfileView from "./view/profile/profile";
 import SortView from "./view/sort/sort";
 import ShowMoreButtonView from "./view/show-more-button/show-more-button";
-import FilmsCountView from "./view/films-count";
+import FilmsCountView from "./view/films-count/films-count";
 import FilmsWrapperView from "./view/films/films";
 import FilmsListView from "./view/films-list/films-list";
 import EmptyFilmsListView from "./view/films-list-empty/films-list-empty";
-import FilmListContainer from "./view/films-list-container";
+import FilmListContainer from "./view/films-list-container/films-list-container";
 import FilmCardView from "./view/film-card/film-card";
-import FilmPopupView from "./view/film-popup";
+import FilmPopupView from "./view/film-popup/film-popup";
 import ClosePopupButtonView from "./view/close-popup-button/close-popup-button";
-import FilmPopupInfoWrapView from "./view/film-popup-info-wrap";
-import FilmPopupPosterView from "./view/film-popup-poster";
-import FilmPopupInfoView from "./view/film-popup-info";
-import FilmPopupFormView from "./view/film-popup-form";
-import FilmPopupTopContainerView from "./view/film-popup-top-container";
-import FilmPopupBottomContainerView from "./view/film-popup-bottom-container";
-import FilmPopupControlsView from "./view/film-popup-controls";
-import FilmPopupCommentsWrapView from "./view/film-popup-comments-wrap";
-import FilmPopupCommentsListView from "./view/film-popup-comments-list";
-import FilmPopupNewCommentView from "./view/film-popup-new-comment";
+import FilmPopupInfoWrapView from "./view/film-popup-info-wrap/film-popup-info-wrap";
+import FilmPopupPosterView from "./view/film-popup-poster/film-popup-poster";
+import FilmPopupInfoView from "./view/film-popup-info/film-popup-info";
+import FilmPopupFormView from "./view/film-popup-form/film-popup-form";
+import FilmPopupTopContainerView from "./view/film-popup-top-container/film-popup-top-container";
+import FilmPopupBottomContainerView from "./view/film-popup-bottom-container/film-popup-bottom-container";
+import FilmPopupControlsView from "./view/film-popup-controls/film-popup-controls";
+import FilmPopupCommentsWrapView from "./view/film-popup-comments-wrap/film-popup-comments-wrap";
+import FilmPopupCommentsListView from "./view/film-popup-comments-list/film-popup-comments-list";
+import FilmPopupNewCommentView from "./view/film-popup-new-comment/film-popup-new-comment";
 import {isEscEvent, getRandomIntInRange, renderElement, RenderPosition} from "./utils";
 import {generateFilmCards} from "./mock/film-card";
 import {generateComments} from "./mock/comment";
@@ -69,12 +69,12 @@ renderElement(siteMainElement, filmsWrapperComponent.element);
 if (allFilmcards.length > 0) {
   renderElement(filmsWrapperComponent.element, filmsListComponent.element);
 } else {
-  sortComponent.getElement().remove();
+  sortComponent.element.remove();
   sortComponent.removeElement();
-  renderElement(filmsWrapperComponent.getElement(), emptyFilmsList.element);
+  renderElement(filmsWrapperComponent.element, emptyFilmsList.element);
 }
 
-renderElement(filmsListComponent.element, filmsListContainerComponent.getElement());
+renderElement(filmsListComponent.element, filmsListContainerComponent.element);
 
 const showMoreButtonComponent = new ShowMoreButtonView();
 renderElement(filmsListComponent.element, showMoreButtonComponent.element);
@@ -83,17 +83,17 @@ const renderFilmCards = (cardsToShow) => {
   cardsToShow.forEach((cardToShow) => {
     const commentsCount = getFilmCardComments(cardToShow).length;
     const filmCard = new FilmCardView(cardToShow, commentsCount).element;
-    renderElement(filmsListContainerComponent.getElement(), filmCard);
+    renderElement(filmsListContainerComponent.element, filmCard);
   });
 };
 
 const appendFilmCards = (cardsToShow) => {
-  filmsListContainerComponent.getElement().innerHTML = ``;
+  filmsListContainerComponent.element.innerHTML = ``;
 
   renderFilmCards(cardsToShow);
 
   if (allFilmcards.length === cardsToShow.length) {
-    showMoreButtonComponent.getElement().remove();
+    showMoreButtonComponent.element.remove();
     showMoreButtonComponent.removeElement();
   }
 };
@@ -114,13 +114,13 @@ const onShowMoreButtonClick = () => {
 showMoreButtonComponent.element.addEventListener(`click`, onShowMoreButtonClick);
 
 const filmsCountComponent = new FilmsCountView(allFilmcards.length);
-renderElement(siteFooterElement, filmsCountComponent.getElement());
+renderElement(siteFooterElement, filmsCountComponent.element);
 
 const filmPopupComponent = new FilmPopupView();
 const closePopupButtonComponent = new ClosePopupButtonView();
 
 const closePopup = () => {
-  filmPopupComponent.getElement().remove();
+  filmPopupComponent.element.remove();
   filmPopupComponent.removeElement();
 
   siteBodyElement.classList.toggle(`hide-overflow`);
@@ -133,7 +133,7 @@ const onPopupEscPress = (evt) => {
 };
 
 const appendFooterWithPopup = (popupForm, popupTopContainer, popupBottomContainer) => {
-  const filmPopup = filmPopupComponent.getElement();
+  const filmPopup = filmPopupComponent.element;
   renderElement(siteBodyElement, filmPopup);
   renderElement(filmPopup, popupForm);
   renderElement(popupForm, popupTopContainer);
@@ -148,14 +148,15 @@ const appendPopupWithCloseButton = (popupTopContainer) => {
 };
 
 const appendPopupWithInfo = (popupTopContainer, card) => {
-  const filmPopupInfoWrap = new FilmPopupInfoWrapView().getElement();
+  const filmPopupInfoWrap = new FilmPopupInfoWrapView().element;
   renderElement(popupTopContainer, filmPopupInfoWrap);
 
-  renderElement(filmPopupInfoWrap, new FilmPopupPosterView(card).getElement());
-  renderElement(filmPopupInfoWrap, new FilmPopupInfoView(card).getElement());
+  renderElement(filmPopupInfoWrap, new FilmPopupPosterView(card).element);
+  renderElement(filmPopupInfoWrap, new FilmPopupInfoView(card).element);
 };
 
-const appendPopupWithControls = (popupTopContainer) => renderElement(popupTopContainer, new FilmPopupControlsView().getElement());
+const filmPopupControlsComponent = new FilmPopupControlsView();
+const appendPopupWithControls = (popupTopContainer) => renderElement(popupTopContainer, filmPopupControlsComponent.element);
 
 const renderPopupTopContainer = (popupTopContainer, card) => {
   appendPopupWithCloseButton(popupTopContainer);
@@ -165,10 +166,10 @@ const renderPopupTopContainer = (popupTopContainer, card) => {
 
 const appendPopupWithComments = (popupBottomContainer, cardComments) => {
   const filmPopupCommentsWrapComponent = new FilmPopupCommentsWrapView(cardComments.length);
-  renderElement(popupBottomContainer, filmPopupCommentsWrapComponent.getElement());
+  renderElement(popupBottomContainer, filmPopupCommentsWrapComponent.element);
 
-  renderElement(filmPopupCommentsWrapComponent.getElement(), new FilmPopupCommentsListView(cardComments).getElement());
-  renderElement(filmPopupCommentsWrapComponent.getElement(), new FilmPopupNewCommentView().getElement());
+  renderElement(filmPopupCommentsWrapComponent.element, new FilmPopupCommentsListView(cardComments).element);
+  renderElement(filmPopupCommentsWrapComponent.element, new FilmPopupNewCommentView().element);
 };
 
 const renderPopupBottomContainer = (popupBottomContainer, card) => {
@@ -177,9 +178,9 @@ const renderPopupBottomContainer = (popupBottomContainer, card) => {
 };
 
 const renderPopup = (card) => {
-  const popupForm = new FilmPopupFormView().getElement();
-  const popupTopContainer = new FilmPopupTopContainerView().getElement();
-  const popupBottomContainer = new FilmPopupBottomContainerView().getElement();
+  const popupForm = new FilmPopupFormView().element;
+  const popupTopContainer = new FilmPopupTopContainerView().element;
+  const popupBottomContainer = new FilmPopupBottomContainerView().element;
 
   appendFooterWithPopup(popupForm, popupTopContainer, popupBottomContainer);
 
@@ -209,5 +210,5 @@ const onFilmCardClick = (evt) => {
   }
 };
 
-filmsListContainerComponent.getElement().addEventListener(`click`, onFilmCardClick);
+filmsListContainerComponent.element.addEventListener(`click`, onFilmCardClick);
 

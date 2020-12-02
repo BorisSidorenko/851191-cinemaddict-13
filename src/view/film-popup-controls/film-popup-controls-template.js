@@ -1,6 +1,4 @@
-import {createElement} from "../utils";
-
-const createFilmPopupControlsTemplate = () => {
+export const createFilmPopupControlsTemplate = () => {
   return `<section class="film-details__controls">
     <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
     <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
@@ -12,25 +10,3 @@ const createFilmPopupControlsTemplate = () => {
     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
   </section>`;
 };
-
-export default class FilmPopupControls {
-  constructor() {
-    this._element = null;
-  }
-
-  getTemplate() {
-    return createFilmPopupControlsTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-}

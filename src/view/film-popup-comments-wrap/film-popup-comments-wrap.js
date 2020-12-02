@@ -1,10 +1,5 @@
-import {createElement} from "../utils";
-
-const createFilmPopupCommentsWrapTemplate = (commentsCount) => {
-  return `<section class="film-details__comments-wrap">
-    <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsCount}</span></h3>
-  </section>`;
-};
+import {createElement} from "../../utils";
+import {createFilmPopupCommentsWrapTemplate} from "../film-popup-comments-wrap/film-popup-comments-wrap-template";
 
 export default class FilmPopupCommentsWrap {
   constructor(commentsCount) {
@@ -16,7 +11,7 @@ export default class FilmPopupCommentsWrap {
     return createFilmPopupCommentsWrapTemplate(this._commentsCount);
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

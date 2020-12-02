@@ -1,9 +1,5 @@
-import {createElement} from "../utils";
-
-const createFilmPopupTopContainerFormTemplate = () => {
-  return `<div class="film-details__top-container">
-    </div>`;
-};
+import {createElement} from "../../utils";
+import {createFilmPopupTopContainerFormTemplate} from "../film-popup-top-container/film-popup-top-container-template";
 
 export default class FilmPopupTopContainer {
   constructor() {
@@ -14,7 +10,7 @@ export default class FilmPopupTopContainer {
     return createFilmPopupTopContainerFormTemplate();
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

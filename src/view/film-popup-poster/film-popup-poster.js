@@ -1,11 +1,5 @@
-import {createElement} from "../utils";
-
-const createFilmPopupPoster = (poster, ageRating) => {
-  return `<div class="film-details__poster">
-    <img class="film-details__poster-img" src="${poster}" alt="">
-    <p class="film-details__age">${ageRating}</p>
-  </div>`;
-};
+import {createElement} from "../../utils";
+import {createFilmPopupPoster} from "../film-popup-poster/film-popup-poster-template";
 
 export default class FilmPopupPoster {
   constructor({poster, ageRating}) {
@@ -18,7 +12,7 @@ export default class FilmPopupPoster {
     return createFilmPopupPoster(this._poster, this._ageRating);
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemaplte());
     }

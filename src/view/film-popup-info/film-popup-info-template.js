@@ -1,12 +1,10 @@
-import {createElement} from "../utils";
-
 const getGengresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
 
 const createGenresTemplate = (genres) => {
   return genres.map(getGengresTemplate).join(``);
 };
 
-const createFilmPopupInfoTemplate = (card) => {
+export const createFilmPopupInfoTemplate = (card) => {
   const {title, titleOriginal, rating, director, screenwriters, actors, releaseDate, duration, country, genres, description} = card;
   return `<div class="film-details__info">
     <div class="film-details__info-head">
@@ -56,26 +54,3 @@ const createFilmPopupInfoTemplate = (card) => {
     </p>
   </div>`;
 };
-
-export default class FilmPopupInfo {
-  constructor(card) {
-    this._element = null;
-    this._card = card;
-  }
-
-  getTemplate() {
-    return createFilmPopupInfoTemplate(this._card);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-}

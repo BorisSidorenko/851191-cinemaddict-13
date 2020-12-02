@@ -1,5 +1,3 @@
-import {createElement} from "../utils";
-
 const getCommentElement = ({text, emoji, author, date}) => {
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
@@ -20,31 +18,8 @@ const createCommentElements = (comments) => {
   return comments.map(getCommentElement).join(``);
 };
 
-const createFilmPopupCommentsListTemplate = (comments) => {
+export const createFilmPopupCommentsListTemplate = (comments) => {
   return `<ul class="film-details__comments-list">
     ${createCommentElements(comments)}
   </ul>`;
 };
-
-export default class FilmPopupCommentsList {
-  constructor(comments) {
-    this._element = null;
-    this._comments = comments;
-  }
-
-  getTemplate() {
-    return createFilmPopupCommentsListTemplate(this._comments);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-}

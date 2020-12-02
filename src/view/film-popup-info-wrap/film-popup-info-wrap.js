@@ -1,9 +1,5 @@
-import {createElement} from "../utils";
-
-const createFilmPopupInfoWrapTemplate = () => {
-  return `<div class="film-details__info-wrap">
-    </div>`;
-};
+import {createElement} from "../../utils";
+import {createFilmPopupInfoWrapTemplate} from "../film-popup-info-wrap/film-popup-info-wrap-template";
 
 export default class FilmPopupInfoWrap {
   constructor() {
@@ -14,7 +10,7 @@ export default class FilmPopupInfoWrap {
     return createFilmPopupInfoWrapTemplate();
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemaplte());
     }
