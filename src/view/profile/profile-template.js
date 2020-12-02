@@ -9,7 +9,7 @@ const Ranks = {
 const getRank = (fimlsCount) => {
   let rank = ``;
 
-  if (fimlsCount > 0 && fimlsCount <= Ranks.NOVICE_FILMS_MAX) {
+  if (fimlsCount >= 0 && fimlsCount <= Ranks.NOVICE_FILMS_MAX) {
     rank = Ranks.NOVICE;
   } else if (fimlsCount > Ranks.NOVICE_FILMS_MAX && fimlsCount <= Ranks.FAN_FILMS_MAX) {
     rank = Ranks.FAN;

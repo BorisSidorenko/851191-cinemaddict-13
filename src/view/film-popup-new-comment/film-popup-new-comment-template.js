@@ -1,4 +1,4 @@
-export const createFilmPopupNewComment = () => {
+export const createFilmPopupNewCommentTemplate = () => {
   return `<div class="film-details__new-comment">
     <div class="film-details__add-emoji-label"></div>
 

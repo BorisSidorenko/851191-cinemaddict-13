@@ -18,7 +18,7 @@ const createCommentElements = (comments) => {
   return comments.map(getCommentElement).join(``);
 };
 
-export const createFilmPopupCommentsList = (comments) => {
+export const createFilmPopupCommentsListTemplate = (comments) => {
   return `<ul class="film-details__comments-list">
     ${createCommentElements(comments)}
   </ul>`;
