@@ -15,7 +15,7 @@ export default class ClosePopupButton {
     return createClosePopupButtonTemaplte();
   }
 
-  getElement() {
+  get element() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

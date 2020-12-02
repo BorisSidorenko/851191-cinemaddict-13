@@ -52,9 +52,11 @@ const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
 const sortComponent = new SortView();
+const profileComponent = new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK));
+const siteMenuComponent = new SiteMenuView(allFilmcards);
 
-renderElement(siteHeaderElement, new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK)).getElement());
-renderElement(siteMainElement, new SiteMenuView(allFilmcards).getElement(), RenderPosition.AFTERBEGIN);
+renderElement(siteHeaderElement, profileComponent.getElement());
+renderElement(siteMainElement, siteMenuComponent.getElement(), RenderPosition.AFTERBEGIN);
 renderElement(siteMainElement, sortComponent.getElement());
 
 const filmsWrapperComponent = new FilmsWrapperView();
@@ -111,7 +113,8 @@ const onShowMoreButtonClick = () => {
 
 showMoreButtonComponent.getElement().addEventListener(`click`, onShowMoreButtonClick);
 
-renderElement(siteFooterElement, new FilmsCountView(allFilmcards.length).getElement());
+const filmsCountComponent = new FilmsCountView(allFilmcards.length);
+renderElement(siteFooterElement, filmsCountComponent.getElement());
 
 const filmPopupComponent = new FilmPopupView();
 const closePopupButtonComponent = new ClosePopupButtonView();
@@ -121,7 +124,7 @@ const closePopup = () => {
   filmPopupComponent.removeElement();
 
   siteBodyElement.classList.toggle(`hide-overflow`);
-  closePopupButtonComponent.getElement().removeEventListener(`click`, closePopup);
+  closePopupButtonComponent.element.removeEventListener(`click`, closePopup);
   document.removeEventListener(`keydown`, onPopupEscPress);
 };
 
@@ -139,9 +142,9 @@ const appendFooterWithPopup = (popupForm, popupTopContainer, popupBottomContaine
 
 const appendPopupWithCloseButton = (popupTopContainer) => {
 
-  renderElement(popupTopContainer, closePopupButtonComponent.getElement());
+  renderElement(popupTopContainer, closePopupButtonComponent.element);
 
-  closePopupButtonComponent.getElement().addEventListener(`click`, closePopup);
+  closePopupButtonComponent.element.addEventListener(`click`, closePopup);
 };
 
 const appendPopupWithInfo = (popupTopContainer, card) => {

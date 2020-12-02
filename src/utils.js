@@ -38,10 +38,10 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
 
 export const renderElement = (container, element, place = RenderPosition.BEFOREEND) => place === RenderPosition.BEFOREEND ? container.append(element) : container.prepend(element);
 
-export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-  return newElement.firstChild;
+export const createElement = (template, element = `div`) => {
+  const node = document.createElement(element);
+  node.innerHTML = template;
+  return node.firstChild;
 };
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
