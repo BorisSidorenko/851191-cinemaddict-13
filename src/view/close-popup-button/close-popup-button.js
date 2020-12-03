@@ -1,25 +1,9 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createClosePopupButtonTemaplte} from "../close-popup-button/close-popup-button-template";
 
 
-export default class ClosePopupButton {
-  constructor() {
-    this._element = null;
-  }
-
+export default class ClosePopupButton extends AbstractView {
   getTemplate() {
     return createClosePopupButtonTemaplte();
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,24 +1,8 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createFilmPopupFormTemplate} from "../film-popup-form/film-popup-form-template";
 
-export default class FilmPopupForm {
-  constructor() {
-    this._element = null;
-  }
-
+export default class FilmPopupForm extends AbstractView {
   getTemplate() {
     return createFilmPopupFormTemplate();
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

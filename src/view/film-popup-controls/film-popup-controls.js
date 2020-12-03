@@ -1,24 +1,8 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createFilmPopupControlsTemplate} from "../film-popup-controls/film-popup-controls-template";
 
-export default class FilmPopupControls {
-  constructor() {
-    this._element = null;
-  }
-
+export default class FilmPopupControls extends AbstractView {
   getTemplate() {
     return createFilmPopupControlsTemplate();
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

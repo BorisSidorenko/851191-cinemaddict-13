@@ -1,24 +1,8 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createFilmPopupInfoWrapTemplate} from "../film-popup-info-wrap/film-popup-info-wrap-template";
 
-export default class FilmPopupInfoWrap {
-  constructor() {
-    this._element = null;
-  }
-
+export default class FilmPopupInfoWrap extends AbstractView {
   getTemaplte() {
     return createFilmPopupInfoWrapTemplate();
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemaplte());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
