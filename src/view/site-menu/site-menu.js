@@ -1,25 +1,13 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createSiteMenuTemplate} from "../site-menu/site-menu-template";
 
-export default class SiteMenu {
+export default class SiteMenu extends AbstractView {
   constructor(cards) {
-    this._element = null;
+    super();
     this._cards = cards;
   }
 
   getTemplate() {
     return createSiteMenuTemplate(this._cards);
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

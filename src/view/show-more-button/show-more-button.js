@@ -1,24 +1,8 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createShowMoreButtonTemplate} from "../show-more-button/show-more-button-template";
 
-export default class ShowMoreButton {
-  constructor() {
-    this._element = null;
-  }
-
+export default class ShowMoreButton extends AbstractView {
   getTemplate() {
     return createShowMoreButtonTemplate();
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

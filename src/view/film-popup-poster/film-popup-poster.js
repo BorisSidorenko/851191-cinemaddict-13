@@ -1,26 +1,14 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createFilmPopupPoster} from "../film-popup-poster/film-popup-poster-template";
 
-export default class FilmPopupPoster {
+export default class FilmPopupPoster extends AbstractView {
   constructor({poster, ageRating}) {
-    this._element = null;
+    super();
     this._poster = poster;
     this._ageRating = ageRating;
   }
 
-  getTemaplte() {
+  getTemplate() {
     return createFilmPopupPoster(this._poster, this._ageRating);
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemaplte());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

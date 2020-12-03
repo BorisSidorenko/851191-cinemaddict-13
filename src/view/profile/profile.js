@@ -1,25 +1,13 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createProfileTemplate} from "../profile/profile-template";
 
-export default class Profile {
+export default class Profile extends AbstractView {
   constructor(filmsCount) {
-    this._element = null;
+    super();
     this._filmsCount = filmsCount;
   }
 
   getTemplate() {
     return createProfileTemplate(this._filmsCount);
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
