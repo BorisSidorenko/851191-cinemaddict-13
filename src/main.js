@@ -21,7 +21,8 @@ import FilmPopupControlsView from "./view/film-popup-controls/film-popup-control
 import FilmPopupCommentsWrapView from "./view/film-popup-comments-wrap/film-popup-comments-wrap";
 import FilmPopupCommentsListView from "./view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "./view/film-popup-new-comment/film-popup-new-comment";
-import {isEscEvent, getRandomIntInRange, renderElement, RenderPosition} from "./utils";
+import {render, remove, RenderPosition} from "./utils/render";
+import {isEscEvent, getRandomIntInRange} from "./utils/common";
 import {generateFilmCards} from "./mock/film-card";
 import {generateComments} from "./mock/comment";
 
@@ -56,35 +57,34 @@ const sortComponent = new SortView();
 const profileComponent = new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK));
 const siteMenuComponent = new SiteMenuView(allFilmcards);
 
-renderElement(siteHeaderElement, profileComponent.element);
-renderElement(siteMainElement, siteMenuComponent.element, RenderPosition.AFTERBEGIN);
-renderElement(siteMainElement, sortComponent.element);
+render(siteHeaderElement, profileComponent);
+render(siteMainElement, siteMenuComponent, RenderPosition.AFTERBEGIN);
+render(siteMainElement, sortComponent);
 
 const filmsWrapperComponent = new FilmsWrapperView();
 const filmsListComponent = new FilmsListView();
 const emptyFilmsList = new EmptyFilmsListView();
 const filmsListContainerComponent = new FilmListContainer();
 
-renderElement(siteMainElement, filmsWrapperComponent.element);
+render(siteMainElement, filmsWrapperComponent);
 
 if (allFilmcards.length > 0) {
-  renderElement(filmsWrapperComponent.element, filmsListComponent.element);
+  render(filmsWrapperComponent, filmsListComponent);
 } else {
-  sortComponent.element.remove();
-  sortComponent.removeElement();
-  renderElement(filmsWrapperComponent.element, emptyFilmsList.element);
+  remove(sortComponent);
+  render(filmsWrapperComponent, emptyFilmsList);
 }
 
-renderElement(filmsListComponent.element, filmsListContainerComponent.element);
+render(filmsListComponent, filmsListContainerComponent);
 
 const showMoreButtonComponent = new ShowMoreButtonView();
-renderElement(filmsListComponent.element, showMoreButtonComponent.element);
+render(filmsListComponent, showMoreButtonComponent);
 
 const renderFilmCards = (cardsToShow) => {
   cardsToShow.forEach((cardToShow) => {
     const commentsCount = getFilmCardComments(cardToShow).length;
-    const filmCard = new FilmCardView(cardToShow, commentsCount).element;
-    renderElement(filmsListContainerComponent.element, filmCard);
+    const filmCardComponent = new FilmCardView(cardToShow, commentsCount);
+    render(filmsListContainerComponent, filmCardComponent);
   });
 };
 
@@ -94,8 +94,7 @@ const appendFilmCards = (cardsToShow) => {
   renderFilmCards(cardsToShow);
 
   if (allFilmcards.length === cardsToShow.length) {
-    showMoreButtonComponent.element.remove();
-    showMoreButtonComponent.removeElement();
+    remove(showMoreButtonComponent);
   }
 };
 
@@ -115,15 +114,14 @@ const onShowMoreButtonClick = () => {
 showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
 
 const filmsCountComponent = new FilmsCountView(allFilmcards.length);
-renderElement(siteFooterElement, filmsCountComponent.element);
+render(siteFooterElement, filmsCountComponent);
 
 const filmPopupComponent = new FilmPopupView();
 const closePopupButtonWrapperComponent = new ClosePopupButtonWrapperView();
 const closePopupButtonComponent = new ClosePopupButtonView();
 
 const closePopup = () => {
-  filmPopupComponent.element.remove();
-  filmPopupComponent.removeElement();
+  remove(filmPopupComponent);
 
   siteBodyElement.classList.toggle(`hide-overflow`);
   closePopupButtonComponent.clearClickHandler();
@@ -135,29 +133,28 @@ const onPopupEscPress = (evt) => {
 };
 
 const appendFooterWithPopup = (popupForm, popupTopContainer, popupBottomContainer) => {
-  const filmPopup = filmPopupComponent.element;
-  renderElement(siteBodyElement, filmPopup);
-  renderElement(filmPopup, popupForm);
-  renderElement(popupForm, popupTopContainer);
-  renderElement(popupForm, popupBottomContainer);
+  render(siteBodyElement, filmPopupComponent);
+  render(filmPopupComponent, popupForm);
+  render(popupForm, popupTopContainer);
+  render(popupForm, popupBottomContainer);
 };
 
 const appendPopupWithCloseButton = (popupTopContainer) => {
-  renderElement(popupTopContainer, closePopupButtonWrapperComponent.element);
-  renderElement(closePopupButtonWrapperComponent.element, closePopupButtonComponent.element);
+  render(popupTopContainer, closePopupButtonWrapperComponent);
+  render(closePopupButtonWrapperComponent, closePopupButtonComponent);
   closePopupButtonComponent.setClickHandler(closePopup);
 };
 
 const appendPopupWithInfo = (popupTopContainer, card) => {
-  const filmPopupInfoWrap = new FilmPopupInfoWrapView().element;
-  renderElement(popupTopContainer, filmPopupInfoWrap);
+  const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
+  render(popupTopContainer, filmPopupInfoWrapComponent);
 
-  renderElement(filmPopupInfoWrap, new FilmPopupPosterView(card).element);
-  renderElement(filmPopupInfoWrap, new FilmPopupInfoView(card).element);
+  render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card));
+  render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
 };
 
 const filmPopupControlsComponent = new FilmPopupControlsView();
-const appendPopupWithControls = (popupTopContainer) => renderElement(popupTopContainer, filmPopupControlsComponent.element);
+const appendPopupWithControls = (popupTopContainer) => render(popupTopContainer, filmPopupControlsComponent);
 
 const renderPopupTopContainer = (popupTopContainer, card) => {
   appendPopupWithCloseButton(popupTopContainer);
@@ -167,10 +164,10 @@ const renderPopupTopContainer = (popupTopContainer, card) => {
 
 const appendPopupWithComments = (popupBottomContainer, cardComments) => {
   const filmPopupCommentsWrapComponent = new FilmPopupCommentsWrapView(cardComments.length);
-  renderElement(popupBottomContainer, filmPopupCommentsWrapComponent.element);
+  render(popupBottomContainer, filmPopupCommentsWrapComponent);
 
-  renderElement(filmPopupCommentsWrapComponent.element, new FilmPopupCommentsListView(cardComments).element);
-  renderElement(filmPopupCommentsWrapComponent.element, new FilmPopupNewCommentView().element);
+  render(filmPopupCommentsWrapComponent.element, new FilmPopupCommentsListView(cardComments));
+  render(filmPopupCommentsWrapComponent.element, new FilmPopupNewCommentView());
 };
 
 const renderPopupBottomContainer = (popupBottomContainer, card) => {
