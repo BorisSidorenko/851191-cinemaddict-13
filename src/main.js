@@ -9,6 +9,7 @@ import EmptyFilmsListView from "./view/films-list-empty/films-list-empty";
 import FilmListContainer from "./view/films-list-container/films-list-container";
 import FilmCardView from "./view/film-card/film-card";
 import FilmPopupView from "./view/film-popup/film-popup";
+import ClosePopupButtonWrapperView from "./view/close-popup-button-wrapper/close-popup-button-wrapper";
 import ClosePopupButtonView from "./view/close-popup-button/close-popup-button";
 import FilmPopupInfoWrapView from "./view/film-popup-info-wrap/film-popup-info-wrap";
 import FilmPopupPosterView from "./view/film-popup-poster/film-popup-poster";
@@ -117,6 +118,7 @@ const filmsCountComponent = new FilmsCountView(allFilmcards.length);
 renderElement(siteFooterElement, filmsCountComponent.element);
 
 const filmPopupComponent = new FilmPopupView();
+const closePopupButtonWrapperComponent = new ClosePopupButtonWrapperView();
 const closePopupButtonComponent = new ClosePopupButtonView();
 
 const closePopup = () => {
@@ -124,7 +126,7 @@ const closePopup = () => {
   filmPopupComponent.removeElement();
 
   siteBodyElement.classList.toggle(`hide-overflow`);
-  closePopupButtonComponent.element.removeEventListener(`click`, closePopup);
+  closePopupButtonComponent.clearClickHandler();
   document.removeEventListener(`keydown`, onPopupEscPress);
 };
 
@@ -141,10 +143,9 @@ const appendFooterWithPopup = (popupForm, popupTopContainer, popupBottomContaine
 };
 
 const appendPopupWithCloseButton = (popupTopContainer) => {
-
-  renderElement(popupTopContainer, closePopupButtonComponent.element);
-
-  closePopupButtonComponent.element.addEventListener(`click`, closePopup);
+  renderElement(popupTopContainer, closePopupButtonWrapperComponent.element);
+  renderElement(closePopupButtonWrapperComponent.element, closePopupButtonComponent.element);
+  closePopupButtonComponent.setClickHandler(closePopup);
 };
 
 const appendPopupWithInfo = (popupTopContainer, card) => {
