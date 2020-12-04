@@ -112,7 +112,7 @@ const onShowMoreButtonClick = () => {
   appendFilmCards(cardsToShow);
 };
 
-showMoreButtonComponent.element.addEventListener(`click`, onShowMoreButtonClick);
+showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
 
 const filmsCountComponent = new FilmsCountView(allFilmcards.length);
 renderElement(siteFooterElement, filmsCountComponent.element);
@@ -211,5 +211,5 @@ const onFilmCardClick = (evt) => {
   }
 };
 
-filmsListContainerComponent.element.addEventListener(`click`, onFilmCardClick);
+filmsListContainerComponent.setClickHandler(onFilmCardClick);
 
