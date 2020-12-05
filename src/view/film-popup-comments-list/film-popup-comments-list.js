@@ -1,25 +1,13 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createFilmPopupCommentsListTemplate} from "../film-popup-comments-list/film-popup-comments-list-template";
 
-export default class FilmPopupCommentsList {
+export default class FilmPopupCommentsList extends AbstractView {
   constructor(comments) {
-    this._element = null;
+    super();
     this._comments = comments;
   }
 
   getTemplate() {
     return createFilmPopupCommentsListTemplate(this._comments);
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,25 +1,13 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createFilmsCountTemplate} from "../films-count/films-count-template";
 
-export default class FilmsCount {
+export default class FilmsCount extends AbstractView {
   constructor(count) {
-    this._element = null;
+    super();
     this._count = count;
   }
 
-  getTemaplte() {
+  getTemplate() {
     return createFilmsCountTemplate(this._count);
-  }
-
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemaplte());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

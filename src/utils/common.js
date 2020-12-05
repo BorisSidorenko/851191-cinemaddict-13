@@ -4,11 +4,6 @@ const KeyCode = {
   ESC_CODE: `Escape`
 };
 
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-
 const MAX_MONTH = 12;
 const MIN_MONTH = 1;
 const MAX_DATE = 31;
@@ -34,14 +29,6 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
   const date = getRandomIntInRange(MAX_DATE, MIN_DATE);
 
   return dayjs(`${year}-${month}-${date}`).format(dateFormat);
-};
-
-export const renderElement = (container, element, place = RenderPosition.BEFOREEND) => place === RenderPosition.BEFOREEND ? container.append(element) : container.prepend(element);
-
-export const createElement = (template, element = `div`) => {
-  const node = document.createElement(element);
-  node.innerHTML = template;
-  return node.firstChild;
 };
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());

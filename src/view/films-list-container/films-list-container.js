@@ -1,24 +1,28 @@
-import {createElement} from "../../utils";
+import AbstractView from "../abstract-component";
 import {createFilmsListContainerTemplate} from "../films-list-container/films-list-container-template";
 
-export default class FilmsListContainer {
+export default class FilmsListContainer extends AbstractView {
   constructor() {
-    this._element = null;
+    super();
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmsListContainerTemplate();
   }
 
-  get element() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click(evt);
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.element.addEventListener(`click`, this._clickHandler);
+  }
+
+  clearClickHandler() {
+    this._callback.click = null;
+    this.element.removeEventListener(`click`, this._clickHandler);
   }
 }

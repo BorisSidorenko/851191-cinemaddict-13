@@ -1,4 +1,4 @@
-import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils";
+import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
 const COMMENTS = [
   `Almost two hours? Seriously?`,
