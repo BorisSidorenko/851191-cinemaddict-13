@@ -7,6 +7,7 @@ import EmptyFilmsListView from "../view/films-list-empty/films-list-empty";
 import FilmsListContainer from "../view/films-list-container/films-list-container";
 import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
+import FilmCardView from "ю./view/film-card/film-card";
 import {getRandomIntInRange} from "../utils/common";
 import {render, RenderPosition} from "../utils/render";
 
@@ -28,11 +29,14 @@ export default class FilmList {
     this._filmsListContainerComponent = new FilmsListContainer();
     this._showMoreButtonComponent = new ShowMoreButtonView();
     this._filmsCountComponent = new FilmsCountView();
+    this._filmCardComponent = null;
     this._filmsCards = null;
+    this._comments = null;
   }
 
-  init(filmsCards) {
+  init(filmsCards, comments) {
     this._filmsCards = filmsCards.slice();
+    this._comments = comments.slice();
 
     this._renderProfile();
 
@@ -87,7 +91,19 @@ export default class FilmList {
 
   }
 
-  _renderFilmsCards() {
+  _renderFilmCard() {
 
+  }
+
+  _getFilmCardComments({id}) {
+    return this._comments[id];
+  }
+
+  _renderFilmsCards(cardsToShow) {
+    cardsToShow.forEach((cardToShow) => {
+      const commentsCount = this._getFilmCardComments(cardToShow).length;
+      this._filmCardComponent = new FilmCardView(cardToShow, commentsCount);
+      render(this._filmsListContainerComponent, this._filmCardComponent);
+    });
   }
 }
