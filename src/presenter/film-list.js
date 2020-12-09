@@ -7,7 +7,7 @@ import EmptyFilmsListView from "../view/films-list-empty/films-list-empty";
 import FilmsListContainer from "../view/films-list-container/films-list-container";
 import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
-import FilmCardView from "../view/film-card/film-card";
+import FilmPresenter from "../presenter/film";
 import {getRandomIntInRange} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 
@@ -142,9 +142,9 @@ export default class FilmList {
   }
 
   _renderFilmCard(cardToShow) {
-    const commentsCount = this._getFilmCardComments(cardToShow).length;
-    const filmCardComponent = new FilmCardView(cardToShow, commentsCount);
-    render(this._filmsListContainerComponent, filmCardComponent);
+    const filmPresenter = new FilmPresenter(this._filmsListContainerComponent);
+    const cardComments = this._getFilmCardComments(cardToShow);
+    filmPresenter.init(cardToShow, cardComments);
   }
 
   _getFilmCardComments({id}) {
