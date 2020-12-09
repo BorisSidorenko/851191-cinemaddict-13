@@ -33,9 +33,12 @@ export default class FilmList {
     this._filmsListComponent = new FilmsListView();
     this._emptyFilmsListComponent = new EmptyFilmsListView();
     this._filmsListContainerComponent = new FilmsListContainer();
+    this._showMoreButtonComponent = new ShowMoreButtonView();
+    this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._filmCardComponent = null;
     this._filmsCards = null;
     this._comments = null;
+    this._showMoreButtonClickCounter = 1;
   }
 
   init(filmsCards, comments) {
@@ -116,24 +119,21 @@ export default class FilmList {
     render(this._filmsWrapperComponent, this._emptyFilmsListComponent);
   }
 
+  _handleShowMoreButtonClick() {
+    this._showMoreButtonClickCounter++;
+
+    const cardsToShow = this._filmsCards.slice(0, CARDS_TO_SHOW_COUNT * this._showMoreButtonClickCounter);
+
+    this._renderFilmsCards(cardsToShow);
+
+    if (cardsToShow.length === this._filmsCards.length) {
+      remove(this._showMoreButtonComponent);
+    }
+  }
+
   _renderShowMoreButton() {
-    const showMoreButtonComponent = new ShowMoreButtonView();
-    render(this._filmsListComponent, showMoreButtonComponent);
-
-    let showMoreButtonClickCounter = 1;
-
-    const onShowMoreButtonClick = () => {
-      showMoreButtonClickCounter++;
-
-      const cardsToShow = this._filmsCards.slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter);
-      this._renderFilmsCards(cardsToShow);
-
-      if (cardsToShow.length === this._filmsCards.length) {
-        remove(showMoreButtonComponent);
-      }
-    };
-
-    showMoreButtonComponent.setClickHandler(onShowMoreButtonClick);
+    render(this._filmsListComponent, this._showMoreButtonComponent);
+    this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
   }
 
   _renderFilmsCount() {
