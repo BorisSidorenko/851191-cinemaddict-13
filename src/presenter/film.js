@@ -5,7 +5,14 @@ import FilmPopupBottomContainerView from "../view/film-popup-bottom-container/fi
 import FilmCardView from "../view/film-card/film-card";
 import ClosePopupButtonWrapperView from "../view/close-popup-button-wrapper/close-popup-button-wrapper";
 import ClosePopupButtonView from "../view/close-popup-button/close-popup-button";
-import {render, RenderPosition, remove} from "../utils/render";
+import FilmPopupInfoWrapView from "../view/film-popup-info-wrap/film-popup-info-wrap";
+import FilmPopupPosterView from "../view/film-popup-poster/film-popup-poster";
+import FilmPopupInfoView from "../view/film-popup-info/film-popup-info";
+import FilmPopupControlsView from "../view/film-popup-controls/film-popup-controls";
+import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-popup-comments-wrap";
+import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
+import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
+import {render, remove} from "../utils/render";
 import {isEscEvent} from "../utils/common";
 
 const ELEMENTS_TO_SHOW_POPUP = [
@@ -15,10 +22,11 @@ const ELEMENTS_TO_SHOW_POPUP = [
 ];
 
 export default class Film {
-  constructor(filmsCards, mainContainer, filmsListContainer) {
+  constructor(filmsCards, comments, mainContainer, filmsListContainer) {
     this._mainContainer = mainContainer;
     this._filmsListContainerComponent = filmsListContainer;
     this._filmsCards = filmsCards;
+    this._comments = comments;
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._filmPopupComponent = new FilmPopupView();
     this._closePopupButtonComponent = new ClosePopupButtonView();
@@ -28,9 +36,13 @@ export default class Film {
     this._cardComments = null;
   }
 
-  init(filmCard, cardComments) {
+  _getFilmCardComments({id}) {
+    return this._comments[id];
+  }
+
+  init(filmCard) {
     this._filmCard = filmCard;
-    this._cardComments = cardComments;
+    this._cardComments = this._getFilmCardComments(filmCard);
 
     const commentsCount = this._cardComments.length;
     const filmCardComponent = new FilmCardView(filmCard, commentsCount);
@@ -59,7 +71,7 @@ export default class Film {
   _closePopup() {
     remove(this._filmPopupComponent);
 
-    this._mainContainer.classList.toggle(`hide-overflow`);
+    this._mainContainer.parentNode.classList.toggle(`hide-overflow`);
     this._closePopupButtonComponent.clearClickHandler();
     document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
   }
@@ -100,10 +112,36 @@ export default class Film {
     this._closePopupButtonComponent.setClickHandler(this._handleClosePopupButtonClick);
   }
 
+  _appendPopupWithInfo(popupTopContainer, card) {
+    const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
+    render(popupTopContainer, filmPopupInfoWrapComponent);
+
+    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card));
+    render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
+  }
+
+  _appendPopupWithControls(popupTopContainer) {
+    const filmPopupControlsComponent = new FilmPopupControlsView();
+    render(popupTopContainer, filmPopupControlsComponent);
+  }
+
+  _appendPopupWithComments(popupBottomContainer, comments) {
+    const filmPopupCommentsWrapComponent = new FilmPopupCommentsWrapView(comments.length);
+    render(popupBottomContainer, filmPopupCommentsWrapComponent);
+
+    render(filmPopupCommentsWrapComponent, new FilmPopupCommentsListView(comments));
+    render(filmPopupCommentsWrapComponent, new FilmPopupNewCommentView());
+  }
+
   _renderPopupTopContainer(popupTopContainer, card) {
     this._appendPopupWithCloseButton(popupTopContainer);
-    //appendPopupWithInfo(popupTopContainer, card);
-    //appendPopupWithControls(popupTopContainer);
+    this._appendPopupWithInfo(popupTopContainer, card);
+    this._appendPopupWithControls(popupTopContainer);
+  }
+
+  _renderPopupBottomContainer(popupBottomContainer, card) {
+    const comments = this._getFilmCardComments(card);
+    this._appendPopupWithComments(popupBottomContainer, comments);
   }
 
   _renderPopup(card) {
@@ -111,11 +149,11 @@ export default class Film {
     const popupTopContainerComponent = new FilmPopupTopContainerView();
     const popupBottomContainerComponent = new FilmPopupBottomContainerView();
 
-    this._appendMainWithPopup(popupFormComponent.element, popupTopContainerComponent.element, popupBottomContainerComponent.element);
+    this._appendMainWithPopup(popupFormComponent, popupTopContainerComponent, popupBottomContainerComponent);
 
-    this._renderPopupTopContainer(popupTopContainerComponent.element, card);
-    //renderPopupBottomContainer(popupBottomContainer, card);
+    this._renderPopupTopContainer(popupTopContainerComponent, card);
+    this._renderPopupBottomContainer(popupBottomContainerComponent, card);
 
-    this._mainContainer.classList.toggle(`hide-overflow`);
+    this._mainContainer.parentNode.classList.toggle(`hide-overflow`);
   }
 }

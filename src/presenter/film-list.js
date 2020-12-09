@@ -114,13 +114,8 @@ export default class FilmList {
   }
 
   _renderFilmCard(cardToShow) {
-    const filmPresenter = new FilmPresenter(this._filmsCards, this._mainContainer, this._filmsListContainerComponent);
-    const cardComments = this._getFilmCardComments(cardToShow);
-    filmPresenter.init(cardToShow, cardComments);
-  }
-
-  _getFilmCardComments({id}) {
-    return this._comments[id];
+    const filmPresenter = new FilmPresenter(this._filmsCards, this._comments, this._mainContainer, this._filmsListContainerComponent);
+    filmPresenter.init(cardToShow);
   }
 
   _renderFilmsCards(cardsToShow) {
