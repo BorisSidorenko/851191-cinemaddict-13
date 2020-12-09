@@ -16,12 +16,6 @@ const CARDS_TO_SHOW_COUNT = 5;
 const MIN_PROFILE_RANK = 0;
 const MAX_PROFILE_RANK = 40;
 
-const ELEMENTS_TO_SHOW_POPUP = [
-  `film-card__poster`,
-  `film-card__title`,
-  `film-card__comments`
-];
-
 export default class FilmList {
   constructor(headerContainer, mainContainer, footerContainer) {
     this._headerContainer = headerContainer;
@@ -89,28 +83,6 @@ export default class FilmList {
   }
 
   _renderFilmsListContainer() {
-    // const isPopupElementClicked = (className) => ELEMENTS_TO_SHOW_POPUP.some((val) => val === className);
-
-    // const getCard = (id) => this._filmsCards.find((el) => el.id === id);
-
-    const onFilmCardClick = (evt) => {
-      // const showPopup = isPopupElementClicked(evt.target.className);
-
-      // if (showPopup) {
-      //   evt.preventDefault();
-
-      //   const cardId = evt.target.parentNode.dataset.id;
-      //   const clickedCard = getCard(cardId);
-
-      //   if (clickedCard) {
-      //     renderPopup(clickedCard);
-      //     document.addEventListener(`keydown`, onPopupEscPress);
-      //   }
-      // }
-    };
-
-    this._filmsListContainerComponent.setClickHandler(onFilmCardClick);
-
     render(this._filmsListComponent, this._filmsListContainerComponent);
   }
 
@@ -142,7 +114,7 @@ export default class FilmList {
   }
 
   _renderFilmCard(cardToShow) {
-    const filmPresenter = new FilmPresenter(this._filmsListContainerComponent);
+    const filmPresenter = new FilmPresenter(this._filmsCards, this._mainContainer, this._filmsListContainerComponent);
     const cardComments = this._getFilmCardComments(cardToShow);
     filmPresenter.init(cardToShow, cardComments);
   }

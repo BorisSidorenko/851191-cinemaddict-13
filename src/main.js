@@ -4,9 +4,6 @@ import ClosePopupButtonView from "./view/close-popup-button/close-popup-button";
 import FilmPopupInfoWrapView from "./view/film-popup-info-wrap/film-popup-info-wrap";
 import FilmPopupPosterView from "./view/film-popup-poster/film-popup-poster";
 import FilmPopupInfoView from "./view/film-popup-info/film-popup-info";
-import FilmPopupFormView from "./view/film-popup-form/film-popup-form";
-import FilmPopupTopContainerView from "./view/film-popup-top-container/film-popup-top-container";
-import FilmPopupBottomContainerView from "./view/film-popup-bottom-container/film-popup-bottom-container";
 import FilmPopupControlsView from "./view/film-popup-controls/film-popup-controls";
 import FilmPopupCommentsWrapView from "./view/film-popup-comments-wrap/film-popup-comments-wrap";
 import FilmPopupCommentsListView from "./view/film-popup-comments-list/film-popup-comments-list";
@@ -49,13 +46,6 @@ const onPopupEscPress = (evt) => {
   isEscEvent(evt, closePopup);
 };
 
-const appendFooterWithPopup = (popupForm, popupTopContainer, popupBottomContainer) => {
-  render(siteBodyElement, filmPopupComponent);
-  render(filmPopupComponent, popupForm);
-  render(popupForm, popupTopContainer);
-  render(popupForm, popupBottomContainer);
-};
-
 const appendPopupWithCloseButton = (popupTopContainer) => {
   render(popupTopContainer, closePopupButtonWrapperComponent);
   render(closePopupButtonWrapperComponent, closePopupButtonComponent);
@@ -93,12 +83,6 @@ const renderPopupBottomContainer = (popupBottomContainer, card) => {
 };
 
 const renderPopup = (card) => {
-  const popupForm = new FilmPopupFormView().element;
-  const popupTopContainer = new FilmPopupTopContainerView().element;
-  const popupBottomContainer = new FilmPopupBottomContainerView().element;
-
-  appendFooterWithPopup(popupForm, popupTopContainer, popupBottomContainer);
-
   renderPopupTopContainer(popupTopContainer, card);
   renderPopupBottomContainer(popupBottomContainer, card);
 
