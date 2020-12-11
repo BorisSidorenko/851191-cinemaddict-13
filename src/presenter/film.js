@@ -12,7 +12,7 @@ import FilmPopupControlsView from "../view/film-popup-controls/film-popup-contro
 import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-popup-comments-wrap";
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
-import {render, remove} from "../utils/render";
+import {render, remove, replace} from "../utils/render";
 import {isEscEvent} from "../utils/common";
 
 const ELEMENTS_TO_SHOW_POPUP = [
@@ -33,6 +33,7 @@ export default class Film {
     this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
     this._filmCard = null;
+    this._filmCardComponent = null;
     this._cardComments = null;
   }
 
@@ -44,12 +45,27 @@ export default class Film {
     this._filmCard = filmCard;
     this._cardComments = this._getFilmCardComments(filmCard);
 
+    const prevFilmCardComponent = this._filmCardComponent;
+
     const commentsCount = this._cardComments.length;
-    const filmCardComponent = new FilmCardView(filmCard, commentsCount);
+    this._filmCardComponent = new FilmCardView(filmCard, commentsCount);
 
     this._filmsListContainerComponent.setClickHandler(this._handleFilmCardClick);
 
-    render(this._filmsListContainerComponent, filmCardComponent);
+    if (prevFilmCardComponent === null) {
+      render(this._filmsListContainerComponent, this._filmCardComponent);
+      return;
+    }
+
+    if (this._filmsListContainerComponent.element.contains(prevFilmCardComponent)) {
+      replace(this._filmCardComponent, prevFilmCardComponent);
+    }
+
+    remove(prevFilmCardComponent);
+  }
+
+  destroy() {
+    remove(this._filmCardComponent);
   }
 
   _isPopupElementClicked(className) {

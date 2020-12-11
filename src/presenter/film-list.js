@@ -33,6 +33,7 @@ export default class FilmList {
     this._filmsCards = null;
     this._comments = null;
     this._showMoreButtonClickCounter = 1;
+    this._filmPresenter = {};
   }
 
   init(filmsCards, comments) {
@@ -100,6 +101,8 @@ export default class FilmList {
 
     if (cardsToShow.length === this._filmsCards.length) {
       remove(this._showMoreButtonComponent);
+    } else {
+      this._renderShowMoreButton();
     }
   }
 
@@ -116,10 +119,21 @@ export default class FilmList {
   _renderFilmCard(cardToShow) {
     const filmPresenter = new FilmPresenter(this._filmsCards, this._comments, this._mainContainer, this._filmsListContainerComponent);
     filmPresenter.init(cardToShow);
+    this._filmPresenter[cardToShow.id] = filmPresenter;
   }
 
   _renderFilmsCards(cardsToShow) {
-    this._filmsListContainerComponent.element.innerHTML = ``;
+    this._clearFilmListContainer();
     cardsToShow.forEach((cardToShow) => this._renderFilmCard(cardToShow));
+  }
+
+  _clearFilmListContainer() {
+    const filmPresenters = Object.values(this._filmPresenter);
+    if (filmPresenters.length > 0) {
+      filmPresenters.forEach((presenter) => presenter.destroy());
+      this._filmPresenter = {};
+
+      remove(this._showMoreButtonComponent);
+    }
   }
 }
