@@ -37,12 +37,12 @@ export const createElement = (template, element = `div`) => {
 };
 
 export const replace = (newChild, oldChild) => {
-  if (oldChild instanceof Abstract) {
-    oldChild = oldChild.getElement();
+  if (oldChild instanceof AbstractView) {
+    oldChild = oldChild.element;
   }
 
-  if (newChild instanceof Abstract) {
-    newChild = newChild.getElement();
+  if (newChild instanceof AbstractView) {
+    newChild = newChild.element;
   }
 
   const parent = oldChild.parentElement;
