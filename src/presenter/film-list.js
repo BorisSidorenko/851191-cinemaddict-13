@@ -8,7 +8,7 @@ import FilmsListContainer from "../view/films-list-container/films-list-containe
 import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
 import FilmPresenter from "../presenter/film";
-import {getRandomIntInRange} from "../utils/common";
+import {getRandomIntInRange, updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 
 const CARDS_TO_SHOW_COUNT = 5;
@@ -34,11 +34,12 @@ export default class FilmList {
     this._comments = null;
     this._showMoreButtonClickCounter = 1;
     this._filmPresenter = {};
+    this._handleFilmChange = this._handleFilmChange.bind(this);
   }
 
   init(filmsCards, comments) {
-    this._filmsCards = filmsCards;
-    this._comments = comments;
+    this._filmsCards = filmsCards.slice();
+    this._comments = Object.assign({}, comments);
 
     this._renderProfile();
 
@@ -135,5 +136,10 @@ export default class FilmList {
 
       remove(this._showMoreButtonComponent);
     }
+  }
+
+  _handleFilmChange(updatedFilm) {
+    this._filmsCards = updateItem(this._filmsCards, updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(updatedFilm);
   }
 }
