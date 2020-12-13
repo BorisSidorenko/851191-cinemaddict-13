@@ -22,7 +22,7 @@ const ELEMENTS_TO_SHOW_POPUP = [
 ];
 
 export default class Film {
-  constructor(filmsCards, comments, mainContainer, filmsListContainer, changeData) {
+  constructor(filmsCards, comments, mainContainer, filmsListContainer, changeData, openedPopupHandle) {
     this._mainContainer = mainContainer;
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
@@ -30,6 +30,8 @@ export default class Film {
     this._comments = comments;
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._filmPopupComponent = new FilmPopupView();
+    this._popupOpened = false;
+    this._openedPopupHandle = openedPopupHandle;
     this._closePopupButtonComponent = new ClosePopupButtonView();
     this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
@@ -94,9 +96,15 @@ export default class Film {
   _closePopup() {
     remove(this._filmPopupComponent);
 
-    this._mainContainer.parentNode.classList.toggle(`hide-overflow`);
+    this._mainContainer.parentNode.classList.remove(`hide-overflow`);
     this._closePopupButtonComponent.clearClickHandler();
     document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
+  }
+
+  closeOpenedPopup() {
+    if (this._popupOpened === true) {
+      this._closePopup();
+    }
   }
 
   _handleFilmCardClick(evt) {
@@ -109,6 +117,7 @@ export default class Film {
       const clickedCard = this._getClickedCard(cardId);
 
       if (clickedCard) {
+        this._openedPopupHandle();
         this._renderPopup(clickedCard);
         document.addEventListener(`keydown`, this._handlePopupEscKeyDown);
       }
@@ -217,6 +226,7 @@ export default class Film {
     this._renderPopupTopContainer(popupTopContainerComponent, card);
     this._renderPopupBottomContainer(popupBottomContainerComponent, card);
 
-    this._mainContainer.parentNode.classList.toggle(`hide-overflow`);
+    this._mainContainer.parentNode.classList.add(`hide-overflow`);
+    this._popupOpened = true;
   }
 }
