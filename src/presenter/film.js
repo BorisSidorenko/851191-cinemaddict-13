@@ -188,8 +188,8 @@ export default class Film {
     render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
   }
 
-  _appendPopupWithControls(popupTopContainer) {
-    const filmPopupControlsComponent = new FilmPopupControlsView();
+  _appendPopupWithControls(popupTopContainer, card) {
+    const filmPopupControlsComponent = new FilmPopupControlsView(card);
     render(popupTopContainer, filmPopupControlsComponent);
 
     filmPopupControlsComponent.setAddToHistoryClickHandler(this._handleAddToHistoryClick);
@@ -208,7 +208,7 @@ export default class Film {
   _renderPopupTopContainer(popupTopContainer, card) {
     this._appendPopupWithCloseButton(popupTopContainer);
     this._appendPopupWithInfo(popupTopContainer, card);
-    this._appendPopupWithControls(popupTopContainer);
+    this._appendPopupWithControls(popupTopContainer, card);
   }
 
   _renderPopupBottomContainer(popupBottomContainer, card) {
