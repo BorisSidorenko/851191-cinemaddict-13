@@ -22,9 +22,10 @@ const ELEMENTS_TO_SHOW_POPUP = [
 ];
 
 export default class Film {
-  constructor(filmsCards, comments, mainContainer, filmsListContainer) {
+  constructor(filmsCards, comments, mainContainer, filmsListContainer, changeData) {
     this._mainContainer = mainContainer;
     this._filmsListContainerComponent = filmsListContainer;
+    this._changeData = changeData;
     this._filmsCards = filmsCards;
     this._comments = comments;
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
@@ -32,6 +33,9 @@ export default class Film {
     this._closePopupButtonComponent = new ClosePopupButtonView();
     this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
+    this._handleAddToHistoryClick = this._handleAddToHistoryClick.bind(this);
+    this._handleAddToWatchListClick = this._handleAddToWatchListClick.bind(this);
+    this._handleAddToFavoriteClick = this._handleAddToFavoriteClick.bind(this);
     this._filmCard = null;
     this._filmCardComponent = null;
     this._cardComments = null;
@@ -51,13 +55,16 @@ export default class Film {
     this._filmCardComponent = new FilmCardView(filmCard, commentsCount);
 
     this._filmsListContainerComponent.setClickHandler(this._handleFilmCardClick);
+    this._filmCardComponent.setAddToHistoryClickHandler(this._handleAddToHistoryClick);
+    this._filmCardComponent.setAddToWatchListClickHandler(this._handleAddToWatchListClick);
+    this._filmCardComponent.setAddToFavoriteClickHandler(this._handleAddToFavoriteClick);
 
     if (prevFilmCardComponent === null) {
       render(this._filmsListContainerComponent, this._filmCardComponent);
       return;
     }
 
-    if (this._filmsListContainerComponent.element.contains(prevFilmCardComponent)) {
+    if (this._filmsListContainerComponent.element.contains(prevFilmCardComponent.element)) {
       replace(this._filmCardComponent, prevFilmCardComponent);
     }
 
@@ -108,6 +115,42 @@ export default class Film {
     }
   }
 
+  _handleAddToWatchListClick() {
+    const updatedFilmCard = Object.assign(
+        {},
+        this._filmCard,
+        {
+          isWatchlist: !this._filmCard.isWatchlist
+        }
+    );
+
+    this._changeData(updatedFilmCard);
+  }
+
+  _handleAddToHistoryClick() {
+    const updatedFilmCard = Object.assign(
+        {},
+        this._filmCard,
+        {
+          isHistory: !this._filmCard.isHistory
+        }
+    );
+
+    this._changeData(updatedFilmCard);
+  }
+
+  _handleAddToFavoriteClick() {
+    const updatedFilmCard = Object.assign(
+        {},
+        this._filmCard,
+        {
+          isFavorite: !this._filmCard.isFavorite
+        }
+    );
+
+    this._changeData(updatedFilmCard);
+  }
+
   _appendMainWithPopup(popupForm, popupTopContainer, popupBottomContainer) {
     render(this._mainContainer, this._filmPopupComponent);
     render(this._filmPopupComponent, popupForm);
@@ -139,6 +182,10 @@ export default class Film {
   _appendPopupWithControls(popupTopContainer) {
     const filmPopupControlsComponent = new FilmPopupControlsView();
     render(popupTopContainer, filmPopupControlsComponent);
+
+    filmPopupControlsComponent.setAddToHistoryClickHandler(this._handleAddToHistoryClick);
+    filmPopupControlsComponent.setAddToWatchListClickHandler(this._handleAddToWatchListClick);
+    filmPopupControlsComponent.setAddToFavoriteClickHandler(this._handleAddToFavoriteClick);
   }
 
   _appendPopupWithComments(popupBottomContainer, comments) {

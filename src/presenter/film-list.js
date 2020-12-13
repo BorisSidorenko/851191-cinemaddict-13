@@ -118,7 +118,7 @@ export default class FilmList {
   }
 
   _renderFilmCard(cardToShow) {
-    const filmPresenter = new FilmPresenter(this._filmsCards, this._comments, this._mainContainer, this._filmsListContainerComponent);
+    const filmPresenter = new FilmPresenter(this._filmsCards, this._comments, this._mainContainer, this._filmsListContainerComponent, this._handleFilmChange);
     filmPresenter.init(cardToShow);
     this._filmPresenter[cardToShow.id] = filmPresenter;
   }
