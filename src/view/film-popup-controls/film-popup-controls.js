@@ -14,7 +14,8 @@ export default class FilmPopupControls extends AbstractView {
     return createFilmPopupControlsTemplate(this._card);
   }
 
-  _addToHistoryClickHandler() {
+  _addToHistoryClickHandler(evt) {
+    evt.preventDefault();
     this._callback.addToHistoryClick();
   }
 
@@ -28,7 +29,8 @@ export default class FilmPopupControls extends AbstractView {
     this.element.querySelector(`#watched`).removeEventListener(`click`, this._addToHistoryClickHandler);
   }
 
-  _addToWatchListClickHandler() {
+  _addToWatchListClickHandler(evt) {
+    evt.preventDefault();
     this._callback.addToWatchListClick();
   }
 
@@ -42,7 +44,8 @@ export default class FilmPopupControls extends AbstractView {
     this.element.querySelector(`#watchlist`).removeEventListener(`click`, this._addToWatchListClickHandler);
   }
 
-  _addToFavoriteClickHandler() {
+  _addToFavoriteClickHandler(evt) {
+    evt.preventDefault();
     this._callback.addToFavoriteClick();
   }
 

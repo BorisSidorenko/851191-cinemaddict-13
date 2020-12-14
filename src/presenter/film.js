@@ -22,11 +22,11 @@ const ELEMENTS_TO_SHOW_POPUP = [
 ];
 
 export default class Film {
-  constructor(filmsCards, comments, mainContainer, filmsListContainer, changeData, openedPopupHandle) {
+  constructor(comments, mainContainer, filmsListContainer, changeData, openedPopupHandle) {
     this._mainContainer = mainContainer;
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
-    this._filmsCards = filmsCards;
+    this._filmsCards = null;
     this._comments = comments;
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._filmPopupComponent = new FilmPopupView();
@@ -40,6 +40,8 @@ export default class Film {
     this._handleAddToFavoriteClick = this._handleAddToFavoriteClick.bind(this);
     this._filmCard = null;
     this._filmCardComponent = null;
+    this._popupTopContainerComponent = null;
+    this._filmPopupControlsComponent = null;
     this._cardComments = null;
   }
 
@@ -47,7 +49,8 @@ export default class Film {
     return this._comments[id];
   }
 
-  init(filmCard) {
+  init(filmsCards, filmCard) {
+    this._filmsCards = filmsCards;
     this._filmCard = filmCard;
     this._cardComments = this._getFilmCardComments(filmCard);
 
@@ -68,6 +71,10 @@ export default class Film {
 
     if (this._filmsListContainerComponent.element.contains(prevFilmCardComponent.element)) {
       replace(this._filmCardComponent, prevFilmCardComponent);
+    }
+
+    if (this._popupOpened) {
+      this._renderPopupControls(this._popupTopContainerComponent, this._filmCard);
     }
 
     remove(prevFilmCardComponent);
@@ -99,6 +106,7 @@ export default class Film {
     this._mainContainer.parentNode.classList.remove(`hide-overflow`);
     this._closePopupButtonComponent.clearClickHandler();
     document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
+    this._popupOpened = false;
   }
 
   closeOpenedPopup() {
@@ -188,13 +196,18 @@ export default class Film {
     render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
   }
 
-  _appendPopupWithControls(popupTopContainer, card) {
-    const filmPopupControlsComponent = new FilmPopupControlsView(card);
-    render(popupTopContainer, filmPopupControlsComponent);
+  _renderPopupControls(popupTopContainer, card) {
+    if (this._filmPopupControlsComponent !== null) {
+      remove(this._filmPopupControlsComponent);
+    }
 
-    filmPopupControlsComponent.setAddToHistoryClickHandler(this._handleAddToHistoryClick);
-    filmPopupControlsComponent.setAddToWatchListClickHandler(this._handleAddToWatchListClick);
-    filmPopupControlsComponent.setAddToFavoriteClickHandler(this._handleAddToFavoriteClick);
+    this._filmPopupControlsComponent = new FilmPopupControlsView(card);
+
+    this._filmPopupControlsComponent.setAddToHistoryClickHandler(this._handleAddToHistoryClick);
+    this._filmPopupControlsComponent.setAddToWatchListClickHandler(this._handleAddToWatchListClick);
+    this._filmPopupControlsComponent.setAddToFavoriteClickHandler(this._handleAddToFavoriteClick);
+
+    render(popupTopContainer, this._filmPopupControlsComponent);
   }
 
   _appendPopupWithComments(popupBottomContainer, comments) {
@@ -208,7 +221,7 @@ export default class Film {
   _renderPopupTopContainer(popupTopContainer, card) {
     this._appendPopupWithCloseButton(popupTopContainer);
     this._appendPopupWithInfo(popupTopContainer, card);
-    this._appendPopupWithControls(popupTopContainer, card);
+    this._renderPopupControls(popupTopContainer, card);
   }
 
   _renderPopupBottomContainer(popupBottomContainer, card) {
@@ -218,12 +231,12 @@ export default class Film {
 
   _renderPopup(card) {
     const popupFormComponent = new FilmPopupFormView();
-    const popupTopContainerComponent = new FilmPopupTopContainerView();
+    this._popupTopContainerComponent = new FilmPopupTopContainerView();
     const popupBottomContainerComponent = new FilmPopupBottomContainerView();
 
-    this._appendMainWithPopup(popupFormComponent, popupTopContainerComponent, popupBottomContainerComponent);
+    this._appendMainWithPopup(popupFormComponent, this._popupTopContainerComponent, popupBottomContainerComponent);
 
-    this._renderPopupTopContainer(popupTopContainerComponent, card);
+    this._renderPopupTopContainer(this._popupTopContainerComponent, card);
     this._renderPopupBottomContainer(popupBottomContainerComponent, card);
 
     this._mainContainer.parentNode.classList.add(`hide-overflow`);

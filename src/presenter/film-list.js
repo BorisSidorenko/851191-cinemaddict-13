@@ -119,8 +119,8 @@ export default class FilmList {
   }
 
   _renderFilmCard(cardToShow) {
-    const filmPresenter = new FilmPresenter(this._filmsCards, this._comments, this._mainContainer, this._filmsListContainerComponent, this._handleFilmChange, this._handleOpenedPopup);
-    filmPresenter.init(cardToShow);
+    const filmPresenter = new FilmPresenter(this._comments, this._mainContainer, this._filmsListContainerComponent, this._handleFilmChange, this._handleOpenedPopup);
+    filmPresenter.init(this._filmsCards, cardToShow);
     this._filmPresenter[cardToShow.id] = filmPresenter;
   }
 
@@ -141,7 +141,7 @@ export default class FilmList {
 
   _handleFilmChange(updatedFilm) {
     this._filmsCards = updateItem(this._filmsCards, updatedFilm);
-    this._filmPresenter[updatedFilm.id].init(updatedFilm);
+    this._filmPresenter[updatedFilm.id].init(this._filmsCards, updatedFilm);
   }
 
   _handleOpenedPopup() {
