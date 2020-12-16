@@ -8,8 +8,14 @@ import FilmsListContainer from "../view/films-list-container/films-list-containe
 import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
 import FilmPresenter from "../presenter/film";
-import {getRandomIntInRange, updateItem} from "../utils/common";
+import {getRandomIntInRange, updateItem, isEscEvent} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
+
+const ELEMENTS_TO_SHOW_POPUP = [
+  `film-card__poster`,
+  `film-card__title`,
+  `film-card__comments`
+];
 
 const CARDS_TO_SHOW_COUNT = 5;
 
@@ -36,6 +42,9 @@ export default class FilmList {
     this._filmPresenter = {};
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleOpenedPopup = this._handleOpenedPopup.bind(this);
+    this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
+    this._clickedCard = null;
+    this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
   }
 
   init(filmsCards, comments) {
@@ -119,7 +128,7 @@ export default class FilmList {
   }
 
   _renderFilmCard(cardToShow) {
-    const filmPresenter = new FilmPresenter(this._comments, this._mainContainer, this._filmsListContainerComponent, this._handleFilmChange, this._handleOpenedPopup);
+    const filmPresenter = new FilmPresenter(this._comments, this._mainContainer, this._filmsListContainerComponent, this._handleFilmChange, this._handleFilmCardClick, this.__handleClosePopupButtonClick);
     filmPresenter.init(this._filmsCards, cardToShow);
     this._filmPresenter[cardToShow.id] = filmPresenter;
   }
@@ -146,5 +155,43 @@ export default class FilmList {
 
   _handleOpenedPopup() {
     Object.values(this._filmPresenter).forEach((presenter) => presenter.closeOpenedPopup());
+  }
+
+  _handleClosePopupButtonClick() {
+    this._filmPresenter[this._clickedCard.id].closePopup();
+    document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
+  }
+
+  _onPopupEscPress(evt) {
+    isEscEvent(evt, this._handleClosePopupButtonClick.bind(this));
+  }
+
+  _handlePopupEscKeyDown(evt) {
+    this._onPopupEscPress(evt);
+  }
+
+  _getClickedCard(id) {
+    return this._filmsCards.find((el) => el.id === id);
+  }
+
+  _isPopupElementClicked(className) {
+    return ELEMENTS_TO_SHOW_POPUP.some((val) => val === className);
+  }
+
+  _handleFilmCardClick(evt) {
+    const showPopup = this._isPopupElementClicked(evt.target.className);
+
+    if (showPopup) {
+      evt.preventDefault();
+
+      const cardId = evt.target.parentNode.dataset.id;
+      this._clickedCard = this._getClickedCard(cardId);
+
+      if (this._clickedCard) {
+        this._handleOpenedPopup();
+        this._filmPresenter[this._clickedCard.id].renderPopup(this._clickedCard);
+        document.addEventListener(`keydown`, this._handlePopupEscKeyDown);
+      }
+    }
   }
 }
