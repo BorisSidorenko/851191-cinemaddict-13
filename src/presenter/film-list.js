@@ -10,56 +10,45 @@ import FilmsCountView from "../view/films-count/films-count";
 import FilmPresenter from "../presenter/film";
 import {getRandomIntInRange, updateItem, isEscEvent} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
+import {ProfileRank, CARDS_TO_SHOW_COUNT} from "../utils/constants";
 
-const ELEMENTS_TO_SHOW_POPUP = [
-  `film-card__poster`,
-  `film-card__title`,
-  `film-card__comments`
-];
+const profileComponent = new ProfileView(getRandomIntInRange(ProfileRank.MAX, ProfileRank.MIN));
+const sortComponent = new SortView();
+const filmsWrapperComponent = new FilmsWrapperView();
+const filmsListComponent = new FilmsListView();
+const emptyFilmsListComponent = new EmptyFilmsListView();
+const filmsListContainerComponent = new FilmsListContainer();
+const showMoreButtonComponent = new ShowMoreButtonView();
+let showMoreButtonClickCounter = 1;
 
-const CARDS_TO_SHOW_COUNT = 5;
-
-const MIN_PROFILE_RANK = 0;
-const MAX_PROFILE_RANK = 40;
-
-export default class FilmList {
+export default class FilmListPresenter {
   constructor(headerContainer, mainContainer, footerContainer) {
     this._headerContainer = headerContainer;
     this._mainContainer = mainContainer;
     this._footerContainer = footerContainer;
-    this._profileComponent = new ProfileView(getRandomIntInRange(MAX_PROFILE_RANK, MIN_PROFILE_RANK));
-    this._sortComponent = new SortView();
-    this._filmsWrapperComponent = new FilmsWrapperView();
-    this._filmsListComponent = new FilmsListView();
-    this._emptyFilmsListComponent = new EmptyFilmsListView();
-    this._filmsListContainerComponent = new FilmsListContainer();
-    this._showMoreButtonComponent = new ShowMoreButtonView();
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._filmCardComponent = null;
     this._filmsCards = null;
     this._comments = null;
-    this._showMoreButtonClickCounter = 1;
+
     this._filmPresenter = {};
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleOpenedPopup = this._handleOpenedPopup.bind(this);
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._clickedCard = null;
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
+    this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
   }
 
   init(filmsCards, comments) {
     this._filmsCards = filmsCards.slice();
     this._comments = Object.assign({}, comments);
 
-    this._renderProfile();
-
-    this._renderFilmsList();
-
-    this._renderFilmsCount();
+    this._render();
   }
 
   _renderProfile() {
-    render(this._headerContainer, this._profileComponent);
+    render(this._headerContainer, profileComponent);
   }
 
   _renderFilter() {
@@ -68,58 +57,67 @@ export default class FilmList {
   }
 
   _renderSort() {
-    render(this._mainContainer, this._sortComponent);
+    render(this._mainContainer, sortComponent);
   }
 
   _renderFilmsWrapper() {
-    render(this._mainContainer, this._filmsWrapperComponent);
+    render(this._mainContainer, filmsWrapperComponent);
   }
 
-  _renderFilmsList() {
+  _render() {
+    this._renderProfile();
+
     if (this._filmsCards.length === 0) {
       this._renderEmptyFilmsList();
       return;
     }
 
     this._renderFilter();
+
     this._renderSort();
 
-    render(this._mainContainer, this._filmsListComponent);
+    this._renderFilms();
+
+    this._renderFilmsCount();
+  }
+
+  _renderFilms() {
+    render(this._mainContainer, filmsListComponent);
 
     this._renderFilmsListContainer();
     this._renderFilmsCards(this._filmsCards.slice(0, CARDS_TO_SHOW_COUNT));
 
-    if (this._filmsCards.length > CARDS_TO_SHOW_COUNT) {
-      this._renderShowMoreButton();
-    }
+    this._renderShowMoreButton();
   }
 
   _renderFilmsListContainer() {
-    render(this._filmsListComponent, this._filmsListContainerComponent);
+    render(filmsListComponent, filmsListContainerComponent);
   }
 
   _renderEmptyFilmsList() {
-    remove(this._sortComponent);
-    render(this._filmsWrapperComponent, this._emptyFilmsListComponent);
+    remove(sortComponent);
+    render(filmsWrapperComponent, emptyFilmsListComponent);
   }
 
   _handleShowMoreButtonClick() {
-    this._showMoreButtonClickCounter++;
+    showMoreButtonClickCounter += 1;
 
-    const cardsToShow = this._filmsCards.slice(0, CARDS_TO_SHOW_COUNT * this._showMoreButtonClickCounter);
+    const cardsToShow = this._filmsCards.slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter);
 
     this._renderFilmsCards(cardsToShow);
 
     if (cardsToShow.length === this._filmsCards.length) {
-      remove(this._showMoreButtonComponent);
+      remove(showMoreButtonComponent);
     } else {
       this._renderShowMoreButton();
     }
   }
 
   _renderShowMoreButton() {
-    render(this._filmsListComponent, this._showMoreButtonComponent);
-    this._showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+    if (this._filmsCards.length > CARDS_TO_SHOW_COUNT) {
+      render(filmsListComponent, showMoreButtonComponent);
+      showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+    }
   }
 
   _renderFilmsCount() {
@@ -128,7 +126,7 @@ export default class FilmList {
   }
 
   _renderFilmCard(cardToShow) {
-    const filmPresenter = new FilmPresenter(this._comments, this._mainContainer, this._filmsListContainerComponent, this._handleFilmChange, this._handleFilmCardClick, this.__handleClosePopupButtonClick);
+    const filmPresenter = new FilmPresenter(this._comments, this._mainContainer, filmsListContainerComponent, this._handleFilmChange, this._handleFilmCardClick, this._handleClosePopupButtonClick);
     filmPresenter.init(this._filmsCards, cardToShow);
     this._filmPresenter[cardToShow.id] = filmPresenter;
   }
@@ -144,7 +142,7 @@ export default class FilmList {
       filmPresenters.forEach((presenter) => presenter.destroy());
       this._filmPresenter = {};
 
-      remove(this._showMoreButtonComponent);
+      remove(showMoreButtonComponent);
     }
   }
 
@@ -170,28 +168,10 @@ export default class FilmList {
     this._onPopupEscPress(evt);
   }
 
-  _getClickedCard(id) {
-    return this._filmsCards.find((el) => el.id === id);
-  }
-
-  _isPopupElementClicked(className) {
-    return ELEMENTS_TO_SHOW_POPUP.some((val) => val === className);
-  }
-
-  _handleFilmCardClick(evt) {
-    const showPopup = this._isPopupElementClicked(evt.target.className);
-
-    if (showPopup) {
-      evt.preventDefault();
-
-      const cardId = evt.target.parentNode.dataset.id;
-      this._clickedCard = this._getClickedCard(cardId);
-
-      if (this._clickedCard) {
-        this._handleOpenedPopup();
-        this._filmPresenter[this._clickedCard.id].renderPopup(this._clickedCard);
-        document.addEventListener(`keydown`, this._handlePopupEscKeyDown);
-      }
-    }
+  _handleFilmCardClick(clickedCard) {
+    this._clickedCard = clickedCard;
+    this._handleOpenedPopup();
+    this._filmPresenter[this._clickedCard .id].renderPopup(this._clickedCard);
+    document.addEventListener(`keydown`, this._handlePopupEscKeyDown);
   }
 }

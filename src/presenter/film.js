@@ -13,6 +13,7 @@ import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-pop
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
 import {render, remove, replace} from "../utils/render";
+import {ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
 export default class Film {
   constructor(comments, mainContainer, filmsListContainer, changeData, cardClick, closeBtnClick) {
@@ -21,11 +22,12 @@ export default class Film {
     this._changeData = changeData;
     this._filmsCards = null;
     this._comments = comments;
-    this._handleFilmCardClick = cardClick;
+    this._cardClick = cardClick;
     this._filmPopupComponent = new FilmPopupView();
     this._popupOpened = false;
     this._closePopupButtonComponent = new ClosePopupButtonView();
     this._handleClosePopupButtonClick = closeBtnClick;
+    this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._handleAddToHistoryClick = this._handleAddToHistoryClick.bind(this);
     this._handleAddToWatchListClick = this._handleAddToWatchListClick.bind(this);
     this._handleAddToFavoriteClick = this._handleAddToFavoriteClick.bind(this);
@@ -87,6 +89,29 @@ export default class Film {
   closeOpenedPopup() {
     if (this._popupOpened === true) {
       this.closePopup();
+    }
+  }
+
+  _getClickedCard(id) {
+    return this._filmsCards.find((el) => el.id === id);
+  }
+
+  _isPopupElementClicked(className) {
+    return ELEMENTS_TO_SHOW_POPUP.some((val) => val === className);
+  }
+
+  _handleFilmCardClick(evt) {
+    const showPopup = this._isPopupElementClicked(evt.target.className);
+
+    if (showPopup) {
+      evt.preventDefault();
+
+      const cardId = evt.target.parentNode.dataset.id;
+      const clickedCard = this._getClickedCard(cardId);
+
+      if (clickedCard) {
+        this._cardClick(clickedCard);
+      }
     }
   }
 
