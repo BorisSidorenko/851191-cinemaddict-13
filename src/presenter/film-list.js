@@ -150,8 +150,12 @@ export default class FilmListPresenter {
   _handleFilmChange(updatedFilm) {
     const comments = this._getFilmCardComments(updatedFilm);
     this._filmsCards = updateItem(this._filmsCards, updatedFilm);
-    this._filmPresenter[updatedFilm.id].init(this._filmsCards, updatedFilm);
-    this._filmPopupPresenter[updatedFilm.id].init(updatedFilm, comments);
+    this._filmPresenter[updatedFilm.id].init(this._filmsCards, updatedFilm, comments.length);
+
+    const popupPresenterExists = this._filmPopupPresenter[updatedFilm.id];
+    if (popupPresenterExists) {
+      this._filmPopupPresenter[updatedFilm.id].init(updatedFilm, comments);
+    }
   }
 
   _getFilmCardComments({id}) {
