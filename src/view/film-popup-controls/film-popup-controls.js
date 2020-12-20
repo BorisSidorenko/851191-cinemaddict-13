@@ -8,6 +8,7 @@ export default class FilmPopupControls extends AbstractView {
     this._addToHistoryClickHandler = this._addToHistoryClickHandler.bind(this);
     this._addToWatchListClickHandler = this._addToWatchListClickHandler.bind(this);
     this._addToFavoriteClickHandler = this._addToFavoriteClickHandler.bind(this);
+    this._handleControlsClick = this._handleControlsClick.bind(this);
   }
 
   getTemplate() {
@@ -57,5 +58,17 @@ export default class FilmPopupControls extends AbstractView {
   clearAddToFavoriteClickHandler() {
     this._callback.addToFavoriteClick = null;
     this.element.querySelector(`#favorite`).removeEventListener(`click`, this._addToFavoriteClickHandler);
+  }
+
+  setClickHandlers(callback) {
+    this._callback.popupControlsClick = callback;
+    this.element.querySelector(`#watchlist`).addEventListener(`click`, this._handleControlsClick);
+    this.element.querySelector(`#watched`).addEventListener(`click`, this._handleControlsClick);
+    this.element.querySelector(`#favorite`).addEventListener(`click`, this._handleControlsClick);
+  }
+
+  _handleControlsClick(evt) {
+    evt.preventDefault();
+    this._callback.popupControlsClick(evt);
   }
 }

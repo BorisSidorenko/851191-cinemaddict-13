@@ -16,19 +16,13 @@ export default class Film {
     this._filmCardComponent = null;
   }
 
-  _getFilmCardComments({id}) {
-    return this._comments[id];
-  }
-
-  init(filmsCards, filmCard) {
+  init(filmsCards, filmCard, filmCardCommentsLength) {
     this._filmsCards = filmsCards;
     this._filmCard = filmCard;
-    const cardComments = this._getFilmCardComments(filmCard);
 
     const prevFilmCardComponent = this._filmCardComponent;
 
-    const commentsCount = cardComments.length;
-    this._filmCardComponent = new FilmCardView(filmCard, commentsCount);
+    this._filmCardComponent = new FilmCardView(filmCard, filmCardCommentsLength);
 
     this._setHandlers();
 
@@ -39,10 +33,6 @@ export default class Film {
 
     if (this._filmsListContainerComponent.element.contains(prevFilmCardComponent.element)) {
       replace(this._filmCardComponent, prevFilmCardComponent);
-    }
-
-    if (this._popupOpened) {
-      this._renderPopupControls(this._popupTopContainerComponent, this._filmCard);
     }
 
     remove(prevFilmCardComponent);

@@ -18,3 +18,9 @@ export const CardControls = {
   WATCHED: `${CONTROL_CLASS}--mark-as-watched`,
   FAVORITE: `${CONTROL_CLASS}--favorite`
 };
+
+export const PopupControlsName = {
+  isWatchlist: `watchlist`,
+  isHistory: `watched`,
+  isFavorite: `favorite`
+};
