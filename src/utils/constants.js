@@ -24,3 +24,9 @@ export const PopupControlsName = {
   isHistory: `watched`,
   isFavorite: `favorite`
 };
+
+export const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`
+};
