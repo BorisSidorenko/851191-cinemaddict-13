@@ -5,9 +5,6 @@ export default class FilmPopupControls extends AbstractView {
   constructor(card) {
     super();
     this._card = card;
-    this._addToHistoryClickHandler = this._addToHistoryClickHandler.bind(this);
-    this._addToWatchListClickHandler = this._addToWatchListClickHandler.bind(this);
-    this._addToFavoriteClickHandler = this._addToFavoriteClickHandler.bind(this);
     this._handleControlsClick = this._handleControlsClick.bind(this);
   }
 
