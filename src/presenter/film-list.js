@@ -13,9 +13,9 @@ import PopupPresenter from "../presenter/popup";
 import {getRandomIntInRange, updateItem} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import {ProfileRank, CARDS_TO_SHOW_COUNT} from "../utils/constants";
+import {SortType} from "../utils/constants";
 
 const profileComponent = new ProfileView(getRandomIntInRange(ProfileRank.MAX, ProfileRank.MIN));
-const sortComponent = new SortView();
 const filmsWrapperComponent = new FilmsWrapperView();
 const filmsListComponent = new FilmsListView();
 const emptyFilmsListComponent = new EmptyFilmsListView();
@@ -30,6 +30,7 @@ export default class FilmListPresenter {
     this._footerContainer = footerContainer;
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._filmCardComponent = null;
+    this._sourcedFilmsCards = null;
     this._filmsCards = null;
     this._comments = null;
 
@@ -38,9 +39,13 @@ export default class FilmListPresenter {
     this._handleFilmChange = this._handleFilmChange.bind(this);
 
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._sortComponent = null;
+    this._currentSortType = SortType.DEFAULT;
   }
 
   init(filmsCards, comments) {
+    this._sourcedFilmsCards = filmsCards.slice();
     this._filmsCards = filmsCards.slice();
     this._comments = Object.assign({}, comments);
 
@@ -56,8 +61,38 @@ export default class FilmListPresenter {
     render(this._mainContainer, filterComponent, RenderPosition.AFTERBEGIN);
   }
 
+  _sortFilmCards(sortType) {
+    if (sortType === SortType.DATE) {
+      this._filmsCards = this._filmsCards.sort((a, b) => b.year - a.year);
+    } else if (sortType === SortType.RATING) {
+      this._filmsCards = this._filmsCards.sort((a, b) => b.rating - a.rating);
+    } else {
+      this._filmsCards = this._sourcedFilmsCards.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType !== sortType) {
+      this._sortFilmCards(sortType);
+      this._renderSort();
+
+      this._clearFilmListContainer();
+      this._renderFilms();
+    }
+  }
+
   _renderSort() {
-    render(this._mainContainer, sortComponent);
+    const prevSortComponent = this._sortComponent;
+
+    if (prevSortComponent !== null) {
+      remove(prevSortComponent);
+    }
+
+    this._sortComponent = new SortView(this._currentSortType);
+    render(this._mainContainer, this._sortComponent);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderFilmsWrapper() {
@@ -65,12 +100,12 @@ export default class FilmListPresenter {
   }
 
   _render() {
-    this._renderProfile();
-
     if (this._filmsCards.length === 0) {
       this._renderEmptyFilmsList();
       return;
     }
+
+    this._renderProfile();
 
     this._renderFilter();
 
@@ -82,7 +117,8 @@ export default class FilmListPresenter {
   }
 
   _renderFilms() {
-    render(this._mainContainer, filmsListComponent);
+    this._renderFilmsWrapper();
+    render(filmsWrapperComponent, filmsListComponent);
 
     this._renderFilmsListContainer();
     this._renderFilmsCards(this._filmsCards.slice(0, CARDS_TO_SHOW_COUNT));
@@ -94,9 +130,18 @@ export default class FilmListPresenter {
     render(filmsListComponent, filmsListContainerComponent);
   }
 
-  _renderEmptyFilmsList() {
-    remove(sortComponent);
+  _addEmptyListToWrapper() {
     render(filmsWrapperComponent, emptyFilmsListComponent);
+  }
+
+  _renderEmptyFilmsList() {
+    this._renderFilter();
+
+    this._renderFilmsWrapper();
+
+    this._addEmptyListToWrapper();
+
+    this._renderFilmsCount();
   }
 
   _handleShowMoreButtonClick() {

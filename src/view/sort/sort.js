@@ -2,13 +2,14 @@ import AbstractView from "../abstract-component";
 import {createSortTemplate} from "../sort/sort-template";
 
 export default class Sort extends AbstractView {
-  constructor() {
+  constructor(sortType) {
     super();
+    this._sortType = sortType;
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   getTemplate() {
-    return createSortTemplate();
+    return createSortTemplate(this._sortType);
   }
 
   _handleSortTypeChange(evt) {
