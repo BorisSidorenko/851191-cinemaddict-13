@@ -62,12 +62,15 @@ export default class FilmListPresenter {
   }
 
   _sortFilmCards(sortType) {
-    if (sortType === SortType.DATE) {
-      this._filmsCards = this._filmsCards.sort((a, b) => b.year - a.year);
-    } else if (sortType === SortType.RATING) {
-      this._filmsCards = this._filmsCards.sort((a, b) => b.rating - a.rating);
-    } else {
-      this._filmsCards = this._sourcedFilmsCards.slice();
+    switch (sortType) {
+      case SortType.DATE:
+        this._filmsCards = this._filmsCards.sort((a, b) => b.year - a.year);
+        break;
+      case SortType.RATING:
+        this._filmsCards = this._filmsCards.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        this._filmsCards = this._sourcedFilmsCards.slice();
     }
 
     this._currentSortType = sortType;
