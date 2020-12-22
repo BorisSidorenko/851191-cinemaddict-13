@@ -32,3 +32,13 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
 };
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
+
+export const updateItem = (items, update) => {
+  const indexToUpdate = items.findIndex((item) => item.id === update.id);
+
+  if (indexToUpdate === -1) {
+    return items;
+  }
+
+  return [...items.slice(0, indexToUpdate), update, ...items.slice(indexToUpdate + 1)];
+};
