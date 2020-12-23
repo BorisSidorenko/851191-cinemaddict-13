@@ -1,6 +1,10 @@
+const getEmoji = (emoji) => {
+  return emoji ? `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">` : ``;
+};
+
 export const createFilmPopupNewCommentTemplate = ({text, emoji}) => {
   return `<div class="film-details__new-comment">
-    <div class="film-details__add-emoji-label"></div>
+    <div class="film-details__add-emoji-label">${getEmoji(emoji)}</div>
 
     <label class="film-details__comment-label">
       <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${text ? text : ``}</textarea>
