@@ -54,7 +54,6 @@ export default class PopupPresenter {
 
   _onPopupEscPress(evt) {
     isEscEvent(evt, this._closePopup);
-    document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
   }
 
   _handlePopupEscKeyDown(evt) {
@@ -66,6 +65,7 @@ export default class PopupPresenter {
 
     this._mainContainer.parentNode.classList.remove(`hide-overflow`);
     this._closePopupButtonComponent.clearClickHandler();
+    document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
 
     this._popupOpened = false;
   }
