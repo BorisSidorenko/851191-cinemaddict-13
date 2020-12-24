@@ -12,7 +12,7 @@ import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-pop
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
 
-import {isEscEvent} from "../utils/common";
+import {isEscEvent, isSubmitFormEvent, clearPressedKey} from "../utils/common";
 import {PopupControlsName} from "../utils/constants";
 import {render, remove} from "../utils/render";
 
@@ -24,6 +24,8 @@ export default class PopupPresenter {
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
     this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
     this._closePopup = this._closePopup.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleFormSubmitWrongKeyDown = this._handleFormSubmitWrongKeyDown.bind(this);
     this._filmPopupComponent = null;
     this._popupOpened = false;
     this._closePopupButtonComponent = new ClosePopupButtonView();
@@ -60,12 +62,25 @@ export default class PopupPresenter {
     this._onPopupEscPress(evt);
   }
 
+  _submitForm() {
+
+  }
+
+  _handleFormSubmit(evt) {
+    isSubmitFormEvent(evt, this._submitForm);
+  }
+
+  _handleFormSubmitWrongKeyDown(evt) {
+    clearPressedKey(evt);
+  }
+
   _closePopup() {
     remove(this._filmPopupComponent);
 
     this._mainContainer.parentNode.classList.remove(`hide-overflow`);
     this._closePopupButtonComponent.clearClickHandler();
     document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
+    this._clearSubmitHandlers();
 
     this._popupOpened = false;
   }
@@ -160,6 +175,16 @@ export default class PopupPresenter {
     this._appendPopupWithComments(popupBottomContainer, comments);
   }
 
+  _clearSubmitHandlers() {
+    document.removeEventListener(`keydown`, this._handleFormSubmit);
+    document.removeEventListener(`keyup`, this._handleFormSubmitWrongKeyDown);
+  }
+
+  _setSubmitHandlers() {
+    document.addEventListener(`keydown`, this._handleFormSubmit);
+    document.addEventListener(`keyup`, this._handleFormSubmitWrongKeyDown);
+  }
+
   _renderPopup(card, comments) {
     this._handleOpenedPopup();
 
@@ -171,6 +196,8 @@ export default class PopupPresenter {
 
     this._renderPopupTopContainer(this._popupTopContainerComponent, card);
     this._renderPopupBottomContainer(popupBottomContainerComponent, comments);
+
+    this._setSubmitHandlers();
 
     document.addEventListener(`keydown`, this._handlePopupEscKeyDown);
     this._mainContainer.parentNode.classList.add(`hide-overflow`);
