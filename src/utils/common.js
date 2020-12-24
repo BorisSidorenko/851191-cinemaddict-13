@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
 
 const KeyCode = {
-  ESC_CODE: `Escape`
+  ESC_CODE: `Escape`,
+  CTRL: `Control`,
+  ENTER: `Enter`
 };
 
 const MAX_MONTH = 12;
@@ -9,10 +11,24 @@ const MIN_MONTH = 1;
 const MAX_DATE = 31;
 const MIN_DATE = 1;
 
+let keyPressed = {};
+
 export const isEscEvent = (evt, action) => {
   if (evt.key === KeyCode.ESC_CODE) {
     action();
   }
+};
+
+export const isSubmitFormEvent = (evt, action) => {
+  keyPressed[evt.key] = true;
+
+  if (keyPressed[KeyCode.CTRL] && evt.key === KeyCode.ENTER) {
+    action();
+  }
+};
+
+export const clearPressedKey = (evt) => {
+  delete keyPressed[evt.key];
 };
 
 export const getRandomIntInRange = (a = 1, b = 0) => {
