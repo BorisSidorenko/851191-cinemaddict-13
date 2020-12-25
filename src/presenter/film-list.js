@@ -24,10 +24,11 @@ const showMoreButtonComponent = new ShowMoreButtonView();
 let showMoreButtonClickCounter = 1;
 
 export default class FilmListPresenter {
-  constructor(headerContainer, mainContainer, footerContainer) {
+  constructor(headerContainer, mainContainer, footerContainer, filmsModel) {
     this._headerContainer = headerContainer;
     this._mainContainer = mainContainer;
     this._footerContainer = footerContainer;
+    this._filmsModel = filmsModel;
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._filmCardComponent = null;
     this._sourcedFilmsCards = null;
@@ -84,6 +85,10 @@ export default class FilmListPresenter {
       this._clearFilmListContainer();
       this._renderFilms();
     }
+  }
+
+  _getFilms() {
+    this._filmsModel.getFilms();
   }
 
   _renderSort() {
