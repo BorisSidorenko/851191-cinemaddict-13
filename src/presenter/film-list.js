@@ -214,7 +214,7 @@ export default class FilmListPresenter {
 
     this._removedOpenedPopup();
 
-    const popupPresenter = new PopupPresenter(this._mainContainer, this._handleFilmChange);
+    const popupPresenter = new PopupPresenter(this._mainContainer, this._filmsModel.updateFilm);
     popupPresenter.init(clickedCard, clickedCardComments);
     this._filmPopupPresenter[card.id] = popupPresenter;
   }
