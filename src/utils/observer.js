@@ -11,7 +11,7 @@ export default class Observer {
     this._observers = this._observers.filter((existedObserver) => existedObserver !== observer);
   }
 
-  _notify(evt, payload) {
-    this._observers.forEach((observer) => observer(evt, payload));
+  _notify() {
+    this._observers.forEach((observer) => observer());
   }
 }
