@@ -1,5 +1,4 @@
 import ProfileView from "../view/profile/profile";
-import SiteFilterView from "../view/site-menu/site-menu";
 import SortView from "../view/sort/sort";
 import FilmsWrapperView from "../view/films/films";
 import FilmsListView from "../view/films-list/films-list";
@@ -11,7 +10,7 @@ import FilmPresenter from "../presenter/film";
 import PopupPresenter from "../presenter/popup";
 
 import {getRandomIntInRange} from "../utils/common";
-import {render, RenderPosition, remove} from "../utils/render";
+import {render, remove} from "../utils/render";
 import {ProfileRank, CARDS_TO_SHOW_COUNT} from "../utils/constants";
 import {SortType} from "../utils/constants";
 
@@ -50,11 +49,6 @@ export default class FilmListPresenter {
 
   _renderProfile() {
     render(this._headerContainer, profileComponent);
-  }
-
-  _renderFilter() {
-    const filterComponent = new SiteFilterView(this._getFilms());
-    render(this._mainContainer, filterComponent, RenderPosition.AFTERBEGIN);
   }
 
   _handleSortTypeChange(sortType) {
@@ -107,8 +101,6 @@ export default class FilmListPresenter {
 
     this._renderProfile();
 
-    this._renderFilter();
-
     this._renderSort();
 
     this._renderFilms();
@@ -135,8 +127,6 @@ export default class FilmListPresenter {
   }
 
   _renderEmptyFilmsList() {
-    this._renderFilter();
-
     this._renderFilmsWrapper();
 
     this._addEmptyListToWrapper();
