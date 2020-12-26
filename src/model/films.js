@@ -4,6 +4,7 @@ export default class Films extends Observer {
   constructor() {
     super();
     this._films = [];
+    this.updateFilm = this.updateFilm.bind(this);
   }
 
   set allFilms(films) {
@@ -27,6 +28,6 @@ export default class Films extends Observer {
       ...this._films.slice(indexToUpdate + 1)
     ];
 
-    this._notify();
+    this._notify(filmToUpdate);
   }
 }

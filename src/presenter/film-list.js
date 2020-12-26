@@ -10,7 +10,7 @@ import FilmsCountView from "../view/films-count/films-count";
 import FilmPresenter from "../presenter/film";
 import PopupPresenter from "../presenter/popup";
 
-import {getRandomIntInRange, updateItem} from "../utils/common";
+import {getRandomIntInRange} from "../utils/common";
 import {render, RenderPosition, remove} from "../utils/render";
 import {ProfileRank, CARDS_TO_SHOW_COUNT} from "../utils/constants";
 import {SortType} from "../utils/constants";
@@ -31,9 +31,6 @@ export default class FilmListPresenter {
     this._filmsModel = filmsModel;
     this._commentsModel = commentsModel;
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
-    this._filmCardComponent = null;
-    this._sourcedFilmsCards = null;
-    this._filmsCards = null;
 
     this._filmPresenter = {};
     this._filmPopupPresenter = {};
@@ -43,6 +40,8 @@ export default class FilmListPresenter {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
+
+    this._filmsModel.addObserver(this._handleFilmChange);
   }
 
   init() {
@@ -173,7 +172,7 @@ export default class FilmListPresenter {
 
   _renderFilmCard(cardToShow) {
     const comments = this._getComments();
-    const filmPresenter = new FilmPresenter(comments, this._mainContainer, filmsListContainerComponent, this._handleFilmChange, this._handleFilmCardClick);
+    const filmPresenter = new FilmPresenter(comments, this._mainContainer, filmsListContainerComponent, this._filmsModel.updateFilm, this._handleFilmCardClick);
     const cardToShowCommentsLength = this._getFilmCardComments(cardToShow).length;
     filmPresenter.init(this._getFilms(), cardToShow, cardToShowCommentsLength);
     this._filmPresenter[cardToShow.id] = filmPresenter;
@@ -196,7 +195,6 @@ export default class FilmListPresenter {
 
   _handleFilmChange(updatedFilm) {
     const comments = this._getFilmCardComments(updatedFilm);
-    this._filmsCards = updateItem(this._getFilms(), updatedFilm);
     this._filmPresenter[updatedFilm.id].init(this._getFilms(), updatedFilm, comments.length);
 
     const popupPresenterExists = this._filmPopupPresenter[updatedFilm.id];
