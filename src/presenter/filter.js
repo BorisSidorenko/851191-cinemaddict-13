@@ -11,6 +11,8 @@ export default class Filter {
     this._filterComponent = null;
 
     this._handleFilterChange = this._handleFilterChange.bind(this);
+    this._render = this._render.bind(this);
+    this._filmsModel.addObserver(this._render);
   }
 
   init() {

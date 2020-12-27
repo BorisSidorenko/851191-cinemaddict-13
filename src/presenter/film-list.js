@@ -55,13 +55,24 @@ export default class FilmListPresenter {
     render(this._headerContainer, profileComponent);
   }
 
+  _resetSort() {
+    this._currentSortType = SortType.DEFAULT;
+    this._renderSort();
+  }
+
+  _resetShowMoreButtonClickCounter() {
+    showMoreButtonClickCounter = 1;
+  }
+
   _handleFilterTypeChange() {
     if (this._currentFilterType !== this._filtersModel.filter) {
       this._currentFilterType = this._filtersModel.filter;
     }
 
+    this._resetSort();
     this._clearFilmListContainer();
     this._renderFilms();
+    this._resetShowMoreButtonClickCounter();
   }
 
   _handleSortTypeChange(sortType) {

@@ -1,7 +1,7 @@
 import {nanoid} from "../vendor/nanoid";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
-const CARD_AMOUNT_TO_GENERATE = 13;
+const CARD_AMOUNT_TO_GENERATE = 30;
 
 const MINUTES_IN_HOUR = 60;
 
