@@ -12,7 +12,7 @@ import PopupPresenter from "../presenter/popup";
 import {getRandomIntInRange} from "../utils/common";
 import {render, remove} from "../utils/render";
 import {ProfileRank, CARDS_TO_SHOW_COUNT} from "../utils/constants";
-import {SortType} from "../utils/constants";
+import {SortType, FilterType} from "../utils/constants";
 
 const profileComponent = new ProfileView(getRandomIntInRange(ProfileRank.MAX, ProfileRank.MIN));
 const filmsWrapperComponent = new FilmsWrapperView();
@@ -23,12 +23,13 @@ const showMoreButtonComponent = new ShowMoreButtonView();
 let showMoreButtonClickCounter = 1;
 
 export default class FilmListPresenter {
-  constructor(headerContainer, mainContainer, footerContainer, filmsModel, commentsModel) {
+  constructor(headerContainer, mainContainer, footerContainer, filmsModel, commentsModel, filtersModel) {
     this._headerContainer = headerContainer;
     this._mainContainer = mainContainer;
     this._footerContainer = footerContainer;
     this._filmsModel = filmsModel;
     this._commentsModel = commentsModel;
+    this._filtersModel = filtersModel;
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
     this._filmPresenter = {};
@@ -39,7 +40,10 @@ export default class FilmListPresenter {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
+    this._currentFilterType = this._filtersModel.filter;
 
+    this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._filtersModel.addObserver(this._handleFilterTypeChange);
     this._filmsModel.addObserver(this._handleFilmChange);
   }
 
@@ -49,6 +53,15 @@ export default class FilmListPresenter {
 
   _renderProfile() {
     render(this._headerContainer, profileComponent);
+  }
+
+  _handleFilterTypeChange() {
+    if (this._currentFilterType !== this._filtersModel.filter) {
+      this._currentFilterType = this._filtersModel.filter;
+    }
+
+    this._clearFilmListContainer();
+    this._renderFilms();
   }
 
   _handleSortTypeChange(sortType) {
@@ -62,15 +75,37 @@ export default class FilmListPresenter {
     }
   }
 
-  _getFilms() {
-    switch (this._currentSortType) {
-      case SortType.DATE:
-        return this._filmsModel.allFilms.slice().sort((a, b) => b.year - a.year);
-      case SortType.RATING:
-        return this._filmsModel.allFilms.slice().sort((a, b) => b.rating - a.rating);
+  _getFilteredFlims(films) {
+    switch (this._currentFilterType) {
+      case FilterType.WATCHLIST:
+        return films.slice().filter((film) => film.isWatchlist);
+      case FilterType.HISTORY:
+        return films.slice().filter((film) => film.isHistory);
+      case FilterType.FAVORITES:
+        return films.slice().filter((film) => film.isFavorite);
     }
 
-    return this._filmsModel.allFilms;
+    return films.slice();
+  }
+
+  _getSortedFilms(films) {
+    switch (this._currentSortType) {
+      case SortType.DATE:
+        return films.sort((a, b) => b.year - a.year);
+      case SortType.RATING:
+        return films.sort((a, b) => b.rating - a.rating);
+    }
+
+    return films.slice();
+  }
+
+  _getFilms() {
+    let films = this._filmsModel.allFilms;
+
+    films = this._getFilteredFlims(films);
+    films = this._getSortedFilms(films);
+
+    return films;
   }
 
   _getComments() {

@@ -4,6 +4,7 @@ import FilterPresenter from "./presenter/filter";
 import FilmListPresenter from "./presenter/film-list";
 import FilmsModel from "./model/films";
 import CommentsModel from "./model/comments";
+import FiltersModel from "./model/filters";
 
 const allFilmcards = generateFilmCards();
 
@@ -25,8 +26,10 @@ const siteHeaderElement = siteBodyElement.querySelector(`.header`);
 const siteMainElement = siteBodyElement.querySelector(`.main`);
 const siteFooterElement = siteBodyElement.querySelector(`.footer`);
 
-const filterPresenter = new FilterPresenter(siteMainElement, filmsModel);
+const filtersModel = new FiltersModel();
+
+const filterPresenter = new FilterPresenter(siteMainElement, filmsModel, filtersModel);
 filterPresenter.init();
 
-const filmListPresenter = new FilmListPresenter(siteHeaderElement, siteMainElement, siteFooterElement, filmsModel, commentsModel);
+const filmListPresenter = new FilmListPresenter(siteHeaderElement, siteMainElement, siteFooterElement, filmsModel, commentsModel, filtersModel);
 filmListPresenter.init();

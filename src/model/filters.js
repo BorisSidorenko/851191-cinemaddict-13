@@ -9,6 +9,7 @@ export default class Filters extends Observer {
 
   set filter(filterType) {
     this._filter = filterType;
+    this._notify();
   }
 
   get filter() {
