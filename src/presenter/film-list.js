@@ -43,8 +43,10 @@ export default class FilmListPresenter {
     this._currentFilterType = this._filtersModel.filter;
 
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._handleSortedListChange = this._handleSortedListChange.bind(this);
     this._filtersModel.addObserver(this._handleFilterTypeChange);
     this._filmsModel.addObserver(this._handleFilmChange);
+    this._filmsModel.addObserver(this._handleSortedListChange);
   }
 
   init() {
@@ -62,6 +64,11 @@ export default class FilmListPresenter {
 
   _resetShowMoreButtonClickCounter() {
     showMoreButtonClickCounter = 1;
+  }
+
+  _handleSortedListChange() {
+    this._renderFilmsCards(this._getFilms(true).slice(0, showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT));
+    this._renderShowMoreButton();
   }
 
   _handleFilterTypeChange() {
@@ -110,11 +117,13 @@ export default class FilmListPresenter {
     return films.slice();
   }
 
-  _getFilms() {
+  _getFilms(applyFilterAndSort = false) {
     let films = this._filmsModel.allFilms;
 
-    films = this._getFilteredFlims(films);
-    films = this._getSortedFilms(films);
+    if (applyFilterAndSort) {
+      films = this._getFilteredFlims(films);
+      films = this._getSortedFilms(films);
+    }
 
     return films;
   }
@@ -159,7 +168,7 @@ export default class FilmListPresenter {
     render(filmsWrapperComponent, filmsListComponent);
 
     this._renderFilmsListContainer();
-    this._renderFilmsCards(this._getFilms().slice(0, CARDS_TO_SHOW_COUNT));
+    this._renderFilmsCards(this._getFilms(true).slice(0, CARDS_TO_SHOW_COUNT));
 
     this._renderShowMoreButton();
   }
@@ -183,11 +192,11 @@ export default class FilmListPresenter {
   _handleShowMoreButtonClick() {
     showMoreButtonClickCounter += 1;
 
-    const cardsToShow = this._getFilms().slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter);
+    const cardsToShow = this._getFilms(true).slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter);
 
     this._renderFilmsCards(cardsToShow);
 
-    if (cardsToShow.length === this._getFilms().length) {
+    if (cardsToShow.length === this._getFilms(true).length) {
       remove(showMoreButtonComponent);
     } else {
       this._renderShowMoreButton();
@@ -195,7 +204,7 @@ export default class FilmListPresenter {
   }
 
   _renderShowMoreButton() {
-    if (this._getFilms().length > CARDS_TO_SHOW_COUNT) {
+    if (this._getFilms(true).length > CARDS_TO_SHOW_COUNT) {
       render(filmsListComponent, showMoreButtonComponent);
       showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
     }
