@@ -32,6 +32,7 @@ export default class PopupPresenter {
     this._handlePopupControlsClick = this._handlePopupControlsClick.bind(this);
     this._filmCard = null;
     this._popupTopContainerComponent = null;
+    this._popupFormComponent = null;
   }
 
   init(filmCard, filmCardComments) {
@@ -62,11 +63,20 @@ export default class PopupPresenter {
   }
 
   _submitForm() {
-
+    const commentEmoji = this._popupFormComponent.element[`comment-emoji`].value;
+    const commentText = this._popupFormComponent.element[`comment`].value;
+    const localComment = Object.assign(
+        {},
+        {
+          comment: commentText,
+          date: new Date().toISOString(),
+          emotion: commentEmoji
+        }
+    );
   }
 
   _handleFormSubmit(evt) {
-    isSubmitFormEvent(evt, this._submitForm);
+    isSubmitFormEvent(evt, this._submitForm.bind(this));
   }
 
   _closePopup() {
@@ -181,11 +191,11 @@ export default class PopupPresenter {
   _renderPopup(card, comments) {
     this._handleOpenedPopup();
 
-    const popupFormComponent = new FilmPopupFormView();
+    this._popupFormComponent = new FilmPopupFormView();
     this._popupTopContainerComponent = new FilmPopupTopContainerView();
     const popupBottomContainerComponent = new FilmPopupBottomContainerView();
 
-    this._appendMainWithPopup(popupFormComponent, this._popupTopContainerComponent, popupBottomContainerComponent);
+    this._appendMainWithPopup(this._popupFormComponent, this._popupTopContainerComponent, popupBottomContainerComponent);
 
     this._renderPopupTopContainer(this._popupTopContainerComponent, card);
     this._renderPopupBottomContainer(popupBottomContainerComponent, comments);
