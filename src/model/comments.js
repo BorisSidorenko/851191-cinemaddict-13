@@ -43,6 +43,10 @@ export default class Comments extends Observer {
     }
   }
 
+  getFilmCardComments(filmId) {
+    return this._comments[filmId];
+  }
+
   updateComments(userAction, comment) {
     switch (userAction) {
       case UserAction.ADD_COMMENT:

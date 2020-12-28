@@ -33,7 +33,6 @@ export default class PopupPresenter {
     this._filmPopupControlsComponent = null;
     this._handlePopupControlsClick = this._handlePopupControlsClick.bind(this);
     this._filmCard = null;
-    this._filmCardComments = null;
     this._filmPopupCommentsWrapComponent = null;
     this._popupBottomContainerComponent = null;
     this._popupTopContainerComponent = null;
@@ -44,12 +43,11 @@ export default class PopupPresenter {
     this._commentsModel.addObserver(this._handleModelEvent);
   }
 
-  init(filmCard, filmCardComments) {
+  init(filmCard) {
     this._filmCard = filmCard;
-    this._filmCardComments = filmCardComments;
 
     if (this._filmPopupComponent === null) {
-      this._renderPopup(filmCard, filmCardComments);
+      this._renderPopup(filmCard, this._getCardComments());
       return;
     }
 
@@ -175,14 +173,15 @@ export default class PopupPresenter {
   _handleModelEvent(userAction) {
     switch (userAction) {
       case UserAction.DELETE_COMMENT:
-        this._appendPopupWithComments(this._filmCardComments);
+        this._appendPopupWithComments();
     }
   }
 
   _handleDeleteCommentButtonClick(evt) {
     if (evt.target.tagName === `BUTTON`) {
       const commentId = evt.target.dataset.idComment;
-      const commentToDelete = this._filmCardComments.find((comment) => comment.id === commentId);
+      const cardComments = this._getCardComments();
+      const commentToDelete = cardComments.find((comment) => comment.id === commentId);
 
       this._commentsModel.updateComments(
           UserAction.DELETE_COMMENT,
@@ -191,7 +190,12 @@ export default class PopupPresenter {
     }
   }
 
-  _appendPopupWithComments(comments) {
+  _getCardComments() {
+    return this._commentsModel.getFilmCardComments(this._filmCard.id);
+  }
+
+  _appendPopupWithComments() {
+    const comments = this._getCardComments();
     const prevFilmPopupCommentsWrapComponent = this._filmPopupCommentsWrapComponent;
 
     if (prevFilmPopupCommentsWrapComponent !== null) {
@@ -214,8 +218,8 @@ export default class PopupPresenter {
     this._renderPopupControls(popupTopContainer, card);
   }
 
-  _renderPopupBottomContainer(comments) {
-    this._appendPopupWithComments(comments);
+  _renderPopupBottomContainer() {
+    this._appendPopupWithComments();
   }
 
   _clearSubmitHandler() {
@@ -226,7 +230,7 @@ export default class PopupPresenter {
     document.addEventListener(`keydown`, this._handleFormSubmit);
   }
 
-  _renderPopup(card, comments) {
+  _renderPopup(card) {
     this._handleOpenedPopup();
 
     this._popupFormComponent = new FilmPopupFormView();
@@ -236,7 +240,7 @@ export default class PopupPresenter {
     this._appendMainWithPopup(this._popupFormComponent, this._popupTopContainerComponent);
 
     this._renderPopupTopContainer(this._popupTopContainerComponent, card);
-    this._renderPopupBottomContainer(comments);
+    this._renderPopupBottomContainer();
 
     this._setSubmitHandler();
 

@@ -244,7 +244,7 @@ export default class FilmListPresenter {
 
     const popupPresenterExists = this._filmPopupPresenter[updatedFilm.id];
     if (popupPresenterExists) {
-      this._filmPopupPresenter[updatedFilm.id].init(updatedFilm, comments);
+      this._filmPopupPresenter[updatedFilm.id].init(updatedFilm);
     }
   }
 
