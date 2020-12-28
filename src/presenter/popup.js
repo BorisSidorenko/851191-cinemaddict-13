@@ -187,6 +187,16 @@ export default class PopupPresenter {
           UserAction.DELETE_COMMENT,
           commentToDelete
       );
+
+      const updatedFilmCard = Object.assign(
+          {},
+          this._filmCard,
+          {
+            commentsCount: this._getCardComments().length
+          }
+      );
+
+      this._changeData(updatedFilmCard);
     }
   }
 
