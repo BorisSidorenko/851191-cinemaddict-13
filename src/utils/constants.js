@@ -37,3 +37,8 @@ export const FilterType = {
   HISTORY: `history`,
   FAVORITES: `favorites`
 };
+
+export const UserAction = {
+  ADD_COMMENT: `ADD`,
+  DELETE_COMMENT: `DELETE`
+};

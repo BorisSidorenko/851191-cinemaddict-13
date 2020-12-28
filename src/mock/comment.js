@@ -1,3 +1,4 @@
+import {nanoid} from "../vendor/nanoid";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
 const COMMENTS = [
@@ -54,6 +55,7 @@ const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(st
 export const generateComment = (id) => () => {
   return {
     filmId: id,
+    id: nanoid(4),
     text: getRandomComment(),
     emoji: getRandomEmoji(),
     author: getRandomAuthor(),
