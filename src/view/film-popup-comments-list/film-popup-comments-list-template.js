@@ -1,3 +1,4 @@
+import he from "he";
 import {EMOJI_PATH, EMOJI_EXTENSION} from "../../utils/constants";
 
 const getCommentElement = ({id, text, emoji, author, date}) => {
@@ -6,7 +7,7 @@ const getCommentElement = ({id, text, emoji, author, date}) => {
       <img src="${EMOJI_PATH}${emoji}${EMOJI_EXTENSION}" width="55" height="55" alt="emoji-smile">
     </span>
     <div>
-      <p class="film-details__comment-text">${text}</p>
+      <p class="film-details__comment-text">${he.encode(text)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
         <span class="film-details__comment-day">${date}</span>
