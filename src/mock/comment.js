@@ -9,13 +9,11 @@ const COMMENTS = [
   `Movie just for one time`
 ];
 
-const EMOJI_PATH = `././images/emoji/`;
-
 const EMOJI = [
-  `angry.png`,
-  `puke.png`,
-  `sleeping.png`,
-  `smile.png`
+  `angry`,
+  `puke`,
+  `sleeping`,
+  `smile`
 ];
 
 const AUTHORS = [
@@ -42,7 +40,7 @@ const getRandomComment = () => {
 
 const getRandomEmoji = () => {
   const getEmojiIndex = getRandomInt(EMOJI.length);
-  return `${EMOJI_PATH}${EMOJI[getEmojiIndex]}`;
+  return `${EMOJI[getEmojiIndex]}`;
 };
 
 const getRandomAuthor = () => {

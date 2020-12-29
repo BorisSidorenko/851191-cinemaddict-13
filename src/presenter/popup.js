@@ -12,6 +12,7 @@ import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-pop
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
 
+import {generateComment} from "../mock/comment";
 import {isEscEvent, isSubmitFormEvent} from "../utils/common";
 import {PopupControlsName} from "../utils/constants";
 import {render, remove} from "../utils/render";
@@ -71,15 +72,23 @@ export default class PopupPresenter {
   }
 
   _submitForm() {
+    const commentTemplate = generateComment(this._filmCard.id)();
     const commentEmoji = this._popupFormComponent.element[`comment-emoji`].value;
     const commentText = this._popupFormComponent.element[`comment`].value;
+
     const localComment = Object.assign(
         {},
+        commentTemplate,
         {
           comment: commentText,
-          date: new Date().toISOString(),
-          emotion: commentEmoji
+          emoji: commentEmoji,
+          text: commentText
         }
+    );
+
+    this._commentsModel.updateComments(
+        UserAction.ADD_COMMENT,
+        localComment
     );
   }
 
@@ -170,11 +179,8 @@ export default class PopupPresenter {
     this._changeData(updatedFilmCard);
   }
 
-  _handleModelEvent(userAction) {
-    switch (userAction) {
-      case UserAction.DELETE_COMMENT:
-        this._appendPopupWithComments();
-    }
+  _handleModelEvent() {
+    this._appendPopupWithComments();
   }
 
   _handleDeleteCommentButtonClick(evt) {

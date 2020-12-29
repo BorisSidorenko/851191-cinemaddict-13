@@ -1,7 +1,9 @@
+import {EMOJI_PATH, EMOJI_EXTENSION} from "../../utils/constants";
+
 const getCommentElement = ({id, text, emoji, author, date}) => {
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
-      <img src="${emoji}" width="55" height="55" alt="emoji-smile">
+      <img src="${EMOJI_PATH}${emoji}${EMOJI_EXTENSION}" width="55" height="55" alt="emoji-smile">
     </span>
     <div>
       <p class="film-details__comment-text">${text}</p>

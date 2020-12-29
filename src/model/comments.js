@@ -19,13 +19,11 @@ export default class Comments extends Observer {
   }
 
   _addComment(comment) {
-    this._comments = Object.assign(
-        {},
-        this._comments,
-        {
-          comment
-        }
-    );
+    let filmComments = this._comments[comment.filmId];
+
+    filmComments = [comment, ...filmComments.slice()];
+
+    this._comments[comment.filmId] = filmComments;
   }
 
   _deleteComment({filmId, id}) {
@@ -57,6 +55,6 @@ export default class Comments extends Observer {
         break;
     }
 
-    this._notify(userAction);
+    this._notify();
   }
 }
