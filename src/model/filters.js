@@ -1,5 +1,5 @@
 import Observer from "../utils/observer";
-import {FilterType} from "../utils/constants";
+import {SortType, FilterType} from "../utils/constants";
 
 export default class Filters extends Observer {
   constructor() {
@@ -14,5 +14,29 @@ export default class Filters extends Observer {
 
   get filter() {
     return this._filter;
+  }
+
+  filterFilms(films, filterType) {
+    switch (filterType) {
+      case FilterType.WATCHLIST:
+        return films.filter((film) => film.isWatchlist);
+      case FilterType.HISTORY:
+        return films.filter((film) => film.isHistory);
+      case FilterType.FAVORITES:
+        return films.filter((film) => film.isFavorite);
+    }
+
+    return films;
+  }
+
+  sortFilms(films, sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        return films.sort((a, b) => b.year - a.year);
+      case SortType.RATING:
+        return films.sort((a, b) => b.rating - a.rating);
+    }
+
+    return films;
   }
 }

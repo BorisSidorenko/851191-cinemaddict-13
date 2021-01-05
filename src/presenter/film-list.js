@@ -12,7 +12,7 @@ import PopupPresenter from "../presenter/popup";
 import {getRandomIntInRange} from "../utils/common";
 import {render, remove} from "../utils/render";
 import {ProfileRank, CARDS_TO_SHOW_COUNT} from "../utils/constants";
-import {SortType, FilterType} from "../utils/constants";
+import {SortType} from "../utils/constants";
 
 const profileComponent = new ProfileView(getRandomIntInRange(ProfileRank.MAX, ProfileRank.MIN));
 const filmsWrapperComponent = new FilmsWrapperView();
@@ -96,27 +96,11 @@ export default class FilmListPresenter {
   }
 
   _getFilteredFlims(films) {
-    switch (this._currentFilterType) {
-      case FilterType.WATCHLIST:
-        return films.filter((film) => film.isWatchlist);
-      case FilterType.HISTORY:
-        return films.filter((film) => film.isHistory);
-      case FilterType.FAVORITES:
-        return films.filter((film) => film.isFavorite);
-    }
-
-    return films;
+    return this._filtersModel.filterFilms(films, this._currentFilterType);
   }
 
   _getSortedFilms(films) {
-    switch (this._currentSortType) {
-      case SortType.DATE:
-        return films.sort((a, b) => b.year - a.year);
-      case SortType.RATING:
-        return films.sort((a, b) => b.rating - a.rating);
-    }
-
-    return films;
+    return this._filtersModel.sortFilms(films, this._currentSortType);
   }
 
   _getFilms(applyFilterAndSort = false) {
@@ -213,7 +197,9 @@ export default class FilmListPresenter {
   }
 
   _renderFilmsCount() {
-    const filmsCountComponent = new FilmsCountView(this._getFilms().length);
+    let films = this._getFilms();
+    const availableFilmsCount = films ? films.length : 0;
+    const filmsCountComponent = new FilmsCountView(availableFilmsCount);
     render(this._footerContainer, filmsCountComponent);
   }
 
