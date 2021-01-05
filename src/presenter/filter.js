@@ -22,7 +22,7 @@ export default class Filter {
   _render() {
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new SiteFilterView(this._filterModel.filter, this._filmsModel.allFilms);
+    this._filterComponent = new SiteFilterView(this._filterModel.filter, this._filmsModel.films);
     this._filterComponent.setFilterChangeHandler(this._handleFilterChange);
 
     if (prevFilterComponent !== null) {

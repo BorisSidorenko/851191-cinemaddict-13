@@ -1,5 +1,6 @@
 import Observer from "../utils/observer";
 import {UserAction} from "../utils/constants";
+import loadash from "lodash";
 
 export default class Comments extends Observer {
   constructor() {
@@ -7,19 +8,19 @@ export default class Comments extends Observer {
     this._comments = {};
   }
 
-  set allComments(comments) {
+  set comments(comments) {
     this._comments = Object.assign(
         {},
         comments
     );
   }
 
-  get allComments() {
-    return this._comments;
+  get comments() {
+    return loadash.cloneDeep(this._comments);
   }
 
   _addComment(comment) {
-    let filmComments = this._comments[comment.filmId];
+    let filmComments = loadash.cloneDeep(this._comments[comment.filmId]);
 
     filmComments = [comment, ...filmComments.slice()];
 
@@ -27,18 +28,11 @@ export default class Comments extends Observer {
   }
 
   _deleteComment({filmId, id}) {
-    let filmComments = this._comments[filmId];
+    let filmComments = loadash.cloneDeep(this._comments[filmId]);
 
-    const commentToDeleteIndex = filmComments.findIndex((comment) => comment.id === id);
+    filmComments = filmComments.filter((comment) => comment.id !== id);
 
-    if (commentToDeleteIndex !== -1) {
-      filmComments = [
-        ...filmComments.slice(0, commentToDeleteIndex),
-        ...filmComments.slice(commentToDeleteIndex + 1)
-      ];
-
-      this._comments[filmId] = filmComments;
-    }
+    this._comments[filmId] = filmComments;
   }
 
   getFilmCardComments(filmId) {

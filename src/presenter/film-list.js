@@ -67,7 +67,9 @@ export default class FilmListPresenter {
   }
 
   _handleSortedListChange() {
-    this._renderFilmsCards(this._getFilms(true).slice(0, showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT));
+    let films = this._getFilms(true);
+    let filmsToShow = films.slice(0, showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT);
+    this._renderFilmsCards(filmsToShow);
     this._renderShowMoreButton();
   }
 
@@ -96,14 +98,14 @@ export default class FilmListPresenter {
   _getFilteredFlims(films) {
     switch (this._currentFilterType) {
       case FilterType.WATCHLIST:
-        return films.slice().filter((film) => film.isWatchlist);
+        return films.filter((film) => film.isWatchlist);
       case FilterType.HISTORY:
-        return films.slice().filter((film) => film.isHistory);
+        return films.filter((film) => film.isHistory);
       case FilterType.FAVORITES:
-        return films.slice().filter((film) => film.isFavorite);
+        return films.filter((film) => film.isFavorite);
     }
 
-    return films.slice();
+    return films;
   }
 
   _getSortedFilms(films) {
@@ -114,11 +116,11 @@ export default class FilmListPresenter {
         return films.sort((a, b) => b.rating - a.rating);
     }
 
-    return films.slice();
+    return films;
   }
 
   _getFilms(applyFilterAndSort = false) {
-    let films = this._filmsModel.allFilms;
+    let films = this._filmsModel.films;
 
     if (applyFilterAndSort) {
       films = this._getFilteredFlims(films);
@@ -129,7 +131,7 @@ export default class FilmListPresenter {
   }
 
   _getComments() {
-    return this._commentsModel.allComments;
+    return this._commentsModel.comments;
   }
 
   _renderSort() {

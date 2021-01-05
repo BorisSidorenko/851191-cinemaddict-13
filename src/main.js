@@ -9,7 +9,7 @@ import FiltersModel from "./model/filters";
 const allFilmcards = generateFilmCards();
 
 const filmsModel = new FilmsModel();
-filmsModel.allFilms = allFilmcards;
+filmsModel.films = allFilmcards;
 
 const getAllComments = () => allFilmcards.reduce((acc, {id}) => {
   acc[id] = generateComments(id);
@@ -19,7 +19,7 @@ const getAllComments = () => allFilmcards.reduce((acc, {id}) => {
 const allComments = getAllComments();
 
 const commentsModel = new CommentsModel();
-commentsModel.allComments = allComments;
+commentsModel.comments = allComments;
 
 const siteBodyElement = document.querySelector(`body`);
 const siteHeaderElement = siteBodyElement.querySelector(`.header`);
