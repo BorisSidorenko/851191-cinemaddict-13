@@ -205,7 +205,16 @@ export default class FilmListPresenter {
 
   _renderFilmCard(cardToShow) {
     const comments = this._getComments();
-    const filmPresenter = new FilmPresenter(comments, this._mainContainer, filmsListContainerComponent, this._filmsModel.updateFilm, this._handleFilmCardClick);
+
+    const paramObj = {
+      comments,
+      mainContainer: this._mainContainer,
+      filmsListContainer: filmsListContainerComponent,
+      changeData: this._filmsModel.updateFilm,
+      cardClick: this._handleFilmCardClick
+    };
+
+    const filmPresenter = new FilmPresenter(paramObj);
     const cardToShowCommentsLength = this._getFilmCardComments(cardToShow).length;
     filmPresenter.init(this._getFilms(), cardToShow, cardToShowCommentsLength);
     this._filmPresenter[cardToShow.id] = filmPresenter;
@@ -228,11 +237,15 @@ export default class FilmListPresenter {
 
   _handleFilmChange(updatedFilm) {
     const comments = this._getFilmCardComments(updatedFilm);
-    this._filmPresenter[updatedFilm.id].init(this._getFilms(), updatedFilm, comments.length);
+    const commentsCount = comments.length;
+    const currentPresenter = this._filmPresenter[updatedFilm.id];
+    const films = this._getFilms();
 
-    const popupPresenterExists = this._filmPopupPresenter[updatedFilm.id];
-    if (popupPresenterExists) {
-      this._filmPopupPresenter[updatedFilm.id].init(updatedFilm);
+    currentPresenter.init(films, updatedFilm, commentsCount);
+
+    const popupPresenter = this._filmPopupPresenter[updatedFilm.id];
+    if (popupPresenter) {
+      popupPresenter.init(updatedFilm);
     }
   }
 
@@ -247,7 +260,13 @@ export default class FilmListPresenter {
 
     this._removedOpenedPopup();
 
-    const popupPresenter = new PopupPresenter(this._mainContainer, this._filmsModel.updateFilm, this._commentsModel);
+    const paramObj = {
+      mainContainer: this._mainContainer,
+      changeData: this._filmsModel.updateFilm,
+      commentsModel: this._commentsModel
+    };
+
+    const popupPresenter = new PopupPresenter(paramObj);
     popupPresenter.init(clickedCard, clickedCardComments);
     this._filmPopupPresenter[card.id] = popupPresenter;
   }

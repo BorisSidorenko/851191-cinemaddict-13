@@ -1,7 +1,7 @@
 import Observer from "../utils/observer";
 import loadash from "lodash";
 
-export default class Films extends Observer {
+export default class FilmsModel extends Observer {
   constructor() {
     super();
     this._films = [];

@@ -3,7 +3,7 @@ import {render, RenderPosition} from "../utils/render";
 import {FilterType} from "../utils/constants";
 import {remove} from "../utils/render";
 
-export default class Filter {
+export default class FilterPresenter {
   constructor(mainContainer, filmsModel, filterModel) {
     this._mainContainer = mainContainer;
     this._filmsModel = filmsModel;

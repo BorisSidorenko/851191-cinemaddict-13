@@ -19,7 +19,7 @@ import {render, remove} from "../utils/render";
 import {UserAction} from "../utils/constants";
 
 export default class PopupPresenter {
-  constructor(mainContainer, changeData, commentsModel) {
+  constructor({mainContainer, changeData, commentsModel}) {
     this._mainContainer = mainContainer;
     this._changeData = changeData;
     this._commentsModel = commentsModel;

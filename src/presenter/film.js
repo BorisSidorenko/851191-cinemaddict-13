@@ -2,8 +2,8 @@ import FilmCardView from "../view/film-card/film-card";
 import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
-export default class Film {
-  constructor(comments, mainContainer, filmsListContainer, changeData, cardClick) {
+export default class FilmPresenter {
+  constructor({comments, mainContainer, filmsListContainer, changeData, cardClick}) {
     this._mainContainer = mainContainer;
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
