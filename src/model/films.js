@@ -1,5 +1,5 @@
 import Observer from "../utils/observer";
-import loadash from "lodash";
+import clonedeep from "lodash.clonedeep";
 
 export default class FilmsModel extends Observer {
   constructor() {
@@ -13,7 +13,7 @@ export default class FilmsModel extends Observer {
   }
 
   get films() {
-    return loadash.cloneDeep(this._films);
+    return clonedeep(this._films);
   }
 
   updateFilm(filmToUpdate) {

@@ -1,6 +1,6 @@
 import Observer from "../utils/observer";
 import {UserAction} from "../utils/constants";
-import loadash from "lodash";
+import clonedeep from "lodash.clonedeep";
 
 export default class CommentsModel extends Observer {
   constructor() {
@@ -16,11 +16,11 @@ export default class CommentsModel extends Observer {
   }
 
   get comments() {
-    return loadash.cloneDeep(this._comments);
+    return clonedeep(this._comments);
   }
 
   _addComment(comment) {
-    let filmComments = loadash.cloneDeep(this._comments[comment.filmId]);
+    let filmComments = clonedeep(this._comments[comment.filmId]);
 
     filmComments = [comment, ...filmComments.slice()];
 
@@ -28,7 +28,7 @@ export default class CommentsModel extends Observer {
   }
 
   _deleteComment({filmId, id}) {
-    const filmComments = loadash.cloneDeep(this._comments[filmId]);
+    const filmComments = clonedeep(this._comments[filmId]);
 
     this._comments[filmId] = filmComments.filter((comment) => comment.id !== id);
   }
