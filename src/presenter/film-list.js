@@ -67,8 +67,10 @@ export default class FilmListPresenter {
   }
 
   _handleSortedListChange() {
-    let films = this._getFilms(true);
-    let filmsToShow = films.slice(0, showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT);
+    const films = this._getFilms(true);
+    const filmsCountToShow = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
+    const filmsToShow = films.slice(0, filmsCountToShow);
+
     this._renderFilmsCards(filmsToShow);
     this._renderShowMoreButton();
   }
@@ -104,7 +106,7 @@ export default class FilmListPresenter {
   }
 
   _getFilms(applyFilterAndSort = false) {
-    let films = this._filmsModel.films;
+    let {films} = this._filmsModel;
 
     if (applyFilterAndSort) {
       films = this._getFilteredFlims(films);
@@ -200,6 +202,7 @@ export default class FilmListPresenter {
     let films = this._getFilms();
     const availableFilmsCount = films ? films.length : 0;
     const filmsCountComponent = new FilmsCountView(availableFilmsCount);
+
     render(this._footerContainer, filmsCountComponent);
   }
 
@@ -217,6 +220,7 @@ export default class FilmListPresenter {
     const filmPresenter = new FilmPresenter(paramObj);
     const cardToShowCommentsLength = this._getFilmCardComments(cardToShow).length;
     filmPresenter.init(this._getFilms(), cardToShow, cardToShowCommentsLength);
+
     this._filmPresenter[cardToShow.id] = filmPresenter;
   }
 
@@ -227,6 +231,7 @@ export default class FilmListPresenter {
 
   _clearFilmListContainer() {
     const filmPresenters = Object.values(this._filmPresenter);
+
     if (filmPresenters.length > 0) {
       filmPresenters.forEach((presenter) => presenter.destroy());
       this._filmPresenter = {};
@@ -244,6 +249,7 @@ export default class FilmListPresenter {
     currentPresenter.init(films, updatedFilm, commentsCount);
 
     const popupPresenter = this._filmPopupPresenter[updatedFilm.id];
+
     if (popupPresenter) {
       popupPresenter.init(updatedFilm);
     }
@@ -267,12 +273,15 @@ export default class FilmListPresenter {
     };
 
     const popupPresenter = new PopupPresenter(paramObj);
+
     popupPresenter.init(clickedCard, clickedCardComments);
+
     this._filmPopupPresenter[card.id] = popupPresenter;
   }
 
   _removedOpenedPopup() {
     const filmPopupPresenter = Object.values(this._filmPopupPresenter);
+
     if (filmPopupPresenter.length > 0) {
       filmPopupPresenter.forEach((presenter) => presenter.destroy());
       this._filmPopupPresenter = {};

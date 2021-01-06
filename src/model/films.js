@@ -17,11 +17,8 @@ export default class FilmsModel extends Observer {
   }
 
   updateFilm(filmToUpdate) {
-    this._films.find((film, i) => {
-      if (film.id === filmToUpdate.id) {
-        this._films[i] = filmToUpdate;
-      }
-    });
+    const updatedFilms = this._films.map((film) => film.id === filmToUpdate.id ? filmToUpdate : film);
+    this._films = updatedFilms;
 
     this._notify(filmToUpdate);
   }

@@ -28,11 +28,9 @@ export default class CommentsModel extends Observer {
   }
 
   _deleteComment({filmId, id}) {
-    let filmComments = loadash.cloneDeep(this._comments[filmId]);
+    const filmComments = loadash.cloneDeep(this._comments[filmId]);
 
-    filmComments = filmComments.filter((comment) => comment.id !== id);
-
-    this._comments[filmId] = filmComments;
+    this._comments[filmId] = filmComments.filter((comment) => comment.id !== id);
   }
 
   getFilmCardComments(filmId) {
