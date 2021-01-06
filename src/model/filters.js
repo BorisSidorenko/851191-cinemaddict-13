@@ -32,9 +32,9 @@ export default class FiltersModel extends Observer {
   sortFilms(films, sortType) {
     switch (sortType) {
       case SortType.DATE:
-        return films.sort((a, b) => b.year - a.year);
+        return films.slice().sort((a, b) => b.year - a.year);
       case SortType.RATING:
-        return films.sort((a, b) => b.rating - a.rating);
+        return films.slice().sort((a, b) => b.rating - a.rating);
     }
 
     return films;
