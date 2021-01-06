@@ -11,6 +11,9 @@ export const ELEMENTS_TO_SHOW_POPUP = [
   `film-card__comments`
 ];
 
+export const EMOJI_PATH = `././images/emoji/`;
+export const EMOJI_EXTENSION = `.png`;
+
 const CONTROL_CLASS = `film-card__controls-item`;
 
 export const CardControls = {
@@ -29,4 +32,16 @@ export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
   RATING: `rating`
+};
+
+export const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};
+
+export const UserAction = {
+  ADD_COMMENT: `ADD`,
+  DELETE_COMMENT: `DELETE`
 };

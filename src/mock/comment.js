@@ -1,3 +1,4 @@
+import {nanoid} from "../vendor/nanoid";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
 const COMMENTS = [
@@ -8,13 +9,11 @@ const COMMENTS = [
   `Movie just for one time`
 ];
 
-const EMOJI_PATH = `././images/emoji/`;
-
 const EMOJI = [
-  `angry.png`,
-  `puke.png`,
-  `sleeping.png`,
-  `smile.png`
+  `angry`,
+  `puke`,
+  `sleeping`,
+  `smile`
 ];
 
 const AUTHORS = [
@@ -41,7 +40,7 @@ const getRandomComment = () => {
 
 const getRandomEmoji = () => {
   const getEmojiIndex = getRandomInt(EMOJI.length);
-  return `${EMOJI_PATH}${EMOJI[getEmojiIndex]}`;
+  return `${EMOJI[getEmojiIndex]}`;
 };
 
 const getRandomAuthor = () => {
@@ -54,6 +53,7 @@ const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(st
 export const generateComment = (id) => () => {
   return {
     filmId: id,
+    id: nanoid(4),
     text: getRandomComment(),
     emoji: getRandomEmoji(),
     author: getRandomAuthor(),

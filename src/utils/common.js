@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 
 const KeyCode = {
   ESC_CODE: `Escape`,
-  CTRL: `Control`,
   ENTER: `Enter`
 };
 
@@ -11,8 +10,6 @@ const MIN_MONTH = 1;
 const MAX_DATE = 31;
 const MIN_DATE = 1;
 
-let keyPressed = {};
-
 export const isEscEvent = (evt, action) => {
   if (evt.key === KeyCode.ESC_CODE) {
     action();
@@ -20,15 +17,9 @@ export const isEscEvent = (evt, action) => {
 };
 
 export const isSubmitFormEvent = (evt, action) => {
-  keyPressed[evt.key] = true;
-
-  if (keyPressed[KeyCode.CTRL] && evt.key === KeyCode.ENTER) {
+  if (evt.ctrlKey && evt.key === KeyCode.ENTER) {
     action();
   }
-};
-
-export const clearPressedKey = (evt) => {
-  delete keyPressed[evt.key];
 };
 
 export const getRandomIntInRange = (a = 1, b = 0) => {
@@ -48,13 +39,3 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
 };
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
-
-export const updateItem = (items, update) => {
-  const indexToUpdate = items.findIndex((item) => item.id === update.id);
-
-  if (indexToUpdate === -1) {
-    return items;
-  }
-
-  return [...items.slice(0, indexToUpdate), update, ...items.slice(indexToUpdate + 1)];
-};
