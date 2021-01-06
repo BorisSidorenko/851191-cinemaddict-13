@@ -1,28 +1,28 @@
 import Observer from "../utils/observer";
-import {SortType, FilterType} from "../utils/constants";
+import {SortType, MenuItem} from "../utils/constants";
 
-export default class FiltersModel extends Observer {
+export default class SiteMenuModel extends Observer {
   constructor() {
     super();
-    this._filter = FilterType.ALL;
+    this._menuItem = MenuItem.ALL;
   }
 
-  set filter(filterType) {
-    this._filter = filterType;
+  set menuItem(menuItem) {
+    this._menuItem = menuItem;
     this._notify();
   }
 
-  get filter() {
-    return this._filter;
+  get menuItem() {
+    return this._menuItem;
   }
 
-  filterFilms(films, filterType) {
-    switch (filterType) {
-      case FilterType.WATCHLIST:
+  filterFilms(films, menuItem) {
+    switch (menuItem) {
+      case MenuItem.WATCHLIST:
         return films.filter((film) => film.isWatchlist);
-      case FilterType.HISTORY:
+      case MenuItem.HISTORY:
         return films.filter((film) => film.isHistory);
-      case FilterType.FAVORITES:
+      case MenuItem.FAVORITES:
         return films.filter((film) => film.isFavorite);
     }
 

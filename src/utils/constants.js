@@ -34,11 +34,12 @@ export const SortType = {
   RATING: `rating`
 };
 
-export const FilterType = {
+export const MenuItem = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
-  FAVORITES: `favorites`
+  FAVORITES: `favorites`,
+  STATS: `stats`
 };
 
 export const UserAction = {
