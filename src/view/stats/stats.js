@@ -3,7 +3,7 @@ import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getWatchedFilms, getWatchedFilmsGenresAndCount} from "../../utils/common";
 import {createStatsTemplate} from "../stats/stats-template";
-import {STATISTICS_BAR_HEIGHT} from "../../utils/constants";
+import {STATISTICS_BAR_HEIGHT, StatisticsPeriod} from "../../utils/constants";
 
 const renderCharts = (statisticCtx, labels, data) => {
   return new Chart(statisticCtx, {
@@ -68,12 +68,15 @@ export default class Stats extends SmartView {
   constructor(films) {
     super();
     this._films = films;
+    this._statsPeriod = StatisticsPeriod.ALL_TIME;
+    this._statsPeriodChangeHandler = this._statsPeriodChangeHandler.bind(this);
 
     this._setCharts();
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createStatsTemplate(this._films);
+    return createStatsTemplate(this._films, this._statsPeriod);
   }
 
   _setCharts() {
@@ -89,6 +92,19 @@ export default class Stats extends SmartView {
   }
 
   restoreHandlers() {
+    this._setInnerHandlers();
     this._setCharts();
+  }
+
+  _statsPeriodChangeHandler(evt) {
+    evt.preventDefault();
+
+    this._statsPeriod = evt.target.value;
+
+    this.updateElement();
+  }
+
+  _setInnerHandlers() {
+    this.element.querySelector(`.statistic__filters`).addEventListener(`change`, this._statsPeriodChangeHandler);
   }
 }
