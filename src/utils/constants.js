@@ -56,3 +56,5 @@ export const Rank = {
   FAN_FILMS_MAX: 20,
   MOVIEBUFF: `Movie Buff`
 };
+
+export const STATISTICS_BAR_HEIGHT = 50;
