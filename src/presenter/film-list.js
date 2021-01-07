@@ -6,6 +6,7 @@ import EmptyFilmsListView from "../view/films-list-empty/films-list-empty";
 import FilmsListContainer from "../view/films-list-container/films-list-container";
 import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
+import StatsView from "../view/stats/stats";
 import FilmPresenter from "../presenter/film";
 import PopupPresenter from "../presenter/popup";
 
@@ -41,6 +42,7 @@ export default class FilmListPresenter {
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
     this._currentMenuItem = this._menuModel.menuItem;
+    this._statsComponent = null;
 
     this._handleMenuItemChange = this._handleMenuItemChange.bind(this);
     this._handleSortedListChange = this._handleSortedListChange.bind(this);
@@ -83,6 +85,7 @@ export default class FilmListPresenter {
     }
 
     if (this._currentMenuItem !== MenuItem.STATS) {
+      this._hideStats();
       this._resetSort();
       this._clearFilmListContainer();
       this._renderFilms();
@@ -90,7 +93,26 @@ export default class FilmListPresenter {
     } else {
       remove(this._sortComponent);
       remove(filmsWrapperComponent);
+
+      this._showStats();
     }
+  }
+
+  _hideStats() {
+    if (this._statsComponent) {
+      remove(this._statsComponent);
+    }
+  }
+
+  _showStats() {
+    const prevStatsComponent = this._statsComponent;
+
+    if (prevStatsComponent !== null) {
+      remove(prevStatsComponent);
+    }
+
+    this._statsComponent = new StatsView();
+    render(this._mainContainer, this._statsComponent);
   }
 
   _handleSortTypeChange(sortType) {
