@@ -1,10 +1,23 @@
 import {MINUTES_IN_HOUR} from "../../utils/constants";
-import {getRank, getWatchedFilms, getWatchedFilmsDuration} from "../../utils/common";
+import {getRank, getWatchedFilms, getFilmsDuration, getWatchedFilmsGenresAndCount} from "../../utils/common";
+
+const getTotalDurationHours = (totalDuration) => Math.floor(totalDuration / MINUTES_IN_HOUR);
+
+const getTotalDurationMinutes = (totalDuration) => totalDuration % MINUTES_IN_HOUR;
 
 export const createStatsTemplate = (films) => {
-  const totalDuration = getWatchedFilmsDuration(films);
-  const totalDurationHours = Math.floor(totalDuration / MINUTES_IN_HOUR);
-  const totalDurationMinutes = totalDuration % MINUTES_IN_HOUR;
+  let topWatchedGenreAndCount = [];
+  let topGenre = ``;
+
+  const watchedFilms = getWatchedFilms(films);
+  const totalDuration = getFilmsDuration(watchedFilms);
+
+  const watchedGenresAndCount = getWatchedFilmsGenresAndCount(watchedFilms);
+
+  if (watchedGenresAndCount.length > 0) {
+    [topWatchedGenreAndCount] = watchedGenresAndCount;
+    [topGenre] = topWatchedGenreAndCount;
+  }
 
   return `<section class="statistic">
     <p class="statistic__rank">
@@ -33,15 +46,15 @@ export const createStatsTemplate = (films) => {
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${getWatchedFilms(films).length} <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">${totalDurationHours} <span class="statistic__item-description">h</span> ${totalDurationMinutes} <span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text">${getTotalDurationHours(totalDuration)} <span class="statistic__item-description">h</span> ${getTotalDurationMinutes(totalDuration)} <span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
+        <p class="statistic__item-text">${topGenre}</p>
       </li>
     </ul>
     <div class="statistic__chart-wrap">

@@ -55,14 +55,24 @@ export const convertDurationIntoHours = (duration) => {
   }
 };
 
-export const getWatchedFilmsDuration = (films) => {
-  const watchedFilms = getWatchedFilms(films);
-
-  const totalDuration = watchedFilms.reduce((total, current) => {
+export const getFilmsDuration = (films) => {
+  const totalDuration = films.reduce((total, current) => {
     return total + current.duration;
   }, 0);
 
   return totalDuration;
+};
+
+export const getWatchedFilmsGenresAndCount = (watchedFilms) => {
+  const watchedGenres = watchedFilms.map((film) => film.genres).flat();
+
+  const genresAndCount = {};
+  watchedGenres.forEach((genre) => {
+    genresAndCount[genre] = (genresAndCount[genre] || 0) + 1;
+  });
+
+
+  return Object.entries(genresAndCount).slice().sort((a, b) => b[1] - a[1]);
 };
 
 export const getRank = (films) => {
