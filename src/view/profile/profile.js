@@ -2,12 +2,12 @@ import AbstractView from "../abstract-component";
 import {createProfileTemplate} from "../profile/profile-template";
 
 export default class Profile extends AbstractView {
-  constructor(filmsCount) {
+  constructor(films) {
     super();
-    this._filmsCount = filmsCount;
+    this._films = films;
   }
 
   getTemplate() {
-    return createProfileTemplate(this._filmsCount);
+    return createProfileTemplate(this._films);
   }
 }

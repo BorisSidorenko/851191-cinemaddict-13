@@ -1,3 +1,5 @@
+import {convertDurationIntoHours} from "../../utils/common";
+
 const getGengresTemplate = (genre) => `<span class="film-details__genre">${genre}</span>`;
 
 const createGenresTemplate = (genres) => {
@@ -37,7 +39,7 @@ export const createFilmPopupInfoTemplate = (card) => {
       </tr>
       <tr class="film-details__row">
         <td class="film-details__term">Runtime</td>
-        <td class="film-details__cell">${duration}</td>
+        <td class="film-details__cell">${convertDurationIntoHours(duration)}</td>
       </tr>
       <tr class="film-details__row">
         <td class="film-details__term">Country</td>

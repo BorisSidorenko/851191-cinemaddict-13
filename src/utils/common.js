@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {Rank, MINUTES_IN_HOUR} from "../utils/constants";
 
 const KeyCode = {
   ESC_CODE: `Escape`,
@@ -39,3 +40,42 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
 };
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
+
+export const getWatchedFilms = (films) => films.filter((film) => film.isWatchlist);
+
+export const convertDurationIntoHours = (duration) => {
+  if (duration > MINUTES_IN_HOUR) {
+    if (duration % MINUTES_IN_HOUR > 0) {
+      return `${Math.floor(duration / MINUTES_IN_HOUR)}h ${duration % MINUTES_IN_HOUR}m`;
+    } else {
+      return `${Math.floor(duration / MINUTES_IN_HOUR)}h`;
+    }
+  } else {
+    return `${duration}m`;
+  }
+};
+
+export const getWatchedFilmsDuration = (films) => {
+  const watchedFilms = getWatchedFilms(films);
+
+  const totalDuration = watchedFilms.reduce((total, current) => {
+    return total + current.duration;
+  }, 0);
+
+  return totalDuration;
+};
+
+export const getRank = (films) => {
+  const watchedFilmsCount = getWatchedFilms(films).length;
+  let rank = ``;
+
+  if (watchedFilmsCount >= 0 && watchedFilmsCount <= Rank.NOVICE_FILMS_MAX) {
+    rank = Rank.NOVICE;
+  } else if (watchedFilmsCount > Rank.NOVICE_FILMS_MAX && watchedFilmsCount <= Rank.FAN_FILMS_MAX) {
+    rank = Rank.FAN;
+  } else if (watchedFilmsCount > Rank.FAN_FILMS_MAX) {
+    rank = Rank.MOVIEBUFF;
+  }
+
+  return rank;
+};

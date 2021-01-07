@@ -3,8 +3,6 @@ import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfO
 
 const CARD_AMOUNT_TO_GENERATE = 13;
 
-const MINUTES_IN_HOUR = 60;
-
 const MIN_YEAR = 1950;
 const MAX_YEAR = 2008;
 
@@ -139,19 +137,7 @@ const getRandonGenres = () => {
 
 const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
 
-const getRandomDuration = (max, min) => {
-  const duration = getRandomIntInRange(max, min);
-
-  if (duration > MINUTES_IN_HOUR) {
-    if (duration % MINUTES_IN_HOUR > 0) {
-      return `${Math.floor(duration / MINUTES_IN_HOUR)}h ${duration % MINUTES_IN_HOUR}m`;
-    } else {
-      return `${Math.floor(duration / MINUTES_IN_HOUR)}h`;
-    }
-  } else {
-    return `${duration}m`;
-  }
-};
+const getRandomDuration = (max, min) => getRandomIntInRange(max, min);
 
 const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length)];
 

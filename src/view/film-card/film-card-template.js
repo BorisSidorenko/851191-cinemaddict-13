@@ -1,3 +1,5 @@
+import {convertDurationIntoHours} from "../../utils/common";
+
 export const createFilmCardTemplate = ({id, title, rating, year, duration, genres, poster, description, isHistory, isWatchlist, isFavorite}, commentsCount) => {
   const [genre] = genres;
   return `<article class="film-card" data-id=${id}>
@@ -5,7 +7,7 @@ export const createFilmCardTemplate = ({id, title, rating, year, duration, genre
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${convertDurationIntoHours(duration)}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">

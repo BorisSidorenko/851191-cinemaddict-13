@@ -10,12 +10,10 @@ import StatsView from "../view/stats/stats";
 import FilmPresenter from "../presenter/film";
 import PopupPresenter from "../presenter/popup";
 
-import {getRandomIntInRange} from "../utils/common";
 import {render, remove} from "../utils/render";
-import {ProfileRank, CARDS_TO_SHOW_COUNT} from "../utils/constants";
+import {CARDS_TO_SHOW_COUNT} from "../utils/constants";
 import {SortType, MenuItem} from "../utils/constants";
 
-const profileComponent = new ProfileView(getRandomIntInRange(ProfileRank.MAX, ProfileRank.MIN));
 const filmsWrapperComponent = new FilmsWrapperView();
 const filmsListComponent = new FilmsListView();
 const emptyFilmsListComponent = new EmptyFilmsListView();
@@ -58,6 +56,8 @@ export default class FilmListPresenter {
   }
 
   _renderProfile() {
+    const films = this._getFilms();
+    const profileComponent = new ProfileView(films);
     render(this._headerContainer, profileComponent);
   }
 
@@ -111,7 +111,8 @@ export default class FilmListPresenter {
       remove(prevStatsComponent);
     }
 
-    this._statsComponent = new StatsView();
+    const films = this._getFilms();
+    this._statsComponent = new StatsView(films);
     render(this._mainContainer, this._statsComponent);
   }
 

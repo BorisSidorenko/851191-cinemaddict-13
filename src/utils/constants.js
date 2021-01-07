@@ -1,5 +1,7 @@
 export const CARDS_TO_SHOW_COUNT = 5;
 
+export const MINUTES_IN_HOUR = 60;
+
 export const ProfileRank = {
   MIN: 0,
   MAX: 40
@@ -45,4 +47,12 @@ export const MenuItem = {
 export const UserAction = {
   ADD_COMMENT: `ADD`,
   DELETE_COMMENT: `DELETE`
+};
+
+export const Rank = {
+  NOVICE: `Novice`,
+  NOVICE_FILMS_MAX: 10,
+  FAN: `Fan`,
+  FAN_FILMS_MAX: 20,
+  MOVIEBUFF: `Movie Buff`
 };
