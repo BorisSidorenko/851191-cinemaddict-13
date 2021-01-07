@@ -283,6 +283,8 @@ export default class FilmListPresenter {
     if (popupPresenter) {
       popupPresenter.init(updatedFilm);
     }
+
+    this._renderFilms();
   }
 
   _getFilmCardComments({id}) {
