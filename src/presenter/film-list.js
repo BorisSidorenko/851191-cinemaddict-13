@@ -274,7 +274,7 @@ export default class FilmListPresenter {
     const comments = this._getFilmCardComments(updatedFilm);
     const commentsCount = comments.length;
     const currentPresenter = this._filmPresenter[updatedFilm.id];
-    const films = this._getFilms();
+    const films = this._getFilms(true);
 
     currentPresenter.init(films, updatedFilm, commentsCount);
 
@@ -284,7 +284,9 @@ export default class FilmListPresenter {
       popupPresenter.init(updatedFilm);
     }
 
-    this._renderFilms();
+    const shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
+
+    this._renderFilmsCards(films.slice(0, shownFilmsCardsCount));
   }
 
   _getFilmCardComments({id}) {
