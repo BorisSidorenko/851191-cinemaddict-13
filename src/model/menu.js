@@ -19,11 +19,11 @@ export default class SiteMenuModel extends Observer {
   filterFilms(films, menuItem) {
     switch (menuItem) {
       case MenuItem.WATCHLIST:
-        return films.filter(({userDetails}) => userDetails.isWatchlist);
+        return films.filter(({userDetails}) => userDetails.watchlist);
       case MenuItem.HISTORY:
-        return films.filter(({userDetails}) => userDetails.isHistory);
+        return films.filter(({userDetails}) => userDetails.alreadyWatched);
       case MenuItem.FAVORITES:
-        return films.filter(({userDetails}) => userDetails.isFavorite);
+        return films.filter(({userDetails}) => userDetails.favorite);
     }
 
     return films;

@@ -176,10 +176,10 @@ export const generateFilmCard = () => ({
   country: getRandomCountry(),
   ageRating: getRandomAgeRating(),
   userDetails: {
-    isWatchlist: getRandomBool(),
-    isHistory: getRandomBool(),
+    watchlist: getRandomBool(),
+    alreadyWatched: getRandomBool(),
     watchingDate: getRandomDateInYearRange(2021, 2021, 1, 1),
-    isFavorite: getRandomBool()
+    favorite: getRandomBool()
   }
 });
 

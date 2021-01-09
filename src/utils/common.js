@@ -39,7 +39,7 @@ export const getRandomDateInYearRange = (startYear, endYear, startMonth = MIN_MO
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
 
-export const getWatchedFilms = (films) => films.filter(({userDetails}) => userDetails.isHistory);
+export const getWatchedFilms = (films) => films.filter(({userDetails}) => userDetails.alreadyWatched);
 
 export const convertDurationIntoHours = (duration) => {
   if (duration > MINUTES_IN_HOUR) {

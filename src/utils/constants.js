@@ -28,9 +28,9 @@ export const CardControls = {
 };
 
 export const PopupControlsName = {
-  isWatchlist: `watchlist`,
-  isHistory: `watched`,
-  isFavorite: `favorite`
+  watchlist: `watchlist`,
+  alreadyWatched: `watched`,
+  favorite: `favorite`
 };
 
 export const SortType = {
