@@ -7,6 +7,9 @@ export const ProfileRank = {
   MAX: 40
 };
 
+export const MAX_MONTH = 12;
+export const MIN_MONTH = 1;
+
 export const ELEMENTS_TO_SHOW_POPUP = [
   `film-card__poster`,
   `film-card__title`,

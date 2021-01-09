@@ -1,13 +1,11 @@
 import dayjs from "dayjs";
-import {Rank, MINUTES_IN_HOUR} from "../utils/constants";
+import {Rank, MINUTES_IN_HOUR, MIN_MONTH, MAX_MONTH} from "../utils/constants";
 
 const KeyCode = {
   ESC_CODE: `Escape`,
   ENTER: `Enter`
 };
 
-const MAX_MONTH = 12;
-const MIN_MONTH = 1;
 const MAX_DATE = 31;
 const MIN_DATE = 1;
 
@@ -31,9 +29,9 @@ export const getRandomIntInRange = (a = 1, b = 0) => {
 
 export const getRandomInt = (maxNumber) => getRandomIntInRange(maxNumber - 1);
 
-export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
+export const getRandomDateInYearRange = (startYear, endYear, startMonth = MIN_MONTH, endMonth = MAX_MONTH, dateFormat) => {
   const year = getRandomIntInRange(startYear, endYear);
-  const month = getRandomIntInRange(MAX_MONTH, MIN_MONTH);
+  const month = getRandomIntInRange(startMonth, endMonth);
   const date = getRandomIntInRange(MAX_DATE, MIN_DATE);
 
   return dayjs(`${year}-${month}-${date}`).format(dateFormat);
@@ -41,7 +39,7 @@ export const getRandomDateInYearRange = (startYear, endYear, dateFormat) => {
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
 
-export const getWatchedFilms = (films) => films.filter((film) => film.isWatchlist);
+export const getWatchedFilms = (films) => films.filter(({userDetails}) => userDetails.isHistory);
 
 export const convertDurationIntoHours = (duration) => {
   if (duration > MINUTES_IN_HOUR) {

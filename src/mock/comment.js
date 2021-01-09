@@ -1,4 +1,5 @@
 import {nanoid} from "../vendor/nanoid";
+import {MIN_MONTH, MAX_MONTH} from "../utils/constants";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
 const COMMENTS = [
@@ -48,7 +49,7 @@ const getRandomAuthor = () => {
   return AUTHORS[authorIndex];
 };
 
-const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, COMMENT_DATE_FORMAT);
+const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH, COMMENT_DATE_FORMAT);
 
 export const generateComment = (id) => () => {
   return {

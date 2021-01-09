@@ -184,11 +184,19 @@ export default class PopupPresenter {
     const clickedControlName = allControlsNames.find((controlName) => controlName === evt.target.name);
     const propToChange = this._getKeyByValue(PopupControlsName, clickedControlName);
 
+    const updatedUserDetails = Object.assign(
+        {},
+        this._filmCard.userDetails,
+        {
+          [`${propToChange}`]: !this._filmCard.userDetails[propToChange]
+        }
+    );
+
     const updatedFilmCard = Object.assign(
         {},
         this._filmCard,
         {
-          [`${propToChange}`]: !this._filmCard[propToChange]
+          userDetails: updatedUserDetails
         }
     );
 

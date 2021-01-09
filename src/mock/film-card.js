@@ -1,4 +1,5 @@
 import {nanoid} from "../vendor/nanoid";
+import {MIN_MONTH, MAX_MONTH} from "../utils/constants";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
 const CARD_AMOUNT_TO_GENERATE = 13;
@@ -152,7 +153,7 @@ const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length)];
 
 const getRandomAgeRating = () => `${getRandomIntInRange(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
-const getRandomReleaseDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, RELEASE_DATE_FORMAT);
+const getRandomReleaseDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH, RELEASE_DATE_FORMAT);
 
 const getRandomBool = () => getRandomIntInRange(0, 1) > 0;
 
@@ -174,9 +175,12 @@ export const generateFilmCard = () => ({
   releaseDate: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
   country: getRandomCountry(),
   ageRating: getRandomAgeRating(),
-  isWatchlist: getRandomBool(),
-  isHistory: getRandomBool(),
-  isFavorite: getRandomBool()
+  userDetails: {
+    isWatchlist: getRandomBool(),
+    isHistory: getRandomBool(),
+    watchingDate: getRandomDateInYearRange(2021, 2021, 1, 1),
+    isFavorite: getRandomBool()
+  }
 });
 
 export const generateFilmCards = () => getArrayOfObjects(CARD_AMOUNT_TO_GENERATE, generateFilmCard);

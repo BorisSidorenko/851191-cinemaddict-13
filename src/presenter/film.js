@@ -73,10 +73,18 @@ export default class FilmPresenter {
   _handleCardControlClick(evt) {
     const propToChange = this._getClickedProp(evt.target.classList);
 
+    const updatedUserDetails = Object.assign(
+        {},
+        this._filmCard.userDetails,
+        propToChange
+    );
+
     const updatedFilmCard = Object.assign(
         {},
         this._filmCard,
-        propToChange
+        {
+          userDetails: updatedUserDetails
+        }
     );
 
     this._changeData(updatedFilmCard);
@@ -85,15 +93,15 @@ export default class FilmPresenter {
   _getClickedProp(classList) {
     if (classList.contains(CardControls.WATCHLIST)) {
       return {
-        isWatchlist: !this._filmCard.isWatchlist
+        isWatchlist: !this._filmCard.userDetails.isWatchlist
       };
     } else if (classList.contains(CardControls.WATCHED)) {
       return {
-        isHistory: !this._filmCard.isHistory
+        isHistory: !this._filmCard.userDetails.isHistory
       };
     } else {
       return {
-        isFavorite: !this._filmCard.isFavorite
+        isFavorite: !this._filmCard.userDetails.isFavorite
       };
     }
   }
