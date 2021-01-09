@@ -89,18 +89,19 @@ export default class Stats extends SmartView {
     this._films = films;
     this._statsPeriod = StatisticsPeriod.ALL_TIME;
     this._statsPeriodChangeHandler = this._statsPeriodChangeHandler.bind(this);
+    this._watchedFilms = null;
 
     this._setCharts();
     this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createStatsTemplate(this._films, this._statsPeriod);
+    return createStatsTemplate(this._watchedFilms, this._statsPeriod);
   }
 
   _setCharts() {
-    const watchedFilms = getWatchedFilmsForPeriod(this._films, this._statsPeriod);
-    const watchedFilmsGenresAndCount = getWatchedFilmsGenresAndCount(watchedFilms);
+    this._watchedFilms = getWatchedFilmsForPeriod(this._films, this._statsPeriod);
+    const watchedFilmsGenresAndCount = getWatchedFilmsGenresAndCount(this._watchedFilms);
     const labels = watchedFilmsGenresAndCount.map(([genre]) => genre);
     const data = watchedFilmsGenresAndCount.map(([, value]) => value);
 
@@ -119,6 +120,7 @@ export default class Stats extends SmartView {
     evt.preventDefault();
 
     this._statsPeriod = evt.target.value;
+    this._watchedFilms = getWatchedFilmsForPeriod(this._films, this._statsPeriod);
 
     this.updateElement();
   }
