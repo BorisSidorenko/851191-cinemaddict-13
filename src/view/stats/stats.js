@@ -1,4 +1,5 @@
 import SmartView from "../smart";
+import dayjs from "dayjs";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getWatchedFilms, getWatchedFilmsGenresAndCount} from "../../utils/common";
@@ -64,6 +65,24 @@ const renderCharts = (statisticCtx, labels, data) => {
   });
 };
 
+const getWatchedFilmsForPeriod = (films, period) => {
+  let watchedFilms = getWatchedFilms(films);
+
+  if (period !== StatisticsPeriod.ALL_TIME) {
+    const periodToShow = period === StatisticsPeriod.TODAY ? StatisticsPeriod.DAY : period;
+    const now = dayjs();
+    const startPeriod = now.subtract(1, periodToShow);
+
+    watchedFilms = watchedFilms.filter(({userDetails}) => {
+      const watchDate = dayjs(userDetails.watchingDate);
+      return watchDate.isAfter(startPeriod) && watchDate.isBefore(now);
+    });
+  }
+
+  return watchedFilms;
+};
+
+
 export default class Stats extends SmartView {
   constructor(films) {
     super();
@@ -80,7 +99,7 @@ export default class Stats extends SmartView {
   }
 
   _setCharts() {
-    const watchedFilms = getWatchedFilms(this._films);
+    const watchedFilms = getWatchedFilmsForPeriod(this._films, this._statsPeriod);
     const watchedFilmsGenresAndCount = getWatchedFilmsGenresAndCount(watchedFilms);
     const labels = watchedFilmsGenresAndCount.map(([genre]) => genre);
     const data = watchedFilmsGenresAndCount.map(([, value]) => value);

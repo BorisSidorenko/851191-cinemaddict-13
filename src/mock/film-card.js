@@ -178,7 +178,7 @@ export const generateFilmCard = () => ({
   userDetails: {
     watchlist: getRandomBool(),
     alreadyWatched: getRandomBool(),
-    watchingDate: getRandomDateInYearRange(2021, 2021, 1, 1),
+    watchingDate: getRandomDateInYearRange(2020, 2020, 12, 12),
     favorite: getRandomBool()
   }
 });

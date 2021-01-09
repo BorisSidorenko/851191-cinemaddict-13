@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import FilmPopupView from "../view/film-popup/film-popup";
 import FilmPopupFormView from "../view/film-popup-form/film-popup-form";
 import FilmPopupTopContainerView from "../view/film-popup-top-container/film-popup-top-container";
@@ -14,7 +15,7 @@ import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-n
 
 import {generateComment} from "../mock/comment";
 import {isEscEvent, isSubmitFormEvent} from "../utils/common";
-import {PopupControlsName} from "../utils/constants";
+import {PopupControlsName, UserDetails} from "../utils/constants";
 import {render, remove} from "../utils/render";
 import {UserAction} from "../utils/constants";
 
@@ -179,17 +180,35 @@ export default class PopupPresenter {
     return Object.keys(obj).find((key) => obj[key] === val);
   }
 
-  _handlePopupControlsClick(evt) {
+  _getPropToChange(evt) {
     const allControlsNames = Object.values(PopupControlsName);
     const clickedControlName = allControlsNames.find((controlName) => controlName === evt.target.name);
-    const propToChange = this._getKeyByValue(PopupControlsName, clickedControlName);
+    const propToChangeName = this._getKeyByValue(PopupControlsName, clickedControlName);
+
+    let propToChange = {
+      [`${propToChangeName}`]: !this._filmCard.userDetails[propToChangeName]
+    };
+
+    if (propToChangeName === UserDetails.ALREADY_WATCHED) {
+      propToChange = Object.assign(
+          {},
+          propToChange,
+          {
+            watchingDate: dayjs().format()
+          }
+      );
+    }
+
+    return propToChange;
+  }
+
+  _handlePopupControlsClick(evt) {
+    const propToChange = this._getPropToChange(evt);
 
     const updatedUserDetails = Object.assign(
         {},
         this._filmCard.userDetails,
-        {
-          [`${propToChange}`]: !this._filmCard.userDetails[propToChange]
-        }
+        propToChange
     );
 
     const updatedFilmCard = Object.assign(

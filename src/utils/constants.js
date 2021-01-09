@@ -33,6 +33,12 @@ export const PopupControlsName = {
   favorite: `favorite`
 };
 
+export const UserDetails = {
+  WATCHLIST: `watchlist`,
+  ALREADY_WATCHED: `alreadyWatched`,
+  FAVORITE: `favorite`
+};
+
 export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
@@ -65,6 +71,7 @@ export const STATISTICS_BAR_HEIGHT = 50;
 export const StatisticsPeriod = {
   ALL_TIME: `all-time`,
   TODAY: `today`,
+  DAY: `day`,
   WEEK: `week`,
   MONTH: `month`,
   YEAR: `year`
