@@ -1,4 +1,5 @@
 import {nanoid} from "../vendor/nanoid";
+import {getCommentsIds} from "../mock/comment";
 import {MIN_MONTH, MAX_MONTH} from "../utils/constants";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
@@ -15,9 +16,6 @@ const MAX_AGE_RATING = 18;
 
 const MIN_DURATION = 70;
 const MAX_DURATION = 134;
-
-const MIN_COMMENTS = 0;
-const MAX_COMMENTS = 100;
 
 const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
@@ -151,7 +149,7 @@ const getRandomBool = () => getRandomIntInRange(0, 1) > 0;
 
 export const generateFilmCard = () => ({
   id: nanoid(8),
-  commentsCount: getRandomIntInRange(MIN_COMMENTS, MAX_COMMENTS),
+  comments: getCommentsIds(),
   filmInfo: {
     title: getRandomTitle(),
     alternativeTitle: originalTitle,

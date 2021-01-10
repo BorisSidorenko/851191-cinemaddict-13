@@ -5,14 +5,11 @@ import clonedeep from "lodash.clonedeep";
 export default class CommentsModel extends Observer {
   constructor() {
     super();
-    this._comments = {};
+    this._comments = [];
   }
 
   set comments(comments) {
-    this._comments = Object.assign(
-        {},
-        comments
-    );
+    this._comments = comments.slice();
   }
 
   get comments() {
@@ -20,21 +17,18 @@ export default class CommentsModel extends Observer {
   }
 
   _addComment(comment) {
-    let filmComments = clonedeep(this._comments[comment.filmId]);
-
-    filmComments = [comment, ...filmComments.slice()];
-
-    this._comments[comment.filmId] = filmComments;
+    this._comments = [comment, ...this._comments.slice()];
   }
 
-  _deleteComment({filmId, id}) {
-    const filmComments = clonedeep(this._comments[filmId]);
-
-    this._comments[filmId] = filmComments.filter((comment) => comment.id !== id);
+  _deleteComment({id}) {
+    this._comments = this._comments.filter((comment) => comment.id !== id);
   }
 
-  getFilmCardComments(filmId) {
-    return this._comments[filmId];
+  getFilmCardComments({comments}) {
+    const commentIds = comments;
+    const cardComments = this._comments.filter((comment) => commentIds.find((commentId) => comment.id === commentId));
+
+    return cardComments;
   }
 
   updateComments(userAction, comment) {

@@ -150,6 +150,10 @@ export default class FilmListPresenter {
     return this._commentsModel.comments;
   }
 
+  _getFilmCardComments(card) {
+    return this._commentsModel.getFilmCardComments(card);
+  }
+
   _renderSort() {
     const prevSortComponent = this._sortComponent;
 
@@ -287,11 +291,6 @@ export default class FilmListPresenter {
     const shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
 
     this._renderFilmsCards(films.slice(0, shownFilmsCardsCount));
-  }
-
-  _getFilmCardComments({id}) {
-    const allComments = this._getComments();
-    return allComments[id];
   }
 
   _handleFilmCardClick(card) {

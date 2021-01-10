@@ -34,6 +34,8 @@ const MIN_YEAR_COMMENT = 2018;
 const MAX_COMMENT_COUNT = 5;
 const MIN_COMMENT_COUNT = 0;
 
+let comments = [];
+
 const getRandomComment = () => {
   const commentIndex = getRandomInt(COMMENTS.length);
   return COMMENTS[commentIndex];
@@ -51,9 +53,8 @@ const getRandomAuthor = () => {
 
 const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH, COMMENT_DATE_FORMAT);
 
-export const generateComment = (id) => () => {
+export const generateComment = () => {
   return {
-    filmId: id,
     id: nanoid(4),
     text: getRandomComment(),
     emoji: getRandomEmoji(),
@@ -62,7 +63,16 @@ export const generateComment = (id) => () => {
   };
 };
 
-export const generateComments = (id) => {
+export const generateComments = () => {
   const commentsCount = getRandomIntInRange(MAX_COMMENT_COUNT, MIN_COMMENT_COUNT);
-  return getArrayOfObjects(commentsCount, generateComment(id));
+  return getArrayOfObjects(commentsCount, generateComment);
 };
+
+export const getCommentsIds = () => {
+  const newlyGeneratedComments = generateComments();
+  const newlyGeneratedCommentsIds = newlyGeneratedComments.map(({id}) => id);
+  comments = comments.concat(newlyGeneratedComments);
+  return newlyGeneratedCommentsIds;
+};
+
+export const getAllComments = () => comments;

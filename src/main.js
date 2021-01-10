@@ -1,5 +1,5 @@
 import {generateFilmCards} from "./mock/film-card";
-import {generateComments} from "./mock/comment";
+import {getAllComments} from "./mock/comment";
 import MenuPresenter from "./presenter/menu";
 import FilmListPresenter from "./presenter/film-list";
 import FilmsModel from "./model/films";
@@ -10,11 +10,6 @@ const allFilmcards = generateFilmCards();
 
 const filmsModel = new FilmsModel();
 filmsModel.films = allFilmcards;
-
-const getAllComments = () => allFilmcards.reduce((acc, {id}) => {
-  acc[id] = generateComments(id);
-  return acc;
-}, {});
 
 const allComments = getAllComments();
 

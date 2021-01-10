@@ -84,8 +84,16 @@ export default class PopupPresenter {
     this._changeData(updatedFilmCard);
   }
 
+  _addNewCommentIdToCard({id}) {
+    this._filmCard.comments = [id, ...this._filmCard.comments.slice()];
+  }
+
+  _removeCommentIdFromCard({id}) {
+    this._filmCard.comments = this._filmCard.comments.filter((comment) => comment !== id);
+  }
+
   _submitForm() {
-    const commentTemplate = generateComment(this._filmCard.id)();
+    const commentTemplate = generateComment();
     const commentEmoji = this._popupFormComponent.element[`comment-emoji`].value;
     const commentText = this._popupFormComponent.element[`comment`].value;
 
@@ -99,6 +107,8 @@ export default class PopupPresenter {
             text: commentText
           }
       );
+
+      this._addNewCommentIdToCard(localComment);
 
       this._commentsModel.updateComments(
           UserAction.ADD_COMMENT,
@@ -237,12 +247,14 @@ export default class PopupPresenter {
           commentToDelete
       );
 
+      this._removeCommentIdFromCard(commentToDelete);
+
       this._updateCommnetsCount();
     }
   }
 
   _getCardComments() {
-    return this._commentsModel.getFilmCardComments(this._filmCard.id);
+    return this._commentsModel.getFilmCardComments(this._filmCard);
   }
 
   _appendPopupWithComments() {
