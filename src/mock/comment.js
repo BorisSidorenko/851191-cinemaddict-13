@@ -26,8 +26,6 @@ const AUTHORS = [
   `Liam Phill`
 ];
 
-const COMMENT_DATE_FORMAT = `YYYY/MM/DD hh:mm`;
-
 const MAX_YEAR_COMMENT = 2020;
 const MIN_YEAR_COMMENT = 2018;
 
@@ -51,15 +49,15 @@ const getRandomAuthor = () => {
   return AUTHORS[authorIndex];
 };
 
-const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH, COMMENT_DATE_FORMAT);
+const getRandomCommentDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH);
 
 export const generateComment = () => {
   return {
     id: nanoid(4),
-    text: getRandomComment(),
-    emoji: getRandomEmoji(),
     author: getRandomAuthor(),
-    date: getRandomCommentDate(MIN_YEAR_COMMENT, MAX_YEAR_COMMENT)
+    comment: getRandomComment(),
+    date: getRandomCommentDate(MIN_YEAR_COMMENT, MAX_YEAR_COMMENT),
+    emotion: getRandomEmoji(),
   };
 };
 

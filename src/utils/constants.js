@@ -8,6 +8,7 @@ export const ProfileRank = {
 };
 
 export const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
+export const COMMENT_DATE_FORMAT = `YYYY/MM/DD hh:mm`;
 
 export const DESCRIPTION_SHORT_LENGTH = 139;
 

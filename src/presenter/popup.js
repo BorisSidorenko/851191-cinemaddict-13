@@ -103,7 +103,7 @@ export default class PopupPresenter {
           commentTemplate,
           {
             comment: commentText,
-            emoji: commentEmoji,
+            emotion: commentEmoji,
             text: commentText
           }
       );

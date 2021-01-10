@@ -1,16 +1,19 @@
 import he from "he";
-import {EMOJI_PATH, EMOJI_EXTENSION} from "../../utils/constants";
+import dayjs from "dayjs";
+import {EMOJI_PATH, EMOJI_EXTENSION, COMMENT_DATE_FORMAT} from "../../utils/constants";
 
-const getCommentElement = ({id, text, emoji, author, date}) => {
+const getCommentElement = ({id, author, comment, emotion, date}) => {
+  const commentDate = dayjs(date).format(COMMENT_DATE_FORMAT);
+
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
-      <img src="${EMOJI_PATH}${emoji}${EMOJI_EXTENSION}" width="55" height="55" alt="emoji-smile">
+      <img src="${EMOJI_PATH}${emotion}${EMOJI_EXTENSION}" width="55" height="55" alt="emoji-smile">
     </span>
     <div>
-      <p class="film-details__comment-text">${he.encode(text)}</p>
+      <p class="film-details__comment-text">${he.encode(comment)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${date}</span>
+        <span class="film-details__comment-day">${commentDate}</span>
         <button class="film-details__comment-delete" data-id-comment="${id}">Delete</button>
       </p>
     </div>
