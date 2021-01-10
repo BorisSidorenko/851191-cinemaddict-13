@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import Observer from "../utils/observer";
 import {SortType, MenuItem} from "../utils/constants";
 
@@ -32,9 +33,9 @@ export default class SiteMenuModel extends Observer {
   sortFilms(films, sortType) {
     switch (sortType) {
       case SortType.DATE:
-        return films.slice().sort((a, b) => b.filmInfo.year - a.filmInfo.year);
+        return films.slice().sort((a, b) => dayjs(b.filmInfo.release.date).isAfter(dayjs(a.filmInfo.release.date)) ? 1 : -1);
       case SortType.RATING:
-        return films.slice().sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
+        return films.slice().sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
     }
 
     return films;

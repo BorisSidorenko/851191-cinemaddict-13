@@ -7,6 +7,10 @@ export const ProfileRank = {
   MAX: 40
 };
 
+export const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
+
+export const DESCRIPTION_SHORT_LENGTH = 139;
+
 export const MAX_MONTH = 12;
 export const MIN_MONTH = 1;
 

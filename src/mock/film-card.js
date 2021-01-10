@@ -20,7 +20,6 @@ const MIN_COMMENTS = 0;
 const MAX_COMMENTS = 100;
 
 const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
-const DESCRIPTION_SHORT_LENGTH = 139;
 
 const POSTERS_PATH = `././images/posters/`;
 const POSTERS = [
@@ -106,8 +105,6 @@ const title = {
   [`Список Шиндлера`]: `Schindler's List`
 };
 
-const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
-
 const getRandomRating = (max, min) => {
   const raiting = getRandomIntInRange(max, min);
   return raiting === max ? raiting : `${raiting}.${getRandomIntInRange(max - 1, min)}`;
@@ -136,45 +133,40 @@ const getRandonGenres = () => {
   return getRandomValuesFromArray(genresCount, GENRES);
 };
 
-const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
-
 const getRandomDuration = (max, min) => getRandomIntInRange(max, min);
 
 const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length)];
 
-const getRandomWriters = () => {
-  const screenwriters = getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
-  return screenwriters.join(`, `);
-};
+const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
 
-const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS).join(`, `);
+const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS);
 
 const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length)];
 
 const getRandomAgeRating = () => `${getRandomIntInRange(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
-const getRandomReleaseDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH, RELEASE_DATE_FORMAT);
+const getRandomReleaseDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH);
 
 const getRandomBool = () => getRandomIntInRange(0, 1) > 0;
 
 export const generateFilmCard = () => ({
   id: nanoid(8),
+  commentsCount: getRandomIntInRange(MIN_COMMENTS, MAX_COMMENTS),
   filmInfo: {
     title: getRandomTitle(),
+    alternativeTitle: originalTitle,
+    totalRating: getRandomRating(MAX_RATING, MIN_RATING),
     poster: getRandomPoster(),
-    rating: getRandomRating(MAX_RATING, MIN_RATING),
-    year: getRandomIntInRange(MIN_YEAR, MAX_YEAR),
-    duration: getRandomDuration(MAX_DURATION, MIN_DURATION),
-    genres: getRandonGenres(),
-    descriptionShort: getShortDescription(),
-    commentsCount: getRandomIntInRange(MIN_COMMENTS, MAX_COMMENTS),
-    titleOriginal: originalTitle,
-    director: getRandomDirector(),
-    screenwriters: getRandomWriters(),
-    actors: getRandomActors(),
-    releaseDate: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
-    country: getRandomCountry(),
     ageRating: getRandomAgeRating(),
+    director: getRandomDirector(),
+    writers: getRandomWriters(),
+    actors: getRandomActors(),
+    release: {
+      date: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
+      releaseCountry: getRandomCountry(),
+    },
+    runtime: getRandomDuration(MAX_DURATION, MIN_DURATION),
+    genre: getRandonGenres(),
     description: DESCRIPTION,
   },
   userDetails: {

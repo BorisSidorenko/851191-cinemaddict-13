@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {Rank, MINUTES_IN_HOUR, MIN_MONTH, MAX_MONTH} from "../utils/constants";
+import {Rank, MINUTES_IN_HOUR, MIN_MONTH, MAX_MONTH, DESCRIPTION_SHORT_LENGTH} from "../utils/constants";
 
 const KeyCode = {
   ESC_CODE: `Escape`,
@@ -54,15 +54,15 @@ export const convertDurationIntoHours = (duration) => {
 };
 
 export const getFilmsDuration = (films) => {
-  const totalDuration = films.reduce((total, current) => {
-    return total + current.duration;
+  const totalDuration = films.reduce((total, {filmInfo}) => {
+    return total + filmInfo.runtime;
   }, 0);
 
   return totalDuration;
 };
 
 export const getWatchedFilmsGenresAndCount = (watchedFilms) => {
-  const watchedGenres = watchedFilms.map((film) => film.genres).flat();
+  const watchedGenres = watchedFilms.map(({filmInfo}) => filmInfo.genre).flat();
 
   const genresAndCount = {};
   watchedGenres.forEach((genre) => {
@@ -87,3 +87,5 @@ export const getRank = (films) => {
 
   return rank;
 };
+
+export const getShortDescription = (description) => `${description.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
