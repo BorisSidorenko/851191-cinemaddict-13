@@ -156,7 +156,7 @@ export default class PopupPresenter {
     const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
     render(popupTopContainer, filmPopupInfoWrapComponent);
 
-    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card));
+    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card.filmInfo));
     render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
   }
 

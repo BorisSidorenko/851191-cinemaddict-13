@@ -32,9 +32,9 @@ export default class SiteMenuModel extends Observer {
   sortFilms(films, sortType) {
     switch (sortType) {
       case SortType.DATE:
-        return films.slice().sort((a, b) => b.year - a.year);
+        return films.slice().sort((a, b) => b.filmInfo.year - a.filmInfo.year);
       case SortType.RATING:
-        return films.slice().sort((a, b) => b.rating - a.rating);
+        return films.slice().sort((a, b) => b.filmInfo.rating - a.filmInfo.rating);
     }
 
     return films;

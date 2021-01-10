@@ -6,8 +6,9 @@ const createGenresTemplate = (genres) => {
   return genres.map(getGengresTemplate).join(``);
 };
 
-export const createFilmPopupInfoTemplate = (card) => {
-  const {title, titleOriginal, rating, director, screenwriters, actors, releaseDate, duration, country, genres, description} = card;
+export const createFilmPopupInfoTemplate = ({filmInfo}) => {
+  const {title, titleOriginal, rating, director, screenwriters, actors, releaseDate, duration, country, genres, description} = filmInfo;
+
   return `<div class="film-details__info">
     <div class="film-details__info-head">
       <div class="film-details__title-wrap">

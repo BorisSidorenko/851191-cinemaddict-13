@@ -1,6 +1,7 @@
 import {convertDurationIntoHours} from "../../utils/common";
 
-export const createFilmCardTemplate = ({id, title, rating, year, duration, genres, poster, description, userDetails}, commentsCount) => {
+export const createFilmCardTemplate = ({id, filmInfo, userDetails}, commentsCount) => {
+  const {title, rating, year, duration, genres, poster, description} = filmInfo;
   const [genre] = genres;
   const {alreadyWatched, watchlist, favorite} = userDetails;
 
