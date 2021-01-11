@@ -2,28 +2,29 @@ import AbstractView from "../abstract-component";
 import {createSiteMenuTemplate} from "../site-menu/site-menu-template";
 
 export default class SiteMenu extends AbstractView {
-  constructor(filterType, cards) {
+  constructor(menuItem, cards) {
     super();
-    this._filterType = filterType;
+    this._menuItem = menuItem;
     this._cards = cards;
 
-    this._handleFilterChange = this._handleFilterChange.bind(this);
+    this._handleMenuItemChange = this._handleMenuItemChange.bind(this);
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._filterType, this._cards);
+    return createSiteMenuTemplate(this._menuItem, this._cards);
   }
 
-  _handleFilterChange(evt) {
+  _handleMenuItemChange(evt) {
     evt.preventDefault();
-    this._callback.filterChange(evt);
+    this._callback.menuItemChange(evt);
   }
 
   setFilterChangeHandler(callback) {
-    this._callback.filterChange = callback;
-    this.element.querySelector(`[href="#all"]`).addEventListener(`click`, this._handleFilterChange);
-    this.element.querySelector(`[href="#watchlist"]`).addEventListener(`click`, this._handleFilterChange);
-    this.element.querySelector(`[href="#history"]`).addEventListener(`click`, this._handleFilterChange);
-    this.element.querySelector(`[href="#favorites"]`).addEventListener(`click`, this._handleFilterChange);
+    this._callback.menuItemChange = callback;
+    this.element.querySelector(`[href="#all"]`).addEventListener(`click`, this._handleMenuItemChange);
+    this.element.querySelector(`[href="#watchlist"]`).addEventListener(`click`, this._handleMenuItemChange);
+    this.element.querySelector(`[href="#history"]`).addEventListener(`click`, this._handleMenuItemChange);
+    this.element.querySelector(`[href="#favorites"]`).addEventListener(`click`, this._handleMenuItemChange);
+    this.element.querySelector(`[href="#stats"]`).addEventListener(`click`, this._handleMenuItemChange);
   }
 }

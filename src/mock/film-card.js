@@ -1,9 +1,9 @@
 import {nanoid} from "../vendor/nanoid";
+import {getCommentsIds} from "../mock/comment";
+import {MIN_MONTH, MAX_MONTH} from "../utils/constants";
 import {getRandomIntInRange, getRandomInt, getRandomDateInYearRange, getArrayOfObjects} from "../utils/common";
 
 const CARD_AMOUNT_TO_GENERATE = 13;
-
-const MINUTES_IN_HOUR = 60;
 
 const MIN_YEAR = 1950;
 const MAX_YEAR = 2008;
@@ -17,11 +17,7 @@ const MAX_AGE_RATING = 18;
 const MIN_DURATION = 70;
 const MAX_DURATION = 134;
 
-const MIN_COMMENTS = 0;
-const MAX_COMMENTS = 100;
-
 const DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
-const DESCRIPTION_SHORT_LENGTH = 139;
 
 const POSTERS_PATH = `././images/posters/`;
 const POSTERS = [
@@ -107,8 +103,6 @@ const title = {
   [`Список Шиндлера`]: `Schindler's List`
 };
 
-const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
-
 const getRandomRating = (max, min) => {
   const raiting = getRandomIntInRange(max, min);
   return raiting === max ? raiting : `${raiting}.${getRandomIntInRange(max - 1, min)}`;
@@ -137,60 +131,48 @@ const getRandonGenres = () => {
   return getRandomValuesFromArray(genresCount, GENRES);
 };
 
-const getShortDescription = () => `${DESCRIPTION.substring(0, DESCRIPTION_SHORT_LENGTH)}...`;
-
-const getRandomDuration = (max, min) => {
-  const duration = getRandomIntInRange(max, min);
-
-  if (duration > MINUTES_IN_HOUR) {
-    if (duration % MINUTES_IN_HOUR > 0) {
-      return `${Math.floor(duration / MINUTES_IN_HOUR)}h ${duration % MINUTES_IN_HOUR}m`;
-    } else {
-      return `${Math.floor(duration / MINUTES_IN_HOUR)}h`;
-    }
-  } else {
-    return `${duration}m`;
-  }
-};
+const getRandomDuration = (max, min) => getRandomIntInRange(max, min);
 
 const getRandomDirector = () => DIRECTORS[getRandomInt(DIRECTORS.length)];
 
-const getRandomWriters = () => {
-  const screenwriters = getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
-  return screenwriters.join(`, `);
-};
+const getRandomWriters = () => getRandomValuesFromArray(SCREENWRITERS_PER_FILM, SCREENWRITERS);
 
-const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS).join(`, `);
+const getRandomActors = () => getRandomValuesFromArray(ACTORS_PER_FILM, ACTORS);
 
 const getRandomCountry = () => COUNTRIES[getRandomInt(COUNTRIES.length)];
 
 const getRandomAgeRating = () => `${getRandomIntInRange(MIN_AGE_RATING, MAX_AGE_RATING)}+`;
 
-const getRandomReleaseDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, RELEASE_DATE_FORMAT);
+const getRandomReleaseDate = (startYear, endYear) => getRandomDateInYearRange(startYear, endYear, MIN_MONTH, MAX_MONTH);
 
 const getRandomBool = () => getRandomIntInRange(0, 1) > 0;
 
 export const generateFilmCard = () => ({
   id: nanoid(8),
-  poster: getRandomPoster(),
-  title: getRandomTitle(),
-  rating: getRandomRating(MAX_RATING, MIN_RATING),
-  year: getRandomIntInRange(MIN_YEAR, MAX_YEAR),
-  duration: getRandomDuration(MAX_DURATION, MIN_DURATION),
-  genres: getRandonGenres(),
-  descriptionShort: getShortDescription(),
-  description: DESCRIPTION,
-  commentsCount: getRandomIntInRange(MIN_COMMENTS, MAX_COMMENTS),
-  titleOriginal: originalTitle,
-  director: getRandomDirector(),
-  screenwriters: getRandomWriters(),
-  actors: getRandomActors(),
-  releaseDate: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
-  country: getRandomCountry(),
-  ageRating: getRandomAgeRating(),
-  isWatchlist: getRandomBool(),
-  isHistory: getRandomBool(),
-  isFavorite: getRandomBool()
+  comments: getCommentsIds(),
+  filmInfo: {
+    title: getRandomTitle(),
+    alternativeTitle: originalTitle,
+    totalRating: getRandomRating(MAX_RATING, MIN_RATING),
+    poster: getRandomPoster(),
+    ageRating: getRandomAgeRating(),
+    director: getRandomDirector(),
+    writers: getRandomWriters(),
+    actors: getRandomActors(),
+    release: {
+      date: getRandomReleaseDate(MIN_YEAR, MAX_YEAR),
+      releaseCountry: getRandomCountry(),
+    },
+    runtime: getRandomDuration(MAX_DURATION, MIN_DURATION),
+    genre: getRandonGenres(),
+    description: DESCRIPTION,
+  },
+  userDetails: {
+    watchlist: getRandomBool(),
+    alreadyWatched: getRandomBool(),
+    watchingDate: getRandomDateInYearRange(2020, 2020, 12, 12),
+    favorite: getRandomBool()
+  }
 });
 
 export const generateFilmCards = () => getArrayOfObjects(CARD_AMOUNT_TO_GENERATE, generateFilmCard);

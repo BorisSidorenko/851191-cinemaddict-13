@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import FilmPopupView from "../view/film-popup/film-popup";
 import FilmPopupFormView from "../view/film-popup-form/film-popup-form";
 import FilmPopupTopContainerView from "../view/film-popup-top-container/film-popup-top-container";
@@ -14,7 +15,7 @@ import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-n
 
 import {generateComment} from "../mock/comment";
 import {isEscEvent, isSubmitFormEvent} from "../utils/common";
-import {PopupControlsName} from "../utils/constants";
+import {PopupControlsName, UserDetails} from "../utils/constants";
 import {render, remove} from "../utils/render";
 import {UserAction} from "../utils/constants";
 
@@ -83,8 +84,16 @@ export default class PopupPresenter {
     this._changeData(updatedFilmCard);
   }
 
+  _addNewCommentIdToCard({id}) {
+    this._filmCard.comments = [id, ...this._filmCard.comments.slice()];
+  }
+
+  _removeCommentIdFromCard({id}) {
+    this._filmCard.comments = this._filmCard.comments.filter((comment) => comment !== id);
+  }
+
   _submitForm() {
-    const commentTemplate = generateComment(this._filmCard.id)();
+    const commentTemplate = generateComment();
     const commentEmoji = this._popupFormComponent.element[`comment-emoji`].value;
     const commentText = this._popupFormComponent.element[`comment`].value;
 
@@ -94,10 +103,12 @@ export default class PopupPresenter {
           commentTemplate,
           {
             comment: commentText,
-            emoji: commentEmoji,
+            emotion: commentEmoji,
             text: commentText
           }
       );
+
+      this._addNewCommentIdToCard(localComment);
 
       this._commentsModel.updateComments(
           UserAction.ADD_COMMENT,
@@ -155,7 +166,7 @@ export default class PopupPresenter {
     const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
     render(popupTopContainer, filmPopupInfoWrapComponent);
 
-    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card));
+    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card.filmInfo));
     render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
   }
 
@@ -179,16 +190,42 @@ export default class PopupPresenter {
     return Object.keys(obj).find((key) => obj[key] === val);
   }
 
-  _handlePopupControlsClick(evt) {
+  _getPropToChange(evt) {
     const allControlsNames = Object.values(PopupControlsName);
     const clickedControlName = allControlsNames.find((controlName) => controlName === evt.target.name);
-    const propToChange = this._getKeyByValue(PopupControlsName, clickedControlName);
+    const propToChangeName = this._getKeyByValue(PopupControlsName, clickedControlName);
+
+    let propToChange = {
+      [`${propToChangeName}`]: !this._filmCard.userDetails[propToChangeName]
+    };
+
+    if (propToChangeName === UserDetails.ALREADY_WATCHED) {
+      propToChange = Object.assign(
+          {},
+          propToChange,
+          {
+            watchingDate: dayjs().format()
+          }
+      );
+    }
+
+    return propToChange;
+  }
+
+  _handlePopupControlsClick(evt) {
+    const propToChange = this._getPropToChange(evt);
+
+    const updatedUserDetails = Object.assign(
+        {},
+        this._filmCard.userDetails,
+        propToChange
+    );
 
     const updatedFilmCard = Object.assign(
         {},
         this._filmCard,
         {
-          [`${propToChange}`]: !this._filmCard[propToChange]
+          userDetails: updatedUserDetails
         }
     );
 
@@ -210,12 +247,14 @@ export default class PopupPresenter {
           commentToDelete
       );
 
+      this._removeCommentIdFromCard(commentToDelete);
+
       this._updateCommnetsCount();
     }
   }
 
   _getCardComments() {
-    return this._commentsModel.getFilmCardComments(this._filmCard.id);
+    return this._commentsModel.getFilmCardComments(this._filmCard);
   }
 
   _appendPopupWithComments() {

@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import FilmCardView from "../view/film-card/film-card";
 import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
@@ -73,10 +74,18 @@ export default class FilmPresenter {
   _handleCardControlClick(evt) {
     const propToChange = this._getClickedProp(evt.target.classList);
 
+    const updatedUserDetails = Object.assign(
+        {},
+        this._filmCard.userDetails,
+        propToChange
+    );
+
     const updatedFilmCard = Object.assign(
         {},
         this._filmCard,
-        propToChange
+        {
+          userDetails: updatedUserDetails
+        }
     );
 
     this._changeData(updatedFilmCard);
@@ -85,15 +94,16 @@ export default class FilmPresenter {
   _getClickedProp(classList) {
     if (classList.contains(CardControls.WATCHLIST)) {
       return {
-        isWatchlist: !this._filmCard.isWatchlist
+        watchlist: !this._filmCard.userDetails.watchlist
       };
     } else if (classList.contains(CardControls.WATCHED)) {
       return {
-        isHistory: !this._filmCard.isHistory
+        alreadyWatched: !this._filmCard.userDetails.alreadyWatched,
+        watchingDate: dayjs().format()
       };
     } else {
       return {
-        isFavorite: !this._filmCard.isFavorite
+        favorite: !this._filmCard.userDetails.favorite
       };
     }
   }
