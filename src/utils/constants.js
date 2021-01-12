@@ -84,11 +84,6 @@ export const StatisticsPeriod = {
 
 export const SERVER_ENDPOINT = `https://13.ecmascript.pages.academy/cinemaddict`;
 
-export const SuccessHTTPStatus = {
-  MIN: 200,
-  MAX: 299
-};
-
 export const Url = {
   FILMS: `movies`,
   COMMENTS: `comments`
