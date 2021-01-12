@@ -146,10 +146,6 @@ export default class FilmListPresenter {
     return films;
   }
 
-  _getComments() {
-    return this._commentsModel.comments;
-  }
-
   _getFilmCardComments(card) {
     return this._commentsModel.getFilmCardComments(card);
   }
@@ -241,10 +237,7 @@ export default class FilmListPresenter {
   }
 
   _renderFilmCard(cardToShow) {
-    const comments = this._getComments();
-
     const paramObj = {
-      comments,
       mainContainer: this._mainContainer,
       filmsListContainer: filmsListContainerComponent,
       changeData: this._filmsModel.updateFilm,

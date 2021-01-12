@@ -4,12 +4,11 @@ import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
 export default class FilmPresenter {
-  constructor({comments, mainContainer, filmsListContainer, changeData, cardClick}) {
+  constructor({mainContainer, filmsListContainer, changeData, cardClick}) {
     this._mainContainer = mainContainer;
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
     this._filmsCards = null;
-    this._comments = comments;
     this._cardClick = cardClick;
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._handleCardControlClick = this._handleCardControlClick.bind(this);

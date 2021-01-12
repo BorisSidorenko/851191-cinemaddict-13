@@ -66,6 +66,12 @@ export default class Api {
     return adaptedUserDetails;
   }
 
+  getFilmComments({id}) {
+    return this._load({url: `${Url.COMMENTS}/${id}`})
+      .then((response) => response.json())
+      .then((comments) => comments);
+  }
+
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._auth);
 
