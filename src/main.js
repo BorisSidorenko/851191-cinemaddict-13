@@ -18,7 +18,7 @@ const siteFooterStatisticsElement = siteBodyElement.querySelector(`.footer__stat
 
 const menuModel = new MenuModel();
 
-const filterPresenter = new MenuPresenter(siteMainElement, filmsModel, commentsModel, commentsModel, menuModel);
+const filterPresenter = new MenuPresenter(siteMainElement, filmsModel, commentsModel, menuModel);
 filterPresenter.init();
 
 const filmListPresenter = new FilmListPresenter(siteHeaderElement, siteMainElement, siteFooterStatisticsElement, filmsModel, commentsModel, menuModel, api);
