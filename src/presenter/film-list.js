@@ -40,19 +40,30 @@ export default class FilmListPresenter {
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
     this._currentMenuItem = this._menuModel.menuItem;
+    this._filmsCountComponent = null;
     this._statsComponent = null;
 
     this._handleMenuItemChange = this._handleMenuItemChange.bind(this);
     this._handleSortedListChange = this._handleSortedListChange.bind(this);
-
+    this._handleCommentsReady = this._handleCommentsReady.bind(this);
 
     this._menuModel.addObserver(this._handleMenuItemChange);
     this._menuModel.addObserver(this._handleSortedListChange);
     this._filmsModel.addObserver(this._handleFilmChange);
+    this._commentsModel.addObserver(this._handleCommentsReady);
   }
 
   init() {
     this._render();
+  }
+
+  _handleCommentsReady() {
+    const films = this._getFilms();
+    const comments = this._commentsModel.getAllComments();
+
+    if (films.length === Object.keys(comments).length) {
+      this._render();
+    }
   }
 
   _renderProfile() {
@@ -170,6 +181,8 @@ export default class FilmListPresenter {
     if (this._getFilms().length === 0) {
       this._renderEmptyFilmsList();
       return;
+    } else {
+      remove(emptyFilmsListComponent);
     }
 
     this._renderProfile();
@@ -231,9 +244,16 @@ export default class FilmListPresenter {
   _renderFilmsCount() {
     let films = this._getFilms();
     const availableFilmsCount = films ? films.length : 0;
-    const filmsCountComponent = new FilmsCountView(availableFilmsCount);
 
-    render(this._footerContainer, filmsCountComponent);
+    const prevFilmsCountComponent = this._filmsCountComponent;
+
+    if (prevFilmsCountComponent) {
+      remove(prevFilmsCountComponent);
+    }
+
+    this._filmsCountComponent = new FilmsCountView(availableFilmsCount);
+
+    render(this._footerContainer, this._filmsCountComponent);
   }
 
   _renderFilmCard(cardToShow) {
@@ -268,22 +288,24 @@ export default class FilmListPresenter {
   }
 
   _handleFilmChange(updatedFilm) {
-    const comments = this._getFilmCardComments(updatedFilm);
-    const commentsCount = comments.length;
-    const currentPresenter = this._filmPresenter[updatedFilm.id];
-    const films = this._getFilms(true);
+    if (updatedFilm) {
+      const films = this._getFilms(true);
+      const comments = this._getFilmCardComments(updatedFilm);
+      const commentsCount = comments.length;
+      const currentPresenter = this._filmPresenter[updatedFilm.id];
 
-    currentPresenter.init(films, updatedFilm, commentsCount);
+      currentPresenter.init(films, updatedFilm, commentsCount);
 
-    const popupPresenter = this._filmPopupPresenter[updatedFilm.id];
+      const popupPresenter = this._filmPopupPresenter[updatedFilm.id];
 
-    if (popupPresenter) {
-      popupPresenter.init(updatedFilm);
+      if (popupPresenter) {
+        popupPresenter.init(updatedFilm);
+      }
+
+      const shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
+
+      this._renderFilmsCards(films.slice(0, shownFilmsCardsCount));
     }
-
-    const shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
-
-    this._renderFilmsCards(films.slice(0, shownFilmsCardsCount));
   }
 
   _handleFilmCardClick(card) {

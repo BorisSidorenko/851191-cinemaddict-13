@@ -10,6 +10,7 @@ export default class FilmsModel extends Observer {
 
   set films(films) {
     this._films = films.slice();
+    this._notify();
   }
 
   get films() {

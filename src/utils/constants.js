@@ -82,7 +82,10 @@ export const StatisticsPeriod = {
   YEAR: `year`
 };
 
-export const SERVER_ENDPOINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+export const Server = {
+  ENDPOINT: `https://13.ecmascript.pages.academy/cinemaddict`,
+  AUTHORIZATION: `Basic 98798asd9a8sd7a99`
+};
 
 export const Url = {
   FILMS: `movies`,

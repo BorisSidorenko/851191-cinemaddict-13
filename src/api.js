@@ -33,13 +33,24 @@ export default class Api {
   }
 
   _adaptFilmInfoToClient(filmInfo) {
+    const adaptedRelease = Object.assign(
+        {},
+        filmInfo.release,
+        {
+          releaseCountry: filmInfo.release.release_country
+        }
+    );
+
+    delete adaptedRelease.release_country;
+
     const adaptedFilmInfo = Object.assign(
         {},
         filmInfo,
         {
           ageRating: filmInfo.age_rating,
           alternativeTitle: filmInfo.alternative_title,
-          totalRating: filmInfo.total_rating
+          totalRating: filmInfo.total_rating,
+          release: adaptedRelease
         }
     );
 
