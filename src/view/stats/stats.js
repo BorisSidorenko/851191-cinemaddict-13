@@ -2,7 +2,7 @@ import SmartView from "../smart";
 import dayjs from "dayjs";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {getWatchedFilms, getWatchedFilmsGenresAndCount} from "../../utils/common";
+import {getWatchedFilms, getWatchedFilmsGenresAndCount, getRank} from "../../utils/common";
 import {createStatsTemplate} from "../stats/stats-template";
 import {STATISTICS_BAR_HEIGHT, StatisticsPeriod} from "../../utils/constants";
 
@@ -65,21 +65,21 @@ const renderCharts = (statisticCtx, labels, data) => {
   });
 };
 
-const getWatchedFilmsForPeriod = (films, period) => {
-  let watchedFilms = getWatchedFilms(films);
+const getWatchedFilmsForPeriod = (watchedFilms, period) => {
+  let watchedFilmsForPeriod = watchedFilms;
 
   if (period !== StatisticsPeriod.ALL_TIME) {
     const periodToShow = period === StatisticsPeriod.TODAY ? StatisticsPeriod.DAY : period;
     const now = dayjs();
     const startPeriod = now.subtract(1, periodToShow);
 
-    watchedFilms = watchedFilms.filter(({userDetails}) => {
+    watchedFilmsForPeriod = watchedFilms.filter(({userDetails}) => {
       const watchDate = dayjs(userDetails.watchingDate);
       return watchDate.isAfter(startPeriod) && watchDate.isBefore(now);
     });
   }
 
-  return watchedFilms;
+  return watchedFilmsForPeriod;
 };
 
 
@@ -89,19 +89,23 @@ export default class Stats extends SmartView {
     this._films = films;
     this._statsPeriod = StatisticsPeriod.ALL_TIME;
     this._statsPeriodChangeHandler = this._statsPeriodChangeHandler.bind(this);
+    this._watchedFilmsForPeriod = null;
     this._watchedFilms = null;
+    this._rank = null;
 
     this._setCharts();
     this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createStatsTemplate(this._watchedFilms, this._statsPeriod);
+    return createStatsTemplate(this._watchedFilms, this._statsPeriod, this._rank);
   }
 
   _setCharts() {
-    this._watchedFilms = getWatchedFilmsForPeriod(this._films, this._statsPeriod);
-    const watchedFilmsGenresAndCount = getWatchedFilmsGenresAndCount(this._watchedFilms);
+    this._watchedFilms = getWatchedFilms(this._films);
+    this._rank = getRank(this._watchedFilms);
+    this._watchedFilmsForPeriod = getWatchedFilmsForPeriod(this._watchedFilms, this._statsPeriod);
+    const watchedFilmsGenresAndCount = getWatchedFilmsGenresAndCount(this._watchedFilmsForPeriod);
     const labels = watchedFilmsGenresAndCount.map(([genre]) => genre);
     const data = watchedFilmsGenresAndCount.map(([, value]) => value);
 
@@ -120,7 +124,7 @@ export default class Stats extends SmartView {
     evt.preventDefault();
 
     this._statsPeriod = evt.target.value;
-    this._watchedFilms = getWatchedFilmsForPeriod(this._films, this._statsPeriod);
+    this._watchedFilms = getWatchedFilmsForPeriod(this._watchedFilms, this._statsPeriod);
 
     this.updateElement();
   }

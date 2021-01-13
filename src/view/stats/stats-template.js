@@ -1,11 +1,11 @@
 import {MINUTES_IN_HOUR, StatisticsPeriod} from "../../utils/constants";
-import {getRank, getWatchedFilms, getFilmsDuration, getWatchedFilmsGenresAndCount} from "../../utils/common";
+import {getWatchedFilms, getFilmsDuration, getWatchedFilmsGenresAndCount} from "../../utils/common";
 
 const getTotalDurationHours = (totalDuration) => Math.floor(totalDuration / MINUTES_IN_HOUR);
 
 const getTotalDurationMinutes = (totalDuration) => totalDuration % MINUTES_IN_HOUR;
 
-export const createStatsTemplate = (films, currentPeriod) => {
+export const createStatsTemplate = (films, currentPeriod, rank) => {
   let topWatchedGenreAndCount = [];
   let topGenre = ``;
 
@@ -23,7 +23,7 @@ export const createStatsTemplate = (films, currentPeriod) => {
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${getRank(films)}</span>
+      <span class="statistic__rank-label">${rank}</span>
     </p>
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
       <p class="statistic__filters-description">Show stats:</p>
