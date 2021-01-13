@@ -18,14 +18,15 @@ const siteFooterStatisticsElement = siteBodyElement.querySelector(`.footer__stat
 
 const menuModel = new MenuModel();
 
-const filterPresenter = new MenuPresenter(siteMainElement, filmsModel, menuModel);
+const filterPresenter = new MenuPresenter(siteMainElement, filmsModel, commentsModel, commentsModel, menuModel);
 filterPresenter.init();
 
 const filmListPresenter = new FilmListPresenter(siteHeaderElement, siteMainElement, siteFooterStatisticsElement, filmsModel, commentsModel, menuModel, api);
 filmListPresenter.init();
 
 api.getFilms()
-.then((allFilms) =>{
+.catch(() => [])
+.then((allFilms) => {
   filmsModel.films = allFilms;
   return allFilms;
 })
@@ -37,4 +38,5 @@ api.getFilms()
 .then((allFilmsPromises) => {
   return Promise.all(allFilmsPromises);
 })
+.catch(() => [])
 .then((comments) => commentsModel.setComments(comments));
