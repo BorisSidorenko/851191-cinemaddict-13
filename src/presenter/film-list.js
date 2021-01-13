@@ -180,6 +180,7 @@ export default class FilmListPresenter {
   _renderLoading() {
     this._renderFilmsWrapper();
     render(filmsWrapperComponent, loadingComponent);
+    this._renderFilmsCount();
   }
 
   _checkFilmsAvailable() {
@@ -195,6 +196,7 @@ export default class FilmListPresenter {
   _render() {
     if (this._isLoading) {
       this._renderLoading();
+      return;
     } else {
       remove(loadingComponent);
       if (!this._checkFilmsAvailable()) {
