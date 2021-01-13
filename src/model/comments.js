@@ -5,15 +5,15 @@ import clonedeep from "lodash.clonedeep";
 export default class CommentsModel extends Observer {
   constructor() {
     super();
-    this._comments = {};
+    this._comments = [];
   }
 
-  setComments(film, comments) {
-    this._comments[film.id] = comments.slice();
+  setComments(comments) {
+    this._comments = comments.slice();
     this._notify();
   }
 
-  getAllComments() {
+  getComments() {
     return clonedeep(this._comments);
   }
 

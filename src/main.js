@@ -25,16 +25,16 @@ const filmListPresenter = new FilmListPresenter(siteHeaderElement, siteMainEleme
 filmListPresenter.init();
 
 api.getFilms()
-.then((allFilms) => {
-  allFilms.forEach(((film) => {
-    api.getFilmComments(film)
-    .then((comments) => {
-      commentsModel.setComments(film, comments);
-    });
-  }));
-
+.then((allFilms) =>{
+  filmsModel.films = allFilms;
   return allFilms;
 })
 .then((allFilms) => {
-  filmsModel.films = allFilms;
-});
+  return allFilms.map(((film) => {
+    return api.getFilmComments(film);
+  }));
+})
+.then((allFilmsPromises) => {
+  return Promise.all(allFilmsPromises);
+})
+.then((comments) => commentsModel.setComments(comments));

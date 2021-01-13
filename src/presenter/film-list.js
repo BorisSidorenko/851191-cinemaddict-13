@@ -7,6 +7,7 @@ import FilmsListContainer from "../view/films-list-container/films-list-containe
 import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
 import StatsView from "../view/stats/stats";
+import LoadingView from "../view/films-loading/films-loading";
 import FilmPresenter from "../presenter/film";
 import PopupPresenter from "../presenter/popup";
 
@@ -19,6 +20,7 @@ const filmsListComponent = new FilmsListView();
 const emptyFilmsListComponent = new EmptyFilmsListView();
 const filmsListContainerComponent = new FilmsListContainer();
 const showMoreButtonComponent = new ShowMoreButtonView();
+const loadingComponent = new LoadingView();
 let showMoreButtonClickCounter = 1;
 
 export default class FilmListPresenter {
@@ -43,6 +45,8 @@ export default class FilmListPresenter {
     this._filmsCountComponent = null;
     this._statsComponent = null;
 
+    this._isLoading = true;
+
     this._handleMenuItemChange = this._handleMenuItemChange.bind(this);
     this._handleSortedListChange = this._handleSortedListChange.bind(this);
     this._handleCommentsReady = this._handleCommentsReady.bind(this);
@@ -58,12 +62,8 @@ export default class FilmListPresenter {
   }
 
   _handleCommentsReady() {
-    const films = this._getFilms();
-    const comments = this._commentsModel.getAllComments();
-
-    if (films.length === Object.keys(comments).length) {
-      this._render();
-    }
+    this._isLoading = false;
+    this._render();
   }
 
   _renderProfile() {
@@ -177,13 +177,31 @@ export default class FilmListPresenter {
     render(this._mainContainer, filmsWrapperComponent);
   }
 
-  _render() {
-    if (this._getFilms().length === 0) {
+  _renderLoading() {
+    this._renderFilmsWrapper();
+    render(filmsWrapperComponent, loadingComponent);
+  }
+
+  _checkFilmsAvailable() {
+    if (this._getFilms().length === 0 || this._commentsModel.getComments().length === 0) {
       this._renderEmptyFilmsList();
-      return;
+      return false;
     } else {
       remove(emptyFilmsListComponent);
+      return true;
     }
+  }
+
+  _render() {
+    if (this._isLoading) {
+      this._renderLoading();
+    } else {
+      remove(loadingComponent);
+      if (!this._checkFilmsAvailable()) {
+        return;
+      }
+    }
+
 
     this._renderProfile();
 
