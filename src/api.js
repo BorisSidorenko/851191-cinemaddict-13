@@ -1,5 +1,5 @@
 import FilmsModel from "../src/model/films";
-import {Method, Url} from "../src/utils/constants";
+import {Method, Url, Header} from "../src/utils/constants";
 
 export default class Api {
   constructor(endPoint, auth) {
@@ -13,6 +13,17 @@ export default class Api {
       .then((films) => films.map(FilmsModel.adaptFilmToClient));
   }
 
+  updateFilm(film) {
+    return this._load({
+      url: `${Url.FILMS}/${film.id}`,
+      method: Method.PUT,
+      body: JSON.stringify(film),
+      headers: new Headers({[Header.CONTENT_TYPE]: `application/json`})
+    })
+      .then((response) => response.json())
+      .then((updatedFilm) => updatedFilm);
+  }
+
   getFilmComments({id}) {
     return this._load({url: `${Url.COMMENTS}/${id}`})
       .then((response) => response.json())
@@ -20,7 +31,7 @@ export default class Api {
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
-    headers.append(`Authorization`, this._auth);
+    headers.append(Header.AUTHORIZATION, this._auth);
 
     return fetch(
         `${this._endPoint}/${url}`,

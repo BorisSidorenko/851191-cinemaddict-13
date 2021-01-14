@@ -87,6 +87,11 @@ export const Server = {
   AUTHORIZATION: `Basic 98798asd9a8sd7a99`
 };
 
+export const Header = {
+  AUTHORIZATION: `Authorization`,
+  CONTENT_TYPE: `Content-Type`
+};
+
 export const Url = {
   FILMS: `movies`,
   COMMENTS: `comments`
@@ -94,6 +99,7 @@ export const Url = {
 
 export const Method = {
   GET: `GET`,
+  PUT: `PUT`,
   POST: `POST`,
   DELETE: `DELETE`
 };
