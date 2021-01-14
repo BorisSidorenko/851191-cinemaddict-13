@@ -12,10 +12,12 @@ export default class MenuPresenter {
     this._siteMenuView = null;
     this._isCommentsAvailable = true;
 
+    this._render = this._render.bind(this);
     this._handleFilterChange = this._handleFilterChange.bind(this);
     this._handleCommentsAvailability = this._handleCommentsAvailability.bind(this);
 
     this._commentsModel.addObserver(this._handleCommentsAvailability);
+    this._filmsModel.addObserver(this._render);
   }
 
   init() {
