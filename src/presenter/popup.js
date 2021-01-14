@@ -13,6 +13,8 @@ import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-pop
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
 
+import FilmsModel from "../model/films";
+
 import {generateComment} from "../mock/comment";
 import {isEscEvent, isSubmitFormEvent} from "../utils/common";
 import {PopupControlsName, UserDetails} from "../utils/constants";
@@ -20,10 +22,11 @@ import {render, remove} from "../utils/render";
 import {UserAction} from "../utils/constants";
 
 export default class PopupPresenter {
-  constructor({mainContainer, changeData, commentsModel}) {
+  constructor({mainContainer, changeData, commentsModel, api}) {
     this._mainContainer = mainContainer;
     this._changeData = changeData;
     this._commentsModel = commentsModel;
+    this._api = api;
     this._handleOpenedPopup = this._handleOpenedPopup.bind(this);
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
     this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
@@ -229,7 +232,10 @@ export default class PopupPresenter {
         }
     );
 
-    this._changeData(updatedFilmCard);
+    const adaptedToServerFilm = FilmsModel.adaptFilmToServer(updatedFilmCard);
+
+    this._api.updateFilm(adaptedToServerFilm)
+    .then((filmCard) => this._changeData(filmCard));
   }
 
   _handleModelEvent() {

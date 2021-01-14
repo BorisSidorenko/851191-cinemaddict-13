@@ -1,15 +1,17 @@
 import dayjs from "dayjs";
 import FilmCardView from "../view/film-card/film-card";
+import FilmsModel from "../model/films";
 import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
 export default class FilmPresenter {
-  constructor({mainContainer, filmsListContainer, changeData, cardClick}) {
+  constructor({mainContainer, filmsListContainer, changeData, cardClick, api}) {
     this._mainContainer = mainContainer;
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
     this._filmsCards = null;
     this._cardClick = cardClick;
+    this._api = api;
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._handleCardControlClick = this._handleCardControlClick.bind(this);
     this._filmCard = null;
@@ -87,7 +89,10 @@ export default class FilmPresenter {
         }
     );
 
-    this._changeData(updatedFilmCard);
+    const adaptedToServerFilm = FilmsModel.adaptFilmToServer(updatedFilmCard);
+
+    this._api.updateFilm(adaptedToServerFilm)
+    .then((filmCard) => this._changeData(filmCard));
   }
 
   _getClickedProp(classList) {

@@ -21,7 +21,7 @@ export default class Api {
       headers: new Headers({[Header.CONTENT_TYPE]: `application/json`})
     })
       .then((response) => response.json())
-      .then((updatedFilm) => updatedFilm);
+      .then((updatedFilm) => FilmsModel.adaptFilmToClient(updatedFilm));
   }
 
   getFilmComments({id}) {
