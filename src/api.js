@@ -24,7 +24,7 @@ export default class Api {
       .then((updatedFilm) => FilmsModel.adaptFilmToClient(updatedFilm));
   }
 
-  getFilmComments({id}) {
+  getFilmComments(id) {
     return this._load({url: `${Url.COMMENTS}/${id}`})
       .then((response) => response.json())
       .then((comments) => comments);

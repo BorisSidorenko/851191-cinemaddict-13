@@ -31,12 +31,10 @@ api.getFilms()
   return allFilms;
 })
 .then((allFilms) => {
-  return allFilms.map(((film) => {
-    return api.getFilmComments(film);
+  return allFilms.map((({id}) => {
+    return api.getFilmComments(id);
   }));
 })
-.then((allFilmsPromises) => {
-  return Promise.all(allFilmsPromises);
-})
+.then((allFilmsPromises) => Promise.all(allFilmsPromises))
 .catch(() => [])
 .then((comments) => commentsModel.setComments(comments));
