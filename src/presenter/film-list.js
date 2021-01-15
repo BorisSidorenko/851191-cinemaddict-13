@@ -81,6 +81,7 @@ export default class FilmListPresenter {
 
   _resetShowMoreButtonClickCounter() {
     showMoreButtonClickCounter = 1;
+    this._shownFilmsCardsCount = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
   }
 
   _handleSortedListChange() {
