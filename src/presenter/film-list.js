@@ -327,6 +327,7 @@ export default class FilmListPresenter {
       const shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
 
       this._renderFilmsCards(films.slice(0, shownFilmsCardsCount));
+      this._renderShowMoreButton();
     }
   }
 
