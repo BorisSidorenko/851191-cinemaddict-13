@@ -13,8 +13,6 @@ import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-pop
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
 
-import FilmsModel from "../model/films";
-
 import {generateComment} from "../mock/comment";
 import {isEscEvent, isSubmitFormEvent} from "../utils/common";
 import {PopupControlsName, UserDetails} from "../utils/constants";
@@ -169,7 +167,7 @@ export default class PopupPresenter {
     const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
     render(popupTopContainer, filmPopupInfoWrapComponent);
 
-    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card.filmInfo));
+    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card.film_info));
     render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
   }
 
@@ -199,7 +197,7 @@ export default class PopupPresenter {
     const propToChangeName = this._getKeyByValue(PopupControlsName, clickedControlName);
 
     let propToChange = {
-      [`${propToChangeName}`]: !this._filmCard.userDetails[propToChangeName]
+      [`${propToChangeName}`]: !this._filmCard.user_details[propToChangeName]
     };
 
     if (propToChangeName === UserDetails.ALREADY_WATCHED) {
@@ -207,7 +205,7 @@ export default class PopupPresenter {
           {},
           propToChange,
           {
-            watchingDate: dayjs().format()
+            "watching_date": dayjs().format()
           }
       );
     }
@@ -220,7 +218,7 @@ export default class PopupPresenter {
 
     const updatedUserDetails = Object.assign(
         {},
-        this._filmCard.userDetails,
+        this._filmCard.user_details,
         propToChange
     );
 
@@ -228,13 +226,11 @@ export default class PopupPresenter {
         {},
         this._filmCard,
         {
-          userDetails: updatedUserDetails
+          "user_details": updatedUserDetails
         }
     );
 
-    const adaptedToServerFilm = FilmsModel.adaptFilmToServer(updatedFilmCard);
-
-    this._api.updateFilm(adaptedToServerFilm)
+    this._api.updateFilm(updatedFilmCard)
     .then((filmCard) => this._changeData(filmCard));
   }
 

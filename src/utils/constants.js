@@ -33,14 +33,14 @@ export const CardControls = {
 };
 
 export const PopupControlsName = {
-  watchlist: `watchlist`,
-  alreadyWatched: `watched`,
-  favorite: `favorite`
+  "watchlist": `watchlist`,
+  "already_watched": `watched`,
+  "favorite": `favorite`
 };
 
 export const UserDetails = {
   WATCHLIST: `watchlist`,
-  ALREADY_WATCHED: `alreadyWatched`,
+  ALREADY_WATCHED: `already_watched`,
   FAVORITE: `favorite`
 };
 

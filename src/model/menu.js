@@ -20,11 +20,11 @@ export default class SiteMenuModel extends Observer {
   filterFilms(films, menuItem) {
     switch (menuItem) {
       case MenuItem.WATCHLIST:
-        return films.filter(({userDetails}) => userDetails.watchlist);
+        return films.filter(({user_details: userDetails}) => userDetails.watchlist);
       case MenuItem.HISTORY:
-        return films.filter(({userDetails}) => userDetails.alreadyWatched);
+        return films.filter(({user_details: userDetails}) => userDetails.already_watched);
       case MenuItem.FAVORITES:
-        return films.filter(({userDetails}) => userDetails.favorite);
+        return films.filter(({user_details: userDetails}) => userDetails.favorite);
     }
 
     return films;
@@ -33,9 +33,9 @@ export default class SiteMenuModel extends Observer {
   sortFilms(films, sortType) {
     switch (sortType) {
       case SortType.DATE:
-        return films.slice().sort((a, b) => dayjs(b.filmInfo.release.date).isAfter(dayjs(a.filmInfo.release.date)) ? 1 : -1);
+        return films.slice().sort((a, b) => dayjs(b.film_info.release.date).isAfter(dayjs(a.film_info.release.date)) ? 1 : -1);
       case SortType.RATING:
-        return films.slice().sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+        return films.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
     }
 
     return films;

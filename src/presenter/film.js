@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import FilmCardView from "../view/film-card/film-card";
-import FilmsModel from "../model/films";
 import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
@@ -77,7 +76,7 @@ export default class FilmPresenter {
 
     const updatedUserDetails = Object.assign(
         {},
-        this._filmCard.userDetails,
+        this._filmCard.user_details,
         propToChange
     );
 
@@ -85,29 +84,27 @@ export default class FilmPresenter {
         {},
         this._filmCard,
         {
-          userDetails: updatedUserDetails
+          "user_details": updatedUserDetails
         }
     );
 
-    const adaptedToServerFilm = FilmsModel.adaptFilmToServer(updatedFilmCard);
-
-    this._api.updateFilm(adaptedToServerFilm)
+    this._api.updateFilm(updatedFilmCard)
     .then((filmCard) => this._changeData(filmCard));
   }
 
   _getClickedProp(classList) {
     if (classList.contains(CardControls.WATCHLIST)) {
       return {
-        watchlist: !this._filmCard.userDetails.watchlist
+        "watchlist": !this._filmCard.user_details.watchlist
       };
     } else if (classList.contains(CardControls.WATCHED)) {
       return {
-        alreadyWatched: !this._filmCard.userDetails.alreadyWatched,
-        watchingDate: dayjs().format()
+        "already_watched": !this._filmCard.user_details.already_watched,
+        "watching_date": dayjs().format()
       };
     } else {
       return {
-        favorite: !this._filmCard.userDetails.favorite
+        "favorite": !this._filmCard.user_details.favorite
       };
     }
   }

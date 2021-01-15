@@ -1,4 +1,3 @@
-import FilmsModel from "../src/model/films";
 import {Method, Url, Header} from "../src/utils/constants";
 
 export default class Api {
@@ -9,8 +8,7 @@ export default class Api {
 
   getFilms() {
     return this._load({url: Url.FILMS})
-      .then((response) => response.json())
-      .then((films) => films.map(FilmsModel.adaptFilmToClient));
+      .then((response) => response.json());
   }
 
   updateFilm(film) {
@@ -20,14 +18,12 @@ export default class Api {
       body: JSON.stringify(film),
       headers: new Headers({[Header.CONTENT_TYPE]: `application/json`})
     })
-      .then((response) => response.json())
-      .then((updatedFilm) => FilmsModel.adaptFilmToClient(updatedFilm));
+      .then((response) => response.json());
   }
 
   getFilmComments(id) {
     return this._load({url: `${Url.COMMENTS}/${id}`})
-      .then((response) => response.json())
-      .then((comments) => comments);
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

@@ -1,10 +1,10 @@
 import dayjs from "dayjs";
 import {convertDurationIntoHours, getShortDescription} from "../../utils/common";
 
-export const createFilmCardTemplate = ({id, filmInfo, userDetails}, commentsCount) => {
-  const {title, totalRating, release, runtime, genre, poster, description} = filmInfo;
+export const createFilmCardTemplate = ({id, film_info: filmInfo, user_details: userDetails}, commentsCount) => {
+  const {title, total_rating: totalRating, release, runtime, genre, poster, description} = filmInfo;
   const [firstGenre] = genre;
-  const {alreadyWatched, watchlist, favorite} = userDetails;
+  const {already_watched: alreadyWatched, watchlist, favorite} = userDetails;
   const {date} = release;
   const releaseYear = dayjs(date).year();
 

@@ -73,8 +73,8 @@ const getWatchedFilmsForPeriod = (watchedFilms, period) => {
     const now = dayjs();
     const startPeriod = now.subtract(1, periodToShow);
 
-    watchedFilmsForPeriod = watchedFilms.filter(({userDetails}) => {
-      const watchDate = dayjs(userDetails.watchingDate);
+    watchedFilmsForPeriod = watchedFilms.filter(({user_details: userDetails}) => {
+      const watchDate = dayjs(userDetails.watching_date);
       return watchDate.isAfter(startPeriod) && watchDate.isBefore(now);
     });
   }
