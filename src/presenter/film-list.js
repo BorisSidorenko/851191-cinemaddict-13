@@ -47,6 +47,7 @@ export default class FilmListPresenter {
     this._statsComponent = null;
 
     this._isLoading = true;
+    this._shownFilmsCardsCount = null;
 
     this._handleMenuItemChange = this._handleMenuItemChange.bind(this);
     this._handleSortedListChange = this._handleSortedListChange.bind(this);
@@ -84,8 +85,8 @@ export default class FilmListPresenter {
 
   _handleSortedListChange() {
     const films = this._getFilms(true);
-    const filmsCountToShow = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
-    const filmsToShow = films.slice(0, filmsCountToShow);
+
+    const filmsToShow = films.slice(0, this._shownFilmsCardsCount);
 
     this._renderFilmsCards(filmsToShow);
     this._renderShowMoreButton();
@@ -220,7 +221,9 @@ export default class FilmListPresenter {
     render(filmsWrapperComponent, filmsListComponent);
 
     this._renderFilmsListContainer();
-    this._renderFilmsCards(this._getFilms(true).slice(0, CARDS_TO_SHOW_COUNT));
+
+    this._shownFilmsCardsCount = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
+    this._renderFilmsCards(this._getFilms(true).slice(0, this._shownFilmsCardsCount));
 
     this._renderShowMoreButton();
   }
@@ -243,8 +246,9 @@ export default class FilmListPresenter {
 
   _handleShowMoreButtonClick() {
     showMoreButtonClickCounter += 1;
+    this._shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
 
-    const cardsToShow = this._getFilms(true).slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter);
+    const cardsToShow = this._getFilms(true).slice(0, this._shownFilmsCardsCount);
 
     this._renderFilmsCards(cardsToShow);
 
@@ -256,7 +260,7 @@ export default class FilmListPresenter {
   }
 
   _renderShowMoreButton() {
-    if (this._getFilms(true).length > CARDS_TO_SHOW_COUNT) {
+    if (this._getFilms(true).length > this._shownFilmsCardsCount) {
       render(filmsListComponent, showMoreButtonComponent);
       showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
     }
@@ -324,9 +328,7 @@ export default class FilmListPresenter {
         popupPresenter.init(updatedFilm);
       }
 
-      const shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
-
-      this._renderFilmsCards(films.slice(0, shownFilmsCardsCount));
+      this._renderFilmsCards(films.slice(0, this._shownFilmsCardsCount));
       this._renderShowMoreButton();
     }
   }
