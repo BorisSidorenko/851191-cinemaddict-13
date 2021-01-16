@@ -7,6 +7,7 @@ import FilmsListContainer from "../view/films-list-container/films-list-containe
 import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
 import StatsView from "../view/stats/stats";
+import LoadingView from "../view/films-loading/films-loading";
 import FilmPresenter from "../presenter/film";
 import PopupPresenter from "../presenter/popup";
 
@@ -19,16 +20,18 @@ const filmsListComponent = new FilmsListView();
 const emptyFilmsListComponent = new EmptyFilmsListView();
 const filmsListContainerComponent = new FilmsListContainer();
 const showMoreButtonComponent = new ShowMoreButtonView();
+const loadingComponent = new LoadingView();
 let showMoreButtonClickCounter = 1;
 
 export default class FilmListPresenter {
-  constructor(headerContainer, mainContainer, footerContainer, filmsModel, commentsModel, menuModel) {
+  constructor(headerContainer, mainContainer, footerContainer, filmsModel, commentsModel, menuModel, api) {
     this._headerContainer = headerContainer;
     this._mainContainer = mainContainer;
     this._footerContainer = footerContainer;
     this._filmsModel = filmsModel;
     this._commentsModel = commentsModel;
     this._menuModel = menuModel;
+    this._api = api;
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
     this._filmPresenter = {};
@@ -40,18 +43,28 @@ export default class FilmListPresenter {
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
     this._currentMenuItem = this._menuModel.menuItem;
+    this._filmsCountComponent = null;
     this._statsComponent = null;
+
+    this._isLoading = true;
+    this._shownFilmsCardsCount = null;
 
     this._handleMenuItemChange = this._handleMenuItemChange.bind(this);
     this._handleSortedListChange = this._handleSortedListChange.bind(this);
-
+    this._handleCommentsReady = this._handleCommentsReady.bind(this);
 
     this._menuModel.addObserver(this._handleMenuItemChange);
     this._menuModel.addObserver(this._handleSortedListChange);
     this._filmsModel.addObserver(this._handleFilmChange);
+    this._commentsModel.addObserver(this._handleCommentsReady);
   }
 
   init() {
+    this._render();
+  }
+
+  _handleCommentsReady() {
+    this._isLoading = false;
     this._render();
   }
 
@@ -68,12 +81,13 @@ export default class FilmListPresenter {
 
   _resetShowMoreButtonClickCounter() {
     showMoreButtonClickCounter = 1;
+    this._shownFilmsCardsCount = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
   }
 
   _handleSortedListChange() {
     const films = this._getFilms(true);
-    const filmsCountToShow = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
-    const filmsToShow = films.slice(0, filmsCountToShow);
+
+    const filmsToShow = films.slice(0, this._shownFilmsCardsCount);
 
     this._renderFilmsCards(filmsToShow);
     this._renderShowMoreButton();
@@ -146,10 +160,6 @@ export default class FilmListPresenter {
     return films;
   }
 
-  _getComments() {
-    return this._commentsModel.comments;
-  }
-
   _getFilmCardComments(card) {
     return this._commentsModel.getFilmCardComments(card);
   }
@@ -170,11 +180,33 @@ export default class FilmListPresenter {
     render(this._mainContainer, filmsWrapperComponent);
   }
 
-  _render() {
-    if (this._getFilms().length === 0) {
+  _renderLoading() {
+    this._renderFilmsWrapper();
+    render(filmsWrapperComponent, loadingComponent);
+    this._renderFilmsCount();
+  }
+
+  _checkFilmsAvailable() {
+    if (this._getFilms().length === 0 || this._commentsModel.getComments().length === 0) {
       this._renderEmptyFilmsList();
-      return;
+      return false;
+    } else {
+      remove(emptyFilmsListComponent);
+      return true;
     }
+  }
+
+  _render() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    } else {
+      remove(loadingComponent);
+      if (!this._checkFilmsAvailable()) {
+        return;
+      }
+    }
+
 
     this._renderProfile();
 
@@ -190,7 +222,9 @@ export default class FilmListPresenter {
     render(filmsWrapperComponent, filmsListComponent);
 
     this._renderFilmsListContainer();
-    this._renderFilmsCards(this._getFilms(true).slice(0, CARDS_TO_SHOW_COUNT));
+
+    this._shownFilmsCardsCount = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
+    this._renderFilmsCards(this._getFilms(true).slice(0, this._shownFilmsCardsCount));
 
     this._renderShowMoreButton();
   }
@@ -213,8 +247,9 @@ export default class FilmListPresenter {
 
   _handleShowMoreButtonClick() {
     showMoreButtonClickCounter += 1;
+    this._shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
 
-    const cardsToShow = this._getFilms(true).slice(0, CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter);
+    const cardsToShow = this._getFilms(true).slice(0, this._shownFilmsCardsCount);
 
     this._renderFilmsCards(cardsToShow);
 
@@ -226,7 +261,7 @@ export default class FilmListPresenter {
   }
 
   _renderShowMoreButton() {
-    if (this._getFilms(true).length > CARDS_TO_SHOW_COUNT) {
+    if (this._getFilms(true).length > this._shownFilmsCardsCount) {
       render(filmsListComponent, showMoreButtonComponent);
       showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
     }
@@ -235,20 +270,25 @@ export default class FilmListPresenter {
   _renderFilmsCount() {
     let films = this._getFilms();
     const availableFilmsCount = films ? films.length : 0;
-    const filmsCountComponent = new FilmsCountView(availableFilmsCount);
 
-    render(this._footerContainer, filmsCountComponent);
+    const prevFilmsCountComponent = this._filmsCountComponent;
+
+    if (prevFilmsCountComponent) {
+      remove(prevFilmsCountComponent);
+    }
+
+    this._filmsCountComponent = new FilmsCountView(availableFilmsCount);
+
+    render(this._footerContainer, this._filmsCountComponent);
   }
 
   _renderFilmCard(cardToShow) {
-    const comments = this._getComments();
-
     const paramObj = {
-      comments,
       mainContainer: this._mainContainer,
       filmsListContainer: filmsListContainerComponent,
       changeData: this._filmsModel.updateFilm,
-      cardClick: this._handleFilmCardClick
+      cardClick: this._handleFilmCardClick,
+      api: this._api
     };
 
     const filmPresenter = new FilmPresenter(paramObj);
@@ -275,22 +315,23 @@ export default class FilmListPresenter {
   }
 
   _handleFilmChange(updatedFilm) {
-    const comments = this._getFilmCardComments(updatedFilm);
-    const commentsCount = comments.length;
-    const currentPresenter = this._filmPresenter[updatedFilm.id];
-    const films = this._getFilms(true);
+    if (updatedFilm) {
+      const films = this._getFilms(true);
+      const comments = this._getFilmCardComments(updatedFilm);
+      const commentsCount = comments.length;
+      const currentPresenter = this._filmPresenter[updatedFilm.id];
 
-    currentPresenter.init(films, updatedFilm, commentsCount);
+      currentPresenter.init(films, updatedFilm, commentsCount);
 
-    const popupPresenter = this._filmPopupPresenter[updatedFilm.id];
+      const popupPresenter = this._filmPopupPresenter[updatedFilm.id];
 
-    if (popupPresenter) {
-      popupPresenter.init(updatedFilm);
+      if (popupPresenter) {
+        popupPresenter.init(updatedFilm);
+      }
+
+      this._renderFilmsCards(films.slice(0, this._shownFilmsCardsCount));
+      this._renderShowMoreButton();
     }
-
-    const shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
-
-    this._renderFilmsCards(films.slice(0, shownFilmsCardsCount));
   }
 
   _handleFilmCardClick(card) {
@@ -302,7 +343,8 @@ export default class FilmListPresenter {
     const paramObj = {
       mainContainer: this._mainContainer,
       changeData: this._filmsModel.updateFilm,
-      commentsModel: this._commentsModel
+      commentsModel: this._commentsModel,
+      api: this._api
     };
 
     const popupPresenter = new PopupPresenter(paramObj);

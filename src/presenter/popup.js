@@ -20,10 +20,11 @@ import {render, remove} from "../utils/render";
 import {UserAction} from "../utils/constants";
 
 export default class PopupPresenter {
-  constructor({mainContainer, changeData, commentsModel}) {
+  constructor({mainContainer, changeData, commentsModel, api}) {
     this._mainContainer = mainContainer;
     this._changeData = changeData;
     this._commentsModel = commentsModel;
+    this._api = api;
     this._handleOpenedPopup = this._handleOpenedPopup.bind(this);
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
     this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
@@ -166,7 +167,7 @@ export default class PopupPresenter {
     const filmPopupInfoWrapComponent = new FilmPopupInfoWrapView();
     render(popupTopContainer, filmPopupInfoWrapComponent);
 
-    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card.filmInfo));
+    render(filmPopupInfoWrapComponent, new FilmPopupPosterView(card.film_info));
     render(filmPopupInfoWrapComponent, new FilmPopupInfoView(card));
   }
 
@@ -196,7 +197,7 @@ export default class PopupPresenter {
     const propToChangeName = this._getKeyByValue(PopupControlsName, clickedControlName);
 
     let propToChange = {
-      [`${propToChangeName}`]: !this._filmCard.userDetails[propToChangeName]
+      [`${propToChangeName}`]: !this._filmCard.user_details[propToChangeName]
     };
 
     if (propToChangeName === UserDetails.ALREADY_WATCHED) {
@@ -204,7 +205,7 @@ export default class PopupPresenter {
           {},
           propToChange,
           {
-            watchingDate: dayjs().format()
+            "watching_date": dayjs().format()
           }
       );
     }
@@ -217,7 +218,7 @@ export default class PopupPresenter {
 
     const updatedUserDetails = Object.assign(
         {},
-        this._filmCard.userDetails,
+        this._filmCard.user_details,
         propToChange
     );
 
@@ -225,11 +226,12 @@ export default class PopupPresenter {
         {},
         this._filmCard,
         {
-          userDetails: updatedUserDetails
+          "user_details": updatedUserDetails
         }
     );
 
-    this._changeData(updatedFilmCard);
+    this._api.updateFilm(updatedFilmCard)
+    .then((filmCard) => this._changeData(filmCard));
   }
 
   _handleModelEvent() {

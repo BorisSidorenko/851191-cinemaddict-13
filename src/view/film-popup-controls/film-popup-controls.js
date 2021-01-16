@@ -9,7 +9,7 @@ export default class FilmPopupControls extends AbstractView {
   }
 
   getTemplate() {
-    return createFilmPopupControlsTemplate(this._card.userDetails);
+    return createFilmPopupControlsTemplate(this._card.user_details);
   }
 
   setClickHandlers(callback) {

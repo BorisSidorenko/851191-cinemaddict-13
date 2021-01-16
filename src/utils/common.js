@@ -39,7 +39,7 @@ export const getRandomDateInYearRange = (startYear, endYear, startMonth = MIN_MO
 
 export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
 
-export const getWatchedFilms = (films) => films.filter(({userDetails}) => userDetails.alreadyWatched);
+export const getWatchedFilms = (films) => films.filter(({user_details: userDetails}) => userDetails.already_watched);
 
 export const convertDurationIntoHours = (duration) => {
   if (duration > MINUTES_IN_HOUR) {
@@ -54,7 +54,7 @@ export const convertDurationIntoHours = (duration) => {
 };
 
 export const getFilmsDuration = (films) => {
-  const totalDuration = films.reduce((total, {filmInfo}) => {
+  const totalDuration = films.reduce((total, {film_info: filmInfo}) => {
     return total + filmInfo.runtime;
   }, 0);
 
@@ -62,7 +62,7 @@ export const getFilmsDuration = (films) => {
 };
 
 export const getWatchedFilmsGenresAndCount = (watchedFilms) => {
-  const watchedGenres = watchedFilms.map(({filmInfo}) => filmInfo.genre).flat();
+  const watchedGenres = watchedFilms.map(({film_info: filmInfo}) => filmInfo.genre).flat();
 
   const genresAndCount = {};
   watchedGenres.forEach((genre) => {

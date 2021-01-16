@@ -33,14 +33,14 @@ export const CardControls = {
 };
 
 export const PopupControlsName = {
-  watchlist: `watchlist`,
-  alreadyWatched: `watched`,
-  favorite: `favorite`
+  "watchlist": `watchlist`,
+  "already_watched": `watched`,
+  "favorite": `favorite`
 };
 
 export const UserDetails = {
   WATCHLIST: `watchlist`,
-  ALREADY_WATCHED: `alreadyWatched`,
+  ALREADY_WATCHED: `already_watched`,
   FAVORITE: `favorite`
 };
 
@@ -81,3 +81,26 @@ export const StatisticsPeriod = {
   MONTH: `month`,
   YEAR: `year`
 };
+
+export const Server = {
+  ENDPOINT: `https://13.ecmascript.pages.academy/cinemaddict`,
+  AUTHORIZATION: `Basic 98798asd9a8sd7a99`
+};
+
+export const Header = {
+  AUTHORIZATION: `Authorization`,
+  CONTENT_TYPE: `Content-Type`
+};
+
+export const Url = {
+  FILMS: `movies`,
+  COMMENTS: `comments`
+};
+
+export const Method = {
+  GET: `GET`,
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`
+};
+

@@ -8,11 +8,12 @@ export default class CommentsModel extends Observer {
     this._comments = [];
   }
 
-  set comments(comments) {
+  setComments(comments) {
     this._comments = comments.slice();
+    this._notify();
   }
 
-  get comments() {
+  getComments() {
     return clonedeep(this._comments);
   }
 
@@ -24,11 +25,8 @@ export default class CommentsModel extends Observer {
     this._comments = this._comments.filter((comment) => comment.id !== id);
   }
 
-  getFilmCardComments({comments}) {
-    const commentIds = comments;
-    const cardComments = this._comments.filter((comment) => commentIds.find((commentId) => comment.id === commentId));
-
-    return cardComments;
+  getFilmCardComments({id}) {
+    return this._comments[id];
   }
 
   updateComments(userAction, comment) {

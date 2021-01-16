@@ -8,9 +8,9 @@ const createGenresTemplate = (genres) => {
   return genres.map(getGengresTemplate).join(``);
 };
 
-export const createFilmPopupInfoTemplate = ({filmInfo}) => {
-  const {title, alternativeTitle, totalRating, director, writers, actors, release, runtime, genre, description} = filmInfo;
-  const {date, releaseCountry} = release;
+export const createFilmPopupInfoTemplate = ({film_info: filmInfo}) => {
+  const {title, alternative_title: alternativeTitle, total_rating: totalRating, director, writers, actors, release, runtime, genre, description} = filmInfo;
+  const {date, release_country: releaseCountry} = release;
   const releaseDate = dayjs(date).format(RELEASE_DATE_FORMAT);
 
   return `<div class="film-details__info">
