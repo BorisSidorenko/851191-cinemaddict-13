@@ -13,7 +13,6 @@ import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-pop
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
 
-import {generateComment} from "../mock/comment";
 import {isEscEvent, isSubmitFormEvent} from "../utils/common";
 import {PopupControlsName, UserDetails} from "../utils/constants";
 import {render, remove} from "../utils/render";
@@ -94,20 +93,15 @@ export default class PopupPresenter {
   }
 
   _submitForm() {
-    const commentTemplate = generateComment();
     const commentEmoji = this._popupFormComponent.element[`comment-emoji`].value;
     const commentText = this._popupFormComponent.element[`comment`].value;
 
     if (commentEmoji && commentText) {
-      const localComment = Object.assign(
-          {},
-          commentTemplate,
-          {
-            comment: commentText,
-            emotion: commentEmoji,
-            text: commentText
-          }
-      );
+      const localComment = {
+        comment: commentText,
+        date: dayjs().format(),
+        emotion: commentEmoji,
+      };
 
       this._api.addComment(this._filmCard.id, localComment)
       .then(({movie, comments}) => {
