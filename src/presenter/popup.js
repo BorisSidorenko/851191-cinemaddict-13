@@ -254,15 +254,15 @@ export default class PopupPresenter {
     }
   }
 
-  _disableDeleteButton(deleteButton) {
-    deleteButton.disabled = true;
-    deleteButton.innerHTML = `Deleting…`;
+  _disableDeleteButton(deleteButton, isButtonDisabled) {
+    deleteButton.disabled = isButtonDisabled;
+    deleteButton.innerHTML = isButtonDisabled ? `Deleting…` : `Delete`;
   }
 
   _handleDeleteCommentButtonClick(evt) {
     if (evt.target.tagName === `BUTTON`) {
       const deleteButton = evt.target;
-      this._disableDeleteButton(deleteButton);
+      this._disableDeleteButton(deleteButton, true);
 
       const commentId = evt.target.dataset.idComment;
       const cardComments = this._getCardComments();
@@ -275,7 +275,8 @@ export default class PopupPresenter {
           commentToDelete
       ))
       .then(() => this._removeCommentIdFromCard(commentToDelete))
-      .then(() => this._updateCommnetsCount());
+      .then(() => this._updateCommnetsCount())
+      .catch(() => this._disableDeleteButton(deleteButton, false));
     }
   }
 
