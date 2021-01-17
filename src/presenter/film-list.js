@@ -63,9 +63,11 @@ export default class FilmListPresenter {
     this._render();
   }
 
-  _handleCommentsReady() {
-    this._isLoading = false;
-    this._render();
+  _handleCommentsReady(isInit) {
+    if (isInit) {
+      this._isLoading = false;
+      this._render();
+    }
   }
 
   _renderProfile() {

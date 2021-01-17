@@ -10,7 +10,7 @@ export default class CommentsModel extends Observer {
 
   setComments(comments) {
     this._comments = comments.slice();
-    this._notify();
+    this._notify(true);
   }
 
   getComments() {
@@ -21,24 +21,24 @@ export default class CommentsModel extends Observer {
     this._comments = [comment, ...this._comments.slice()];
   }
 
-  _deleteComment({id}) {
-    this._comments = this._comments.filter((comment) => comment.id !== id);
+  _deleteComment(filmCard, commentToDelete) {
+    this._comments[filmCard.id] = this._comments[filmCard.id].filter((comment) => comment.id !== commentToDelete.id);
   }
 
   getFilmCardComments({id}) {
     return this._comments[id];
   }
 
-  updateComments(userAction, comment) {
+  updateComments(userAction, filmCard, commentToDelete) {
     switch (userAction) {
       case UserAction.ADD_COMMENT:
-        this._addComment(comment);
+        this._addComment(filmCard, commentToDelete);
         break;
       case UserAction.DELETE_COMMENT:
-        this._deleteComment(comment);
+        this._deleteComment(filmCard, commentToDelete);
         break;
     }
 
-    this._notify();
+    this._notify(false);
   }
 }

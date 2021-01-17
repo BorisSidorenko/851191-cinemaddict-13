@@ -74,11 +74,14 @@ export default class PopupPresenter {
   }
 
   _updateCommnetsCount() {
+    const comments = this._getCardComments();
+    const commentsIds = comments.map(({id}) => id);
+
     const updatedFilmCard = Object.assign(
         {},
         this._filmCard,
         {
-          commentsCount: this._getCardComments().length
+          comments: commentsIds
         }
     );
 
@@ -234,8 +237,10 @@ export default class PopupPresenter {
     .then((filmCard) => this._changeData(filmCard));
   }
 
-  _handleModelEvent() {
-    this._appendPopupWithComments();
+  _handleModelEvent(isInit) {
+    if (!isInit) {
+      this._appendPopupWithComments();
+    }
   }
 
   _handleDeleteCommentButtonClick(evt) {
@@ -244,14 +249,14 @@ export default class PopupPresenter {
       const cardComments = this._getCardComments();
       const commentToDelete = cardComments.find((comment) => comment.id === commentId);
 
-      this._commentsModel.updateComments(
+      this._api.deleteComment(commentId)
+      .then(() => this._commentsModel.updateComments(
           UserAction.DELETE_COMMENT,
+          this._filmCard,
           commentToDelete
-      );
-
-      this._removeCommentIdFromCard(commentToDelete);
-
-      this._updateCommnetsCount();
+      ))
+      .then(() => this._removeCommentIdFromCard(commentToDelete))
+      .then(() => this._updateCommnetsCount());
     }
   }
 
