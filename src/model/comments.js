@@ -17,8 +17,8 @@ export default class CommentsModel extends Observer {
     return clonedeep(this._comments);
   }
 
-  _addComment(comment) {
-    this._comments = [comment, ...this._comments.slice()];
+  _addComment(filmCard, comments) {
+    this._comments[filmCard.id] = comments;
   }
 
   _deleteComment(filmCard, commentToDelete) {
@@ -29,13 +29,13 @@ export default class CommentsModel extends Observer {
     return this._comments[id];
   }
 
-  updateComments(userAction, filmCard, commentToDelete) {
+  updateComments(userAction, filmCard, update) {
     switch (userAction) {
       case UserAction.ADD_COMMENT:
-        this._addComment(filmCard, commentToDelete);
+        this._addComment(filmCard, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._deleteComment(filmCard, commentToDelete);
+        this._deleteComment(filmCard, update);
         break;
     }
 

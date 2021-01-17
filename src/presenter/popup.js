@@ -41,6 +41,7 @@ export default class PopupPresenter {
     this._popupTopContainerComponent = null;
     this._popupFormComponent = null;
     this._handleDeleteCommentButtonClick = this._handleDeleteCommentButtonClick.bind(this);
+    this._submitForm = this._submitForm.bind(this);
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._commentsModel.addObserver(this._handleModelEvent);
@@ -88,10 +89,6 @@ export default class PopupPresenter {
     this._changeData(updatedFilmCard);
   }
 
-  _addNewCommentIdToCard({id}) {
-    this._filmCard.comments = [id, ...this._filmCard.comments.slice()];
-  }
-
   _removeCommentIdFromCard({id}) {
     this._filmCard.comments = this._filmCard.comments.filter((comment) => comment !== id);
   }
@@ -112,19 +109,24 @@ export default class PopupPresenter {
           }
       );
 
-      this._addNewCommentIdToCard(localComment);
-
-      this._commentsModel.updateComments(
-          UserAction.ADD_COMMENT,
-          localComment
-      );
-
-      this._updateCommnetsCount();
+      this._api.addComment(this._filmCard.id, localComment)
+      .then(({movie, comments}) => {
+        this._filmCard = movie;
+        return comments;
+      })
+      .then((comments) => {
+        this._commentsModel.updateComments(
+            UserAction.ADD_COMMENT,
+            this._filmCard,
+            comments
+        );
+      })
+      .then(() => this._updateCommnetsCount());
     }
   }
 
   _handleFormSubmit(evt) {
-    isSubmitFormEvent(evt, this._submitForm.bind(this));
+    isSubmitFormEvent(evt, this._submitForm);
   }
 
   _closePopup() {
