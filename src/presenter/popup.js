@@ -245,8 +245,16 @@ export default class PopupPresenter {
     }
   }
 
+  _disableDeleteButton(deleteButton) {
+    deleteButton.disabled = true;
+    deleteButton.innerHTML = `Deleting…`;
+  }
+
   _handleDeleteCommentButtonClick(evt) {
     if (evt.target.tagName === `BUTTON`) {
+      const deleteButton = evt.target;
+      this._disableDeleteButton(deleteButton);
+
       const commentId = evt.target.dataset.idComment;
       const cardComments = this._getCardComments();
       const commentToDelete = cardComments.find((comment) => comment.id === commentId);
