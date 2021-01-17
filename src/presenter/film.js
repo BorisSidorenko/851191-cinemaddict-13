@@ -95,7 +95,7 @@ export default class FilmPresenter {
   _getClickedProp(classList) {
     if (classList.contains(CardControls.WATCHLIST)) {
       return {
-        "watchlist": !this._filmCard.user_details.watchlist
+        watchlist: !this._filmCard.user_details.watchlist
       };
     } else if (classList.contains(CardControls.WATCHED)) {
       return {
@@ -104,7 +104,7 @@ export default class FilmPresenter {
       };
     } else {
       return {
-        "favorite": !this._filmCard.user_details.favorite
+        favorite: !this._filmCard.user_details.favorite
       };
     }
   }
