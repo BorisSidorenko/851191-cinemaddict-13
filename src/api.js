@@ -26,6 +26,13 @@ export default class Api {
       .then((response) => response.json());
   }
 
+  deleteComment(id) {
+    return this._load({
+      url: `${Url.COMMENTS}/${id}`,
+      method: Method.DELETE
+    });
+  }
+
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(Header.AUTHORIZATION, this._auth);
 
