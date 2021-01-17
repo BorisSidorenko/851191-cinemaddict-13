@@ -93,6 +93,17 @@ export default class PopupPresenter {
     this._filmCard.comments = this._filmCard.comments.filter((comment) => comment !== id);
   }
 
+  _disablePopupForm(isFormDisabled) {
+    const formElements = Array.from(this._popupFormComponent.element.elements);
+    const [, ...restElements] = formElements;
+    const attrToDisable = isFormDisabled ? `disabled` : ``;
+
+    restElements.forEach((element) => {
+      element.setAttribute(attrToDisable, ``);
+    });
+
+  }
+
   _submitForm() {
     const commentEmoji = this._popupFormComponent.element[`comment-emoji`].value;
     const commentText = this._popupFormComponent.element[`comment`].value;
@@ -104,9 +115,7 @@ export default class PopupPresenter {
         emotion: commentEmoji,
       };
 
-      this._filmPopupNewCommentComponent.updateData({
-        isSubmitDisabled: true
-      });
+      this._disablePopupForm(true);
 
       this._api.addComment(this._filmCard.id, localComment)
       .then(({movie, comments}) => {
@@ -120,7 +129,8 @@ export default class PopupPresenter {
             comments
         );
       })
-      .then(() => this._updateCommnetsCount());
+      .then(() => this._updateCommnetsCount())
+      .catch(() => this._disablePopupForm(false));
     }
   }
 
