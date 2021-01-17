@@ -96,12 +96,14 @@ export default class PopupPresenter {
   _disablePopupForm(isFormDisabled) {
     const formElements = Array.from(this._popupFormComponent.element.elements);
     const [, ...restElements] = formElements;
-    const attrToDisable = isFormDisabled ? `disabled` : ``;
 
     restElements.forEach((element) => {
-      element.setAttribute(attrToDisable, ``);
+      element.disabled = isFormDisabled;
     });
+  }
 
+  _shakeFormOnError() {
+    this._popupFormComponent.shakeElement();
   }
 
   _submitForm() {
@@ -130,7 +132,10 @@ export default class PopupPresenter {
         );
       })
       .then(() => this._updateCommnetsCount())
-      .catch(() => this._disablePopupForm(false));
+      .catch(() => {
+        this._shakeFormOnError();
+        this._disablePopupForm(false);
+      });
     }
   }
 
@@ -276,7 +281,10 @@ export default class PopupPresenter {
       ))
       .then(() => this._removeCommentIdFromCard(commentToDelete))
       .then(() => this._updateCommnetsCount())
-      .catch(() => this._disableDeleteButton(deleteButton, false));
+      .catch(() => {
+        this._shakeFormOnError();
+        this._disableDeleteButton(deleteButton, false);
+      });
     }
   }
 

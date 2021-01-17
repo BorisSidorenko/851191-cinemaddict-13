@@ -7,6 +7,8 @@ export const ProfileRank = {
   MAX: 40
 };
 
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
 export const COMMENT_DATE_FORMAT = `YYYY/MM/DD hh:mm`;
 
