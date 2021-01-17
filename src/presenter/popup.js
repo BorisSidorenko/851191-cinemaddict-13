@@ -37,6 +37,7 @@ export default class PopupPresenter {
     this._filmCard = null;
     this._filmPopupCommentsWrapComponent = null;
     this._popupBottomContainerComponent = null;
+    this._filmPopupNewCommentComponent = null;
     this._popupTopContainerComponent = null;
     this._popupFormComponent = null;
     this._handleDeleteCommentButtonClick = this._handleDeleteCommentButtonClick.bind(this);
@@ -102,6 +103,10 @@ export default class PopupPresenter {
         date: dayjs().format(),
         emotion: commentEmoji,
       };
+
+      this._filmPopupNewCommentComponent.updateData({
+        isSubmitDisabled: true
+      });
 
       this._api.addComment(this._filmCard.id, localComment)
       .then(({movie, comments}) => {
@@ -282,8 +287,16 @@ export default class PopupPresenter {
     const popupCommentsComponent = new FilmPopupCommentsListView(comments);
     popupCommentsComponent.setDeleteButtonHandlers(this._handleDeleteCommentButtonClick);
 
+    const prevFilmPopupNewCommentComponent = this._filmPopupNewCommentComponent;
+
+    if (prevFilmPopupNewCommentComponent) {
+      remove(prevFilmPopupNewCommentComponent);
+    }
+
+    this._filmPopupNewCommentComponent = new FilmPopupNewCommentView();
+
     render(this._filmPopupCommentsWrapComponent, popupCommentsComponent);
-    render(this._filmPopupCommentsWrapComponent, new FilmPopupNewCommentView());
+    render(this._filmPopupCommentsWrapComponent, this._filmPopupNewCommentComponent);
   }
 
   _renderPopupTopContainer(popupTopContainer, card) {

@@ -12,7 +12,7 @@ export default class FilmPopupNewComment extends SmartView {
   }
 
   getTemplate() {
-    return createFilmPopupNewCommentTemplate(this._data);
+    return createFilmPopupNewCommentTemplate(this._data, this._data.isSubmitDisabled);
   }
 
   _emojiChangeHandler(evt) {
