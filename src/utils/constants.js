@@ -2,20 +2,12 @@ export const CARDS_TO_SHOW_COUNT = 5;
 
 export const MINUTES_IN_HOUR = 60;
 
-export const ProfileRank = {
-  MIN: 0,
-  MAX: 40
-};
-
 export const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
 export const COMMENT_DATE_FORMAT = `YYYY/MM/DD hh:mm`;
 
 export const DESCRIPTION_SHORT_LENGTH = 139;
-
-export const MAX_MONTH = 12;
-export const MIN_MONTH = 1;
 
 export const ELEMENTS_TO_SHOW_POPUP = [
   `film-card__poster`,

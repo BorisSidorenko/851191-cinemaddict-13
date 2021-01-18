@@ -1,13 +1,9 @@
-import dayjs from "dayjs";
-import {Rank, MINUTES_IN_HOUR, MIN_MONTH, MAX_MONTH, DESCRIPTION_SHORT_LENGTH} from "../utils/constants";
+import {Rank, MINUTES_IN_HOUR, DESCRIPTION_SHORT_LENGTH} from "../utils/constants";
 
 const KeyCode = {
   ESC_CODE: `Escape`,
   ENTER: `Enter`
 };
-
-const MAX_DATE = 31;
-const MIN_DATE = 1;
 
 export const isEscEvent = (evt, action) => {
   if (evt.key === KeyCode.ESC_CODE) {
@@ -20,24 +16,6 @@ export const isSubmitFormEvent = (evt, action) => {
     action();
   }
 };
-
-export const getRandomIntInRange = (a = 1, b = 0) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-export const getRandomInt = (maxNumber) => getRandomIntInRange(maxNumber - 1);
-
-export const getRandomDateInYearRange = (startYear, endYear, startMonth = MIN_MONTH, endMonth = MAX_MONTH, dateFormat) => {
-  const year = getRandomIntInRange(startYear, endYear);
-  const month = getRandomIntInRange(startMonth, endMonth);
-  const date = getRandomIntInRange(MAX_DATE, MIN_DATE);
-
-  return dayjs(`${year}-${month}-${date}`).format(dateFormat);
-};
-
-export const getArrayOfObjects = (count, cb) => Array(count).fill().map(() => cb());
 
 export const getWatchedFilms = (films) => films.filter(({user_details: userDetails}) => userDetails.already_watched);
 

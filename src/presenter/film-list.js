@@ -286,7 +286,6 @@ export default class FilmListPresenter {
 
   _renderFilmCard(cardToShow) {
     const paramObj = {
-      mainContainer: this._mainContainer,
       filmsListContainer: filmsListContainerComponent,
       changeData: this._filmsModel.updateFilm,
       cardClick: this._handleFilmCardClick,
