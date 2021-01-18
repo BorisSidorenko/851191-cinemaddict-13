@@ -4,7 +4,7 @@ import FilmListPresenter from "./presenter/film-list";
 import FilmsModel from "./model/films";
 import CommentsModel from "./model/comments";
 import MenuModel from "./model/menu";
-import Api from "././api";
+import Api from "./api/api";
 
 const api = new Api(Server.ENDPOINT, Server.AUTHORIZATION);
 

@@ -1,4 +1,4 @@
-import {Method, Url, Header} from "../src/utils/constants";
+import {Method, Url, Header} from "../utils/constants";
 
 export default class Api {
   constructor(endPoint, auth) {
