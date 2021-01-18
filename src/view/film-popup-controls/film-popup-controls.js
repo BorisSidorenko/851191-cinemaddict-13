@@ -19,13 +19,6 @@ export default class FilmPopupControls extends AbstractView {
     this.element.querySelector(`#favorite`).addEventListener(`click`, this._handleControlsClick);
   }
 
-  clearClickHandlers() {
-    this._callback.popupControlsClick = null;
-    this.element.querySelector(`#watchlist`).removeEventListener(`click`, this._handleControlsClick);
-    this.element.querySelector(`#watched`).removeEventListener(`click`, this._handleControlsClick);
-    this.element.querySelector(`#favorite`).removeEventListener(`click`, this._handleControlsClick);
-  }
-
   _handleControlsClick(evt) {
     evt.preventDefault();
     this._callback.popupControlsClick(evt);

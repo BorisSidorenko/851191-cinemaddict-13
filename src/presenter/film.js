@@ -4,8 +4,7 @@ import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
 export default class FilmPresenter {
-  constructor({mainContainer, filmsListContainer, changeData, cardClick, api}) {
-    this._mainContainer = mainContainer;
+  constructor({filmsListContainer, changeData, cardClick, api}) {
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
     this._filmsCards = null;
