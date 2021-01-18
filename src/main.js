@@ -38,3 +38,8 @@ api.getFilms()
 .then((allFilmsPromises) => Promise.all(allFilmsPromises))
 .catch(() => [])
 .then((comments) => commentsModel.setComments(comments));
+
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});
