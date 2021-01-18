@@ -13,7 +13,6 @@ import FilmPopupCommentsWrapView from "../view/film-popup-comments-wrap/film-pop
 import FilmPopupCommentsListView from "../view/film-popup-comments-list/film-popup-comments-list";
 import FilmPopupNewCommentView from "../view/film-popup-new-comment/film-popup-new-comment";
 
-import {generateComment} from "../mock/comment";
 import {isEscEvent, isSubmitFormEvent} from "../utils/common";
 import {PopupControlsName, UserDetails} from "../utils/constants";
 import {render, remove} from "../utils/render";
@@ -38,9 +37,11 @@ export default class PopupPresenter {
     this._filmCard = null;
     this._filmPopupCommentsWrapComponent = null;
     this._popupBottomContainerComponent = null;
+    this._filmPopupNewCommentComponent = null;
     this._popupTopContainerComponent = null;
     this._popupFormComponent = null;
     this._handleDeleteCommentButtonClick = this._handleDeleteCommentButtonClick.bind(this);
+    this._submitForm = this._submitForm.bind(this);
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._commentsModel.addObserver(this._handleModelEvent);
@@ -74,54 +75,72 @@ export default class PopupPresenter {
   }
 
   _updateCommnetsCount() {
+    const comments = this._getCardComments();
+    const commentsIds = comments.map(({id}) => id);
+
     const updatedFilmCard = Object.assign(
         {},
         this._filmCard,
         {
-          commentsCount: this._getCardComments().length
+          comments: commentsIds
         }
     );
 
     this._changeData(updatedFilmCard);
   }
 
-  _addNewCommentIdToCard({id}) {
-    this._filmCard.comments = [id, ...this._filmCard.comments.slice()];
-  }
-
   _removeCommentIdFromCard({id}) {
     this._filmCard.comments = this._filmCard.comments.filter((comment) => comment !== id);
   }
 
+  _disablePopupForm(isFormDisabled) {
+    const formElements = Array.from(this._popupFormComponent.element.elements);
+    const [, ...restElements] = formElements;
+
+    restElements.forEach((element) => {
+      element.disabled = isFormDisabled;
+    });
+  }
+
+  _shakeFormOnError() {
+    this._popupFormComponent.shakeElement();
+  }
+
   _submitForm() {
-    const commentTemplate = generateComment();
     const commentEmoji = this._popupFormComponent.element[`comment-emoji`].value;
     const commentText = this._popupFormComponent.element[`comment`].value;
 
     if (commentEmoji && commentText) {
-      const localComment = Object.assign(
-          {},
-          commentTemplate,
-          {
-            comment: commentText,
-            emotion: commentEmoji,
-            text: commentText
-          }
-      );
+      const localComment = {
+        comment: commentText,
+        date: dayjs().format(),
+        emotion: commentEmoji,
+      };
 
-      this._addNewCommentIdToCard(localComment);
+      this._disablePopupForm(true);
 
-      this._commentsModel.updateComments(
-          UserAction.ADD_COMMENT,
-          localComment
-      );
-
-      this._updateCommnetsCount();
+      this._api.addComment(this._filmCard.id, localComment)
+      .then(({movie, comments}) => {
+        this._filmCard = movie;
+        return comments;
+      })
+      .then((comments) => {
+        this._commentsModel.updateComments(
+            UserAction.ADD_COMMENT,
+            this._filmCard,
+            comments
+        );
+      })
+      .then(() => this._updateCommnetsCount())
+      .catch(() => {
+        this._shakeFormOnError();
+        this._disablePopupForm(false);
+      });
     }
   }
 
   _handleFormSubmit(evt) {
-    isSubmitFormEvent(evt, this._submitForm.bind(this));
+    isSubmitFormEvent(evt, this._submitForm);
   }
 
   _closePopup() {
@@ -234,24 +253,38 @@ export default class PopupPresenter {
     .then((filmCard) => this._changeData(filmCard));
   }
 
-  _handleModelEvent() {
-    this._appendPopupWithComments();
+  _handleModelEvent(isInit) {
+    if (!isInit) {
+      this._appendPopupWithComments();
+    }
+  }
+
+  _disableDeleteButton(deleteButton, isButtonDisabled) {
+    deleteButton.disabled = isButtonDisabled;
+    deleteButton.innerHTML = isButtonDisabled ? `Deleting…` : `Delete`;
   }
 
   _handleDeleteCommentButtonClick(evt) {
     if (evt.target.tagName === `BUTTON`) {
+      const deleteButton = evt.target;
+      this._disableDeleteButton(deleteButton, true);
+
       const commentId = evt.target.dataset.idComment;
       const cardComments = this._getCardComments();
       const commentToDelete = cardComments.find((comment) => comment.id === commentId);
 
-      this._commentsModel.updateComments(
+      this._api.deleteComment(commentId)
+      .then(() => this._commentsModel.updateComments(
           UserAction.DELETE_COMMENT,
+          this._filmCard,
           commentToDelete
-      );
-
-      this._removeCommentIdFromCard(commentToDelete);
-
-      this._updateCommnetsCount();
+      ))
+      .then(() => this._removeCommentIdFromCard(commentToDelete))
+      .then(() => this._updateCommnetsCount())
+      .catch(() => {
+        this._shakeFormOnError();
+        this._disableDeleteButton(deleteButton, false);
+      });
     }
   }
 
@@ -273,8 +306,16 @@ export default class PopupPresenter {
     const popupCommentsComponent = new FilmPopupCommentsListView(comments);
     popupCommentsComponent.setDeleteButtonHandlers(this._handleDeleteCommentButtonClick);
 
+    const prevFilmPopupNewCommentComponent = this._filmPopupNewCommentComponent;
+
+    if (prevFilmPopupNewCommentComponent) {
+      remove(prevFilmPopupNewCommentComponent);
+    }
+
+    this._filmPopupNewCommentComponent = new FilmPopupNewCommentView();
+
     render(this._filmPopupCommentsWrapComponent, popupCommentsComponent);
-    render(this._filmPopupCommentsWrapComponent, new FilmPopupNewCommentView());
+    render(this._filmPopupCommentsWrapComponent, this._filmPopupNewCommentComponent);
   }
 
   _renderPopupTopContainer(popupTopContainer, card) {

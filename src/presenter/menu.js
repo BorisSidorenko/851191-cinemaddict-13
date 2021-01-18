@@ -24,10 +24,12 @@ export default class MenuPresenter {
     this._render();
   }
 
-  _handleCommentsAvailability() {
-    const comments = this._commentsModel.getComments();
-    this._isCommentsAvailable = comments.length > 0;
-    this._render();
+  _handleCommentsAvailability(isInit) {
+    if (isInit) {
+      const comments = this._commentsModel.getComments();
+      this._isCommentsAvailable = comments.length > 0;
+      this._render();
+    }
   }
 
   _render() {

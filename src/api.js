@@ -26,6 +26,23 @@ export default class Api {
       .then((response) => response.json());
   }
 
+  deleteComment(id) {
+    return this._load({
+      url: `${Url.COMMENTS}/${id}`,
+      method: Method.DELETE
+    });
+  }
+
+  addComment(filmId, localComment) {
+    return this._load({
+      url: `${Url.COMMENTS}/${filmId}`,
+      method: Method.POST,
+      body: JSON.stringify(localComment),
+      headers: new Headers({[Header.CONTENT_TYPE]: `application/json`})
+    })
+    .then((response) => response.json());
+  }
+
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(Header.AUTHORIZATION, this._auth);
 

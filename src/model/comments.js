@@ -10,35 +10,35 @@ export default class CommentsModel extends Observer {
 
   setComments(comments) {
     this._comments = comments.slice();
-    this._notify();
+    this._notify(true);
   }
 
   getComments() {
     return clonedeep(this._comments);
   }
 
-  _addComment(comment) {
-    this._comments = [comment, ...this._comments.slice()];
+  _addComment(filmCard, comments) {
+    this._comments[filmCard.id] = comments;
   }
 
-  _deleteComment({id}) {
-    this._comments = this._comments.filter((comment) => comment.id !== id);
+  _deleteComment(filmCard, commentToDelete) {
+    this._comments[filmCard.id] = this._comments[filmCard.id].filter((comment) => comment.id !== commentToDelete.id);
   }
 
   getFilmCardComments({id}) {
     return this._comments[id];
   }
 
-  updateComments(userAction, comment) {
+  updateComments(userAction, filmCard, update) {
     switch (userAction) {
       case UserAction.ADD_COMMENT:
-        this._addComment(comment);
+        this._addComment(filmCard, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._deleteComment(comment);
+        this._deleteComment(filmCard, update);
         break;
     }
 
-    this._notify();
+    this._notify(false);
   }
 }
