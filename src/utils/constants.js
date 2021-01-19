@@ -88,7 +88,8 @@ export const Header = {
 
 export const Url = {
   FILMS: `movies`,
-  COMMENTS: `comments`
+  COMMENTS: `comments`,
+  SYNC: `sync`
 };
 
 export const Method = {

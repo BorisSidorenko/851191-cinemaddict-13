@@ -43,6 +43,16 @@ export default class Api {
     .then((response) => response.json());
   }
 
+  sync(data) {
+    return this._load({
+      url: `${Url.FILMS}/${Url.SYNC}`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({[Header.CONTENT_TYPE]: `application/json`})
+    })
+    .then((response) => response.json());
+  }
+
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(Header.AUTHORIZATION, this._auth);
 
