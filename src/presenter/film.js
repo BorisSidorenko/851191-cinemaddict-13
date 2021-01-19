@@ -4,12 +4,12 @@ import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
 export default class FilmPresenter {
-  constructor({filmsListContainer, changeData, cardClick, api}) {
+  constructor({filmsListContainer, changeData, cardClick, apiWithProvider}) {
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
     this._filmsCards = null;
     this._cardClick = cardClick;
-    this._api = api;
+    this._apiWithProvider = apiWithProvider;
     this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
     this._handleCardControlClick = this._handleCardControlClick.bind(this);
     this._filmCard = null;
@@ -87,7 +87,7 @@ export default class FilmPresenter {
         }
     );
 
-    this._api.updateFilm(updatedFilmCard)
+    this._apiWithProvider.updateFilm(updatedFilmCard)
     .then((filmCard) => this._changeData(filmCard));
   }
 

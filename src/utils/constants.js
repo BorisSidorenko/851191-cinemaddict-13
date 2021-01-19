@@ -99,3 +99,7 @@ export const Method = {
   DELETE: `DELETE`
 };
 
+const STORAGE_PREFIX = `cinemaddict-cache`;
+const STORAGE_VER = `v13`;
+
+export const STORAGE_NAME = `${STORAGE_PREFIX}-${STORAGE_VER}`;

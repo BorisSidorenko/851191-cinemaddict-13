@@ -19,11 +19,11 @@ import {render, remove} from "../utils/render";
 import {UserAction} from "../utils/constants";
 
 export default class PopupPresenter {
-  constructor({mainContainer, changeData, commentsModel, api}) {
+  constructor({mainContainer, changeData, commentsModel, apiWithProvider}) {
     this._mainContainer = mainContainer;
     this._changeData = changeData;
     this._commentsModel = commentsModel;
-    this._api = api;
+    this._apiWithProvider = apiWithProvider;
     this._handleOpenedPopup = this._handleOpenedPopup.bind(this);
     this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
     this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
@@ -119,7 +119,7 @@ export default class PopupPresenter {
 
       this._disablePopupForm(true);
 
-      this._api.addComment(this._filmCard.id, localComment)
+      this._apiWithProvider.addComment(this._filmCard.id, localComment)
       .then(({movie, comments}) => {
         this._filmCard = movie;
         return comments;
@@ -249,7 +249,7 @@ export default class PopupPresenter {
         }
     );
 
-    this._api.updateFilm(updatedFilmCard)
+    this._apiWithProvider.updateFilm(updatedFilmCard)
     .then((filmCard) => this._changeData(filmCard));
   }
 
@@ -273,7 +273,7 @@ export default class PopupPresenter {
       const cardComments = this._getCardComments();
       const commentToDelete = cardComments.find((comment) => comment.id === commentId);
 
-      this._api.deleteComment(commentId)
+      this._apiWithProvider.deleteComment(commentId)
       .then(() => this._commentsModel.updateComments(
           UserAction.DELETE_COMMENT,
           this._filmCard,

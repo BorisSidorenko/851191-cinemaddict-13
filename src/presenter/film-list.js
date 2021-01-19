@@ -24,14 +24,14 @@ const loadingComponent = new LoadingView();
 let showMoreButtonClickCounter = 1;
 
 export default class FilmListPresenter {
-  constructor(headerContainer, mainContainer, footerContainer, filmsModel, commentsModel, menuModel, api) {
+  constructor(headerContainer, mainContainer, footerContainer, filmsModel, commentsModel, menuModel, apiWithProvider) {
     this._headerContainer = headerContainer;
     this._mainContainer = mainContainer;
     this._footerContainer = footerContainer;
     this._filmsModel = filmsModel;
     this._commentsModel = commentsModel;
     this._menuModel = menuModel;
-    this._api = api;
+    this._apiWithProvider = apiWithProvider;
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
 
     this._filmPresenter = {};
@@ -289,7 +289,7 @@ export default class FilmListPresenter {
       filmsListContainer: filmsListContainerComponent,
       changeData: this._filmsModel.updateFilm,
       cardClick: this._handleFilmCardClick,
-      api: this._api
+      apiWithProvider: this._apiWithProvider
     };
 
     const filmPresenter = new FilmPresenter(paramObj);
@@ -345,7 +345,7 @@ export default class FilmListPresenter {
       mainContainer: this._mainContainer,
       changeData: this._filmsModel.updateFilm,
       commentsModel: this._commentsModel,
-      api: this._api
+      apiWithProvider: this._apiWithProvider
     };
 
     const popupPresenter = new PopupPresenter(paramObj);
