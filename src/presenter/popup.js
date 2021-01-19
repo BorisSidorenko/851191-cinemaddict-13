@@ -273,7 +273,7 @@ export default class PopupPresenter {
       const cardComments = this._getCardComments();
       const commentToDelete = cardComments.find((comment) => comment.id === commentId);
 
-      this._apiWithProvider.deleteComment(commentId)
+      this._apiWithProvider.deleteComment(this._filmCard, commentId)
       .then(() => this._commentsModel.updateComments(
           UserAction.DELETE_COMMENT,
           this._filmCard,
