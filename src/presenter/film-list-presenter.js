@@ -1,6 +1,6 @@
 import ProfileView from "../view/profile/profile";
 import SortView from "../view/sort/sort";
-import FilmsWrapperView from "../view/films/films";
+import FilmsWrapperView from "../view/films-wrapper/films-wrapper";
 import FilmsListView from "../view/films-list/films-list";
 import EmptyFilmsListView from "../view/films-list-empty/films-list-empty";
 import FilmsListContainer from "../view/films-list-container/films-list-container";
