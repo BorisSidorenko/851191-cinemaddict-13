@@ -5,7 +5,7 @@ export default class FilmPopupControls extends AbstractView {
   constructor(card) {
     super();
     this._card = card;
-    this._handleControlsClick = this._handleControlsClick.bind(this);
+    this._controlsClickHandler = this._controlsClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -14,12 +14,12 @@ export default class FilmPopupControls extends AbstractView {
 
   setClickHandlers(callback) {
     this._callback.popupControlsClick = callback;
-    this.element.querySelector(`#watchlist`).addEventListener(`click`, this._handleControlsClick);
-    this.element.querySelector(`#watched`).addEventListener(`click`, this._handleControlsClick);
-    this.element.querySelector(`#favorite`).addEventListener(`click`, this._handleControlsClick);
+    this.element.querySelector(`#watchlist`).addEventListener(`click`, this._controlsClickHandler);
+    this.element.querySelector(`#watched`).addEventListener(`click`, this._controlsClickHandler);
+    this.element.querySelector(`#favorite`).addEventListener(`click`, this._controlsClickHandler);
   }
 
-  _handleControlsClick(evt) {
+  _controlsClickHandler(evt) {
     evt.preventDefault();
     this._callback.popupControlsClick(evt);
   }

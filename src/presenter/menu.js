@@ -13,10 +13,10 @@ export default class MenuPresenter {
     this._isCommentsAvailable = true;
 
     this._render = this._render.bind(this);
-    this._handleFilterChange = this._handleFilterChange.bind(this);
-    this._handleCommentsAvailability = this._handleCommentsAvailability.bind(this);
+    this._filterChangeHandler = this._filterChangeHandler.bind(this);
+    this._commentsAvailabilityHandler = this._commentsAvailabilityHandler.bind(this);
 
-    this._commentsModel.addObserver(this._handleCommentsAvailability);
+    this._commentsModel.addObserver(this._commentsAvailabilityHandler);
     this._filmsModel.addObserver(this._render);
   }
 
@@ -24,7 +24,7 @@ export default class MenuPresenter {
     this._render();
   }
 
-  _handleCommentsAvailability(isInit) {
+  _commentsAvailabilityHandler(isInit) {
     if (isInit) {
       const comments = this._commentsModel.getComments();
       this._isCommentsAvailable = comments.length > 0;
@@ -38,7 +38,7 @@ export default class MenuPresenter {
     const sourceFilms = this._isCommentsAvailable ? this._filmsModel.films : [];
 
     this._siteMenuView = new SiteMenuView(this._menuModel.menuItem, sourceFilms);
-    this._siteMenuView.setFilterChangeHandler(this._handleFilterChange);
+    this._siteMenuView.setFilterChangeHandler(this._filterChangeHandler);
 
     if (prevSiteMenuComponent !== null) {
       remove(prevSiteMenuComponent);
@@ -47,7 +47,7 @@ export default class MenuPresenter {
     render(this._mainContainer, this._siteMenuView, RenderPosition.AFTERBEGIN);
   }
 
-  _handleFilterChange(evt) {
+  _filterChangeHandler(evt) {
     const hrefValue = evt.target.getAttribute(`href`);
 
     const clickedMenuItem = hrefValue ? hrefValue : evt.target.parentNode.getAttribute(`href`);
