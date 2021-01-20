@@ -32,14 +32,14 @@ export default class FilmListPresenter {
     this._commentsModel = commentsModel;
     this._menuModel = menuModel;
     this._apiWithProvider = apiWithProvider;
-    this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+    this._showMoreButtonClickHandler = this._showMoreButtonClickHandler.bind(this);
 
     this._filmPresenter = {};
     this._filmPopupPresenter = {};
-    this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._filmChangeHandler = this._filmChangeHandler.bind(this);
 
-    this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
-    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._filmCardClickHandler = this._filmCardClickHandler.bind(this);
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._sortComponent = null;
     this._currentSortType = SortType.DEFAULT;
     this._currentMenuItem = this._menuModel.menuItem;
@@ -49,21 +49,21 @@ export default class FilmListPresenter {
     this._isLoading = true;
     this._shownFilmsCardsCount = null;
 
-    this._handleMenuItemChange = this._handleMenuItemChange.bind(this);
-    this._handleSortedListChange = this._handleSortedListChange.bind(this);
-    this._handleCommentsReady = this._handleCommentsReady.bind(this);
+    this._menuItemChangeHandler = this._menuItemChangeHandler.bind(this);
+    this._sortedListChangeHandler = this._sortedListChangeHandler.bind(this);
+    this._commentsReadyHandler = this._commentsReadyHandler.bind(this);
 
-    this._menuModel.addObserver(this._handleMenuItemChange);
-    this._menuModel.addObserver(this._handleSortedListChange);
-    this._filmsModel.addObserver(this._handleFilmChange);
-    this._commentsModel.addObserver(this._handleCommentsReady);
+    this._menuModel.addObserver(this._menuItemChangeHandler);
+    this._menuModel.addObserver(this._sortedListChangeHandler);
+    this._filmsModel.addObserver(this._filmChangeHandler);
+    this._commentsModel.addObserver(this._commentsReadyHandler);
   }
 
   init() {
     this._render();
   }
 
-  _handleCommentsReady(isInit) {
+  _commentsReadyHandler(isInit) {
     if (isInit) {
       this._isLoading = false;
       this._render();
@@ -86,7 +86,7 @@ export default class FilmListPresenter {
     this._shownFilmsCardsCount = showMoreButtonClickCounter * CARDS_TO_SHOW_COUNT;
   }
 
-  _handleSortedListChange() {
+  _sortedListChangeHandler() {
     const films = this._getFilms(true);
 
     const filmsToShow = films.slice(0, this._shownFilmsCardsCount);
@@ -95,7 +95,7 @@ export default class FilmListPresenter {
     this._renderShowMoreButton();
   }
 
-  _handleMenuItemChange() {
+  _menuItemChangeHandler() {
     if (this._currentMenuItem !== this._menuModel.menuItem) {
       this._currentMenuItem = this._menuModel.menuItem;
     }
@@ -132,7 +132,7 @@ export default class FilmListPresenter {
     render(this._mainContainer, this._statsComponent);
   }
 
-  _handleSortTypeChange(sortType) {
+  _sortTypeChangeHandler(sortType) {
     if (this._currentSortType !== sortType) {
       this._currentSortType = sortType;
 
@@ -175,7 +175,7 @@ export default class FilmListPresenter {
 
     this._sortComponent = new SortView(this._currentSortType);
     render(this._mainContainer, this._sortComponent);
-    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
 
   _renderFilmsWrapper() {
@@ -247,7 +247,7 @@ export default class FilmListPresenter {
     this._renderFilmsCount();
   }
 
-  _handleShowMoreButtonClick() {
+  _showMoreButtonClickHandler() {
     showMoreButtonClickCounter += 1;
     this._shownFilmsCardsCount = CARDS_TO_SHOW_COUNT * showMoreButtonClickCounter;
 
@@ -265,7 +265,7 @@ export default class FilmListPresenter {
   _renderShowMoreButton() {
     if (this._getFilms(true).length > this._shownFilmsCardsCount) {
       render(filmsListComponent, showMoreButtonComponent);
-      showMoreButtonComponent.setClickHandler(this._handleShowMoreButtonClick);
+      showMoreButtonComponent.setClickHandler(this._showMoreButtonClickHandler);
     }
   }
 
@@ -288,7 +288,7 @@ export default class FilmListPresenter {
     const paramObj = {
       filmsListContainer: filmsListContainerComponent,
       changeData: this._filmsModel.updateFilm,
-      cardClick: this._handleFilmCardClick,
+      cardClick: this._filmCardClickHandler,
       apiWithProvider: this._apiWithProvider
     };
 
@@ -315,7 +315,7 @@ export default class FilmListPresenter {
     }
   }
 
-  _handleFilmChange(updatedFilm) {
+  _filmChangeHandler(updatedFilm) {
     if (updatedFilm) {
       const films = this._getFilms(true);
       const comments = this._getFilmCardComments(updatedFilm);
@@ -335,7 +335,7 @@ export default class FilmListPresenter {
     }
   }
 
-  _handleFilmCardClick(card) {
+  _filmCardClickHandler(card) {
     const clickedCard = card;
     const clickedCardComments = this._getFilmCardComments(card);
 
