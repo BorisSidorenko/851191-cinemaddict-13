@@ -11,7 +11,7 @@ export default class Smart extends AbstractView {
   }
 
   updateElement() {
-    let prevElement = this.element;
+    const prevElement = this.element;
     const parent = prevElement.parentElement;
     this.removeElement();
 
