@@ -9,6 +9,11 @@ export default class Provider {
   constructor(api, store) {
     this._api = api;
     this._store = store;
+    this._syncNedeed = false;
+  }
+
+  get isSyncNedeed() {
+    return this._syncNedeed;
   }
 
   getFilms() {
@@ -27,15 +32,35 @@ export default class Provider {
   }
 
   updateFilm(film) {
+    const filmsFromStore = Object.values(this._store.getItems());
+
     if (this._isOnline()) {
       return this._api.updateFilm(film)
         .then((updatedFilm) => {
-          this._store.setItem(updatedFilm.id, updatedFilm);
+          const filmToUpdateInStore = Object.assign(
+              {},
+              filmsFromStore[updatedFilm.id],
+              updatedFilm
+          );
+
+          this._store.setItem(updatedFilm.id, filmToUpdateInStore);
+
           return updatedFilm;
         });
     }
 
-    this._store.setItem(film.id, film);
+    const filmToUpdateInStore = Object.assign(
+        {},
+        filmsFromStore[film.id],
+        film,
+        {
+          "sync_nedeed": true
+        }
+    );
+
+    this._store.setItem(film.id, filmToUpdateInStore);
+
+    this._syncNedeed = true;
 
     return Promise.resolve(film);
   }
@@ -115,6 +140,33 @@ export default class Provider {
     }
 
     return Promise.reject(new Error(`Add new comment failed`));
+  }
+
+  sync() {
+    if (this._isOnline()) {
+      const filmsFromStore = Object.values(this._store.getItems());
+      const filmsToSync = filmsFromStore.filter((film) => film.sync_nedeed);
+
+      return this._api.sync(filmsToSync)
+        .then(({updated}) => {
+          this._syncNedeed = false;
+
+          updated.forEach((updatedFilm) => {
+            const adaptToStoreFilm = Object.assign(
+                {},
+                filmsFromStore[updatedFilm.id],
+                updatedFilm
+            );
+
+            delete adaptToStoreFilm.sync_nedeed;
+
+            this._store.setItem(updatedFilm.id, adaptToStoreFilm);
+          });
+
+        });
+    }
+
+    return Promise.reject(new Error(`Sync data failed`));
   }
 
   _isOnline() {
