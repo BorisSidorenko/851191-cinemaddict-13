@@ -270,7 +270,7 @@ export default class FilmListPresenter {
   }
 
   _renderFilmsCount() {
-    let films = this._getFilms();
+    const films = this._getFilms();
     const availableFilmsCount = films ? films.length : 0;
 
     const prevFilmsCountComponent = this._filmsCountComponent;
