@@ -1,4 +1,4 @@
-import {Server, STORAGE_NAME} from "./utils/constants";
+import {Server, STORAGE_NAME, ToastType} from "./utils/constants";
 import MenuPresenter from "./presenter/menu";
 import FilmListPresenter from "./presenter/film-list";
 import FilmsModel from "./model/films";
@@ -7,6 +7,7 @@ import MenuModel from "./model/menu";
 import Api from "./api/api";
 import Provider from "./api/provider";
 import Store from "./api/store";
+import {toast} from "./utils/toast";
 
 const api = new Api(Server.ENDPOINT, Server.AUTHORIZATION);
 const store = new Store(STORAGE_NAME, window.localStorage);
@@ -50,6 +51,7 @@ window.addEventListener(`load`, () => {
 
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
+  toast(`You're online!`, ToastType.SUCCESS);
 
   if (apiWithProvider.isSyncNedeed) {
     apiWithProvider.sync();
@@ -58,4 +60,5 @@ window.addEventListener(`online`, () => {
 
 window.addEventListener(`offline`, () => {
   document.title += ` [offline]`;
+  toast(`You're offline!`, ToastType.WARNING);
 });

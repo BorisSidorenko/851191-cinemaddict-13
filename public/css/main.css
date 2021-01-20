@@ -1104,6 +1104,32 @@ button {
   padding-top: 50px;
   padding-bottom: 50px;
 }
+.toast-container {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: auto;
+  transform: translate(-50%, 0);
+}
+.toast-item {
+  display: inline-flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 5px;
+}
+.toast-item--warning {
+  background-color: #eed8d8;
+  color: #c93d3d;
+}
+.toast-item--success {
+  background-color: #a9f1b9;
+  color: #255e36;
+}
 @keyframes shake {
   0%,
   100% {

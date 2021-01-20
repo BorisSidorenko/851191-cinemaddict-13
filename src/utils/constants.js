@@ -103,3 +103,8 @@ const STORAGE_PREFIX = `cinemaddict-storage`;
 const STORAGE_VER = `v13`;
 
 export const STORAGE_NAME = `${STORAGE_PREFIX}-${STORAGE_VER}`;
+
+export const ToastType = {
+  WARNING: `toast-item--warning`,
+  SUCCESS: `toast-item--success`
+};
