@@ -60,5 +60,5 @@ window.addEventListener(`online`, () => {
 
 window.addEventListener(`offline`, () => {
   document.title += ` [offline]`;
-  toast(`You're offline!`, ToastType.WARNING);
+  toast(`You're offline!`);
 });

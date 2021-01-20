@@ -1,3 +1,5 @@
+import {ToastType} from "../utils/constants";
+
 const TIME_TO_SHOW_TOAST = 5000;
 const TOAST_CONTAINER = `toast-container`;
 const TOAST_ITEM = `toast-item`;
@@ -16,7 +18,7 @@ const createToastContainer = () => {
   return container;
 };
 
-export const toast = (message, toastType) => {
+export const toast = (message, toastType = ToastType.WARNING) => {
   const container = createToastContainer();
   const item = document.createElement(`div`);
 

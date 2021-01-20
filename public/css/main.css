@@ -1113,6 +1113,7 @@ button {
   align-items: flex-start;
   width: auto;
   transform: translate(-50%, 0);
+  z-index: 100;
 }
 .toast-item {
   display: inline-flex;

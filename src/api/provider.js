@@ -1,3 +1,5 @@
+import {toast} from "../utils/toast";
+
 const adaptToStore = (items) => {
   return items.reduce((acc, current) => {
     acc[current.id] = current;
@@ -114,6 +116,7 @@ export default class Provider {
         });
     }
 
+    toast(`Sorry, you can't delete any comment being offline`);
     return Promise.reject(new Error(`Delete comment failed`));
   }
 
@@ -139,6 +142,7 @@ export default class Provider {
         });
     }
 
+    toast(`Sorry, you can't add new comment being offline`);
     return Promise.reject(new Error(`Add new comment failed`));
   }
 
