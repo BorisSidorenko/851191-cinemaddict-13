@@ -8,8 +8,8 @@ import ShowMoreButtonView from "../view/show-more-button/show-more-button";
 import FilmsCountView from "../view/films-count/films-count";
 import StatsView from "../view/stats/stats";
 import LoadingView from "../view/films-loading/films-loading";
-import FilmPresenter from "../presenter/film";
-import PopupPresenter from "../presenter/popup";
+import FilmPresenter from "./film-presenter";
+import PopupPresenter from "./popup-presenter";
 
 import {render, remove} from "../utils/render";
 import {CARDS_TO_SHOW_COUNT} from "../utils/constants";

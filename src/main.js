@@ -1,9 +1,9 @@
 import {Server, STORAGE_NAME, ToastType} from "./utils/constants";
-import MenuPresenter from "./presenter/menu";
-import FilmListPresenter from "./presenter/film-list";
-import FilmsModel from "./model/films";
-import CommentsModel from "./model/comments";
-import MenuModel from "./model/menu";
+import MenuPresenter from "./presenter/menu-presenter";
+import FilmListPresenter from "./presenter/film-list-presenter";
+import FilmsModel from "./model/films-model";
+import CommentsModel from "./model/comments-model";
+import MenuModel from "./model/site-menu-model";
 import Api from "./api/api";
 import Provider from "./api/provider";
 import Store from "./api/store";
