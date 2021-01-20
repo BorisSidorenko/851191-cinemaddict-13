@@ -2,7 +2,7 @@ const CACHE_PREFIX = `cinemaddict-cache`;
 const CACHE_VER = `v13`;
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 
-const HTTP_STATUS_OK = 200;
+const RESPONSE_SAFE_TYPE = `basic`;
 
 self.addEventListener(`install`, (evt) => {
   evt.waitUntil(
@@ -69,7 +69,7 @@ const handleFetch = (evt) => {
 
         return fetch(request)
           .then((response) => {
-            if (!response || !response.ok) {
+            if (!response || !response.ok || response.type !== RESPONSE_SAFE_TYPE) {
               return response;
             }
 
