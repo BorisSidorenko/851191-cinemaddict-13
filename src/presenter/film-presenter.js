@@ -4,14 +4,14 @@ import {render, remove, replace} from "../utils/render";
 import {CardControls, ELEMENTS_TO_SHOW_POPUP} from "../utils/constants";
 
 export default class FilmPresenter {
-  constructor({filmsListContainer, changeData, cardClick, api}) {
+  constructor({filmsListContainer, changeData, cardClick, apiWithProvider}) {
     this._filmsListContainerComponent = filmsListContainer;
     this._changeData = changeData;
     this._filmsCards = null;
     this._cardClick = cardClick;
-    this._api = api;
-    this._handleFilmCardClick = this._handleFilmCardClick.bind(this);
-    this._handleCardControlClick = this._handleCardControlClick.bind(this);
+    this._apiWithProvider = apiWithProvider;
+    this._filmCardClickHandler = this._filmCardClickHandler.bind(this);
+    this._cardControlClickHandler = this._cardControlClickHandler.bind(this);
     this._filmCard = null;
     this._filmCardComponent = null;
   }
@@ -39,8 +39,8 @@ export default class FilmPresenter {
   }
 
   _setHandlers() {
-    this._filmsListContainerComponent.setClickHandler(this._handleFilmCardClick);
-    this._filmCardComponent.setControlsClickHandler(this._handleCardControlClick);
+    this._filmsListContainerComponent.setClickHandler(this._filmCardClickHandler);
+    this._filmCardComponent.setControlsClickHandler(this._cardControlClickHandler);
   }
 
   destroy() {
@@ -55,7 +55,7 @@ export default class FilmPresenter {
     return ELEMENTS_TO_SHOW_POPUP.some((val) => val === className);
   }
 
-  _handleFilmCardClick(evt) {
+  _filmCardClickHandler(evt) {
     const showPopup = this._isPopupElementClicked(evt.target.className);
 
     if (showPopup) {
@@ -70,7 +70,7 @@ export default class FilmPresenter {
     }
   }
 
-  _handleCardControlClick(evt) {
+  _cardControlClickHandler(evt) {
     const propToChange = this._getClickedProp(evt.target.classList);
 
     const updatedUserDetails = Object.assign(
@@ -87,7 +87,7 @@ export default class FilmPresenter {
         }
     );
 
-    this._api.updateFilm(updatedFilmCard)
+    this._apiWithProvider.updateFilm(updatedFilmCard)
     .then((filmCard) => this._changeData(filmCard));
   }
 

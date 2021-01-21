@@ -1,4 +1,4 @@
-import {Method, Url, Header} from "../src/utils/constants";
+import {Method, Url, Header} from "../utils/constants";
 
 export default class Api {
   constructor(endPoint, auth) {
@@ -38,6 +38,16 @@ export default class Api {
       url: `${Url.COMMENTS}/${filmId}`,
       method: Method.POST,
       body: JSON.stringify(localComment),
+      headers: new Headers({[Header.CONTENT_TYPE]: `application/json`})
+    })
+    .then((response) => response.json());
+  }
+
+  sync(data) {
+    return this._load({
+      url: `${Url.FILMS}/${Url.SYNC}`,
+      method: Method.POST,
+      body: JSON.stringify(data),
       headers: new Headers({[Header.CONTENT_TYPE]: `application/json`})
     })
     .then((response) => response.json());

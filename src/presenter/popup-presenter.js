@@ -19,32 +19,32 @@ import {render, remove} from "../utils/render";
 import {UserAction} from "../utils/constants";
 
 export default class PopupPresenter {
-  constructor({mainContainer, changeData, commentsModel, api}) {
+  constructor({mainContainer, changeData, commentsModel, apiWithProvider}) {
     this._mainContainer = mainContainer;
     this._changeData = changeData;
     this._commentsModel = commentsModel;
-    this._api = api;
-    this._handleOpenedPopup = this._handleOpenedPopup.bind(this);
-    this._handlePopupEscKeyDown = this._handlePopupEscKeyDown.bind(this);
-    this._handleClosePopupButtonClick = this._handleClosePopupButtonClick.bind(this);
+    this._apiWithProvider = apiWithProvider;
+    this._openedPopupHandler = this._openedPopupHandler.bind(this);
+    this._popupEscKeyDownHandler = this._popupEscKeyDownHandler.bind(this);
+    this._closePopupButtonClickHandler = this._closePopupButtonClickHandler.bind(this);
     this._closePopup = this._closePopup.bind(this);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._filmPopupComponent = null;
     this._popupOpened = false;
     this._closePopupButtonComponent = new ClosePopupButtonView();
     this._filmPopupControlsComponent = null;
-    this._handlePopupControlsClick = this._handlePopupControlsClick.bind(this);
+    this._popupControlsClickHandler = this._popupControlsClickHandler.bind(this);
     this._filmCard = null;
     this._filmPopupCommentsWrapComponent = null;
     this._popupBottomContainerComponent = null;
     this._filmPopupNewCommentComponent = null;
     this._popupTopContainerComponent = null;
     this._popupFormComponent = null;
-    this._handleDeleteCommentButtonClick = this._handleDeleteCommentButtonClick.bind(this);
+    this._deleteCommentButtonClickHandler = this._deleteCommentButtonClickHandler.bind(this);
     this._submitForm = this._submitForm.bind(this);
 
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._commentsModel.addObserver(this._handleModelEvent);
+    this._modelEventHandler = this._modelEventHandler.bind(this);
+    this._commentsModel.addObserver(this._modelEventHandler);
   }
 
   init(filmCard) {
@@ -62,7 +62,7 @@ export default class PopupPresenter {
     remove(this._filmPopupComponent);
   }
 
-  _handleOpenedPopup() {
+  _openedPopupHandler() {
     this._closeOpenedPopup();
   }
 
@@ -70,7 +70,7 @@ export default class PopupPresenter {
     isEscEvent(evt, this._closePopup);
   }
 
-  _handlePopupEscKeyDown(evt) {
+  _popupEscKeyDownHandler(evt) {
     this._onPopupEscPress(evt);
   }
 
@@ -119,7 +119,7 @@ export default class PopupPresenter {
 
       this._disablePopupForm(true);
 
-      this._api.addComment(this._filmCard.id, localComment)
+      this._apiWithProvider.addComment(this._filmCard.id, localComment)
       .then(({movie, comments}) => {
         this._filmCard = movie;
         return comments;
@@ -139,7 +139,7 @@ export default class PopupPresenter {
     }
   }
 
-  _handleFormSubmit(evt) {
+  _formSubmitHandler(evt) {
     isSubmitFormEvent(evt, this._submitForm);
   }
 
@@ -148,7 +148,7 @@ export default class PopupPresenter {
 
     this._mainContainer.parentNode.classList.remove(`hide-overflow`);
     this._closePopupButtonComponent.clearClickHandler();
-    document.removeEventListener(`keydown`, this._handlePopupEscKeyDown);
+    document.removeEventListener(`keydown`, this._popupEscKeyDownHandler);
     this._clearSubmitHandler();
 
     this._popupOpened = false;
@@ -169,7 +169,7 @@ export default class PopupPresenter {
     render(popupForm, this._popupBottomContainerComponent);
   }
 
-  _handleClosePopupButtonClick() {
+  _closePopupButtonClickHandler() {
     this._closePopup();
   }
 
@@ -179,7 +179,7 @@ export default class PopupPresenter {
     render(popupTopContainer, closePopupButtonWrapperComponent);
     render(closePopupButtonWrapperComponent, this._closePopupButtonComponent);
 
-    this._closePopupButtonComponent.setClickHandler(this._handleClosePopupButtonClick);
+    this._closePopupButtonComponent.setClickHandler(this._closePopupButtonClickHandler);
   }
 
   _appendPopupWithInfo(popupTopContainer, card) {
@@ -203,7 +203,7 @@ export default class PopupPresenter {
   }
 
   _setPopupControlsHandlers() {
-    this._filmPopupControlsComponent.setClickHandlers(this._handlePopupControlsClick);
+    this._filmPopupControlsComponent.setClickHandlers(this._popupControlsClickHandler);
   }
 
   _getKeyByValue(obj, val) {
@@ -232,7 +232,7 @@ export default class PopupPresenter {
     return propToChange;
   }
 
-  _handlePopupControlsClick(evt) {
+  _popupControlsClickHandler(evt) {
     const propToChange = this._getPropToChange(evt);
 
     const updatedUserDetails = Object.assign(
@@ -249,11 +249,11 @@ export default class PopupPresenter {
         }
     );
 
-    this._api.updateFilm(updatedFilmCard)
+    this._apiWithProvider.updateFilm(updatedFilmCard)
     .then((filmCard) => this._changeData(filmCard));
   }
 
-  _handleModelEvent(isInit) {
+  _modelEventHandler(isInit) {
     if (!isInit) {
       this._appendPopupWithComments();
     }
@@ -264,7 +264,7 @@ export default class PopupPresenter {
     deleteButton.innerHTML = isButtonDisabled ? `Deleting…` : `Delete`;
   }
 
-  _handleDeleteCommentButtonClick(evt) {
+  _deleteCommentButtonClickHandler(evt) {
     if (evt.target.tagName === `BUTTON`) {
       const deleteButton = evt.target;
       this._disableDeleteButton(deleteButton, true);
@@ -273,7 +273,7 @@ export default class PopupPresenter {
       const cardComments = this._getCardComments();
       const commentToDelete = cardComments.find((comment) => comment.id === commentId);
 
-      this._api.deleteComment(commentId)
+      this._apiWithProvider.deleteComment(this._filmCard, commentId)
       .then(() => this._commentsModel.updateComments(
           UserAction.DELETE_COMMENT,
           this._filmCard,
@@ -304,7 +304,7 @@ export default class PopupPresenter {
     render(this._popupBottomContainerComponent, this._filmPopupCommentsWrapComponent);
 
     const popupCommentsComponent = new FilmPopupCommentsListView(comments);
-    popupCommentsComponent.setDeleteButtonHandlers(this._handleDeleteCommentButtonClick);
+    popupCommentsComponent.setDeleteButtonHandlers(this._deleteCommentButtonClickHandler);
 
     const prevFilmPopupNewCommentComponent = this._filmPopupNewCommentComponent;
 
@@ -329,15 +329,15 @@ export default class PopupPresenter {
   }
 
   _clearSubmitHandler() {
-    document.removeEventListener(`keydown`, this._handleFormSubmit);
+    document.removeEventListener(`keydown`, this._formSubmitHandler);
   }
 
   _setSubmitHandler() {
-    document.addEventListener(`keydown`, this._handleFormSubmit);
+    document.addEventListener(`keydown`, this._formSubmitHandler);
   }
 
   _renderPopup(card) {
-    this._handleOpenedPopup();
+    this._openedPopupHandler();
 
     this._popupFormComponent = new FilmPopupFormView();
     this._popupTopContainerComponent = new FilmPopupTopContainerView();
@@ -350,7 +350,7 @@ export default class PopupPresenter {
 
     this._setSubmitHandler();
 
-    document.addEventListener(`keydown`, this._handlePopupEscKeyDown);
+    document.addEventListener(`keydown`, this._popupEscKeyDownHandler);
     this._mainContainer.parentNode.classList.add(`hide-overflow`);
     this._popupOpened = true;
   }

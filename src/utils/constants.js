@@ -88,7 +88,8 @@ export const Header = {
 
 export const Url = {
   FILMS: `movies`,
-  COMMENTS: `comments`
+  COMMENTS: `comments`,
+  SYNC: `sync`
 };
 
 export const Method = {
@@ -98,3 +99,12 @@ export const Method = {
   DELETE: `DELETE`
 };
 
+const STORAGE_PREFIX = `cinemaddict-storage`;
+const STORAGE_VER = `v13`;
+
+export const STORAGE_NAME = `${STORAGE_PREFIX}-${STORAGE_VER}`;
+
+export const ToastType = {
+  WARNING: `toast-item--warning`,
+  SUCCESS: `toast-item--success`
+};
