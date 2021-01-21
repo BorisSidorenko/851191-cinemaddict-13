@@ -293,8 +293,7 @@ export default class FilmListPresenter {
     };
 
     const filmPresenter = new FilmPresenter(paramObj);
-    const cardToShowCommentsLength = this._getFilmCardComments(cardToShow).length;
-    filmPresenter.init(this._getFilms(), cardToShow, cardToShowCommentsLength);
+    filmPresenter.init(this._getFilms(), cardToShow);
 
     this._filmPresenter[cardToShow.id] = filmPresenter;
   }
