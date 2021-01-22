@@ -16,13 +16,13 @@ export default class FilmPresenter {
     this._filmCardComponent = null;
   }
 
-  init(filmsCards, filmCard, filmCardCommentsLength) {
+  init(filmsCards, filmCard) {
     this._filmsCards = filmsCards;
     this._filmCard = filmCard;
 
     const prevFilmCardComponent = this._filmCardComponent;
 
-    this._filmCardComponent = new FilmCardView(filmCard, filmCardCommentsLength);
+    this._filmCardComponent = new FilmCardView(this._filmCard);
 
     this._setHandlers();
 

@@ -36,6 +36,8 @@ export default class SiteMenuModel extends Observer {
         return films.slice().sort((a, b) => dayjs(b.film_info.release.date).isAfter(dayjs(a.film_info.release.date)) ? 1 : -1);
       case SortType.RATING:
         return films.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
+      case SortType.COMMENTS:
+        return films.slice().sort((a, b) => b.comments.length - a.comments.length);
     }
 
     return films;

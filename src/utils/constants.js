@@ -5,7 +5,6 @@ export const MINUTES_IN_HOUR = 60;
 export const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const RELEASE_DATE_FORMAT = `DD MMMM YYYY`;
-export const COMMENT_DATE_FORMAT = `YYYY/MM/DD hh:mm`;
 
 export const DESCRIPTION_SHORT_LENGTH = 139;
 
@@ -41,7 +40,8 @@ export const UserDetails = {
 export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
-  RATING: `rating`
+  RATING: `rating`,
+  COMMENTS: `comments`
 };
 
 export const MenuItem = {
@@ -107,4 +107,11 @@ export const STORAGE_NAME = `${STORAGE_PREFIX}-${STORAGE_VER}`;
 export const ToastType = {
   WARNING: `toast-item--warning`,
   SUCCESS: `toast-item--success`
+};
+
+export const AMOUNT_EXTRA_FILMS_TO_DISPLAY = 2;
+
+export const FilmsListExtraTitle = {
+  TOP_RATED: `Top rated`,
+  MOST_COMMENTED: `Most commented`
 };

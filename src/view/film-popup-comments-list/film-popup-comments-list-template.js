@@ -1,9 +1,12 @@
 import he from "he";
 import dayjs from "dayjs";
-import {EMOJI_PATH, EMOJI_EXTENSION, COMMENT_DATE_FORMAT} from "../../utils/constants";
+import relativeTime from "dayjs/plugin/relativeTime";
+import {EMOJI_PATH, EMOJI_EXTENSION} from "../../utils/constants";
+
+dayjs.extend(relativeTime);
 
 const getCommentElement = ({id, author, comment, emotion, date}) => {
-  const commentDate = dayjs(date).format(COMMENT_DATE_FORMAT);
+  const commentDate = dayjs(date).fromNow();
 
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">

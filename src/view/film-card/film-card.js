@@ -11,7 +11,7 @@ export default class FilmCard extends AbstractView {
   }
 
   getTemplate() {
-    return createFilmCardTemplate(this._card, this._commentsCount);
+    return createFilmCardTemplate(this._card);
   }
 
   _controlsClickHandler(evt) {
