@@ -107,3 +107,10 @@ export const ToastType = {
   WARNING: `toast-item--warning`,
   SUCCESS: `toast-item--success`
 };
+
+export const AMOUNT_EXTRA_FILMS_TO_DISPLAY = 2;
+
+export const FilmsListExtraTitle = {
+  TOP_RATED: `Top rated`,
+  MOST_COMMENTED: `Most commented`
+};
