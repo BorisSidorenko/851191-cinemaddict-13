@@ -40,7 +40,8 @@ export const UserDetails = {
 export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
-  RATING: `rating`
+  RATING: `rating`,
+  COMMENTS: `comments`
 };
 
 export const MenuItem = {

@@ -246,14 +246,12 @@ export default class FilmListPresenter {
 
   _renderTopRatedFilms() {
     const films = this._getFilms();
-    const filmsWithRating = films.filter((film) => film.film_info.total_rating > 0);
+    const topRatedFilms = this._getSortedFilms(films, SortType.RATING);
 
-    if (filmsWithRating.length > 0) {
+    if (topRatedFilms.length > 0) {
       render(filmsWrapperComponent, filmsListTopRatedComponent);
       render(filmsListTopRatedComponent, filmsListTopRatedContainerComponent);
 
-
-      const topRatedFilms = this._getSortedFilms(films, SortType.RATING);
       const topRatedFilmsToDisplay = topRatedFilms.slice(0, AMOUNT_EXTRA_FILMS_TO_DISPLAY);
       const propFromTitle = filmsListTopRatedComponent.title.split(` `).join(`_`);
 
@@ -263,13 +261,12 @@ export default class FilmListPresenter {
 
   _renderMostCommentedFilms() {
     const films = this._getFilms();
-    const filmsWithComments = films.filter(({comments}) => comments.length > 0);
+    const mostCommentedFilms = this._getSortedFilms(films, SortType.COMMENTS);
 
-    if (filmsWithComments.length > 0) {
+    if (mostCommentedFilms.length > 0) {
       render(filmsWrapperComponent, filmsListMostCommentedComponent);
       render(filmsListMostCommentedComponent, filmsListMostCommentedContainerComponent);
 
-      const mostCommentedFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length);
       const mostCommentedFilmsToDisplay = mostCommentedFilms.slice(0, AMOUNT_EXTRA_FILMS_TO_DISPLAY);
       const propFromTitle = filmsListMostCommentedComponent.title.split(` `).join(`_`);
 
