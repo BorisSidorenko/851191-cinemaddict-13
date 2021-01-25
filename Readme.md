@@ -1,3 +1,4 @@
+<a href="https://borissidorenko.github.io/851191-cinemaddict-13/public/index.html">Опубликованный проект "Cinemaddict"</a>
 # Проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Борис Сидоренко](https://htmlacademy.ru/profile/borissid).
